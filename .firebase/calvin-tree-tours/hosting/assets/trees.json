@@ -1,0 +1,3056 @@
+{
+  "type" : "FeatureCollection", 
+  "features" : [
+    {
+      "type" : "Feature", 
+      "id" : 1, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885156769569, 42.9277488980932
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 1, 
+        "globalid" : "4896b78e-e45c-4164-bb28-c65e8e2455ae", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "American chestnut", 
+        "what_tree_" : "Other", 
+        "scientific" : "Castanea dentata", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 2, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5884787426998, 42.9279026174119
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 2, 
+        "globalid" : "bfe8cbf6-b738-4ff6-a53d-2591a361cfa5", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Yellow wood", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Cladrastis kentuckea", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "In memory of deceased classmates 1985", 
+        "FamilyName" : "Fabaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 3, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5886029984296, 42.928026776015
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 3, 
+        "globalid" : "b6e2dd7f-6298-487d-88d5-39ee826183c8", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "White pine", 
+        "what_tree_" : "Commemorative Pine", 
+        "scientific" : "Pinus strobus", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "In memory of Peter M. Versluys", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 4, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5891905632938, 42.9274420691962
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 4, 
+        "globalid" : "0ff2980f-f459-4430-8e3b-9b05e05c4122", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "River birch", 
+        "what_tree_" : "Commemorative Birch", 
+        "scientific" : "Betula nigra", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "Donated by Bartlett tree experts", 
+        "FamilyName" : "Betulaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 5, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5894713918912, 42.927248923599
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 5, 
+        "globalid" : "ad767b0f-76c9-440f-9487-6d69a2caf527", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "American sycamore", 
+        "what_tree_" : "Other", 
+        "scientific" : "Platanis occidentalis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Platanaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 6, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885677342135, 42.9283628553615
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 6, 
+        "globalid" : "faca22ec-69a4-42c5-b1e2-4ff39632a21e", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer rubrum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "“Red sunset” planted by her majesty Beatrix, Queen of the Netherlands. June 26, 1982", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : "1982"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 7, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5887491346648, 42.9288073201018
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 7, 
+        "globalid" : "c68a84bc-d70e-4e92-aeb2-40be3f414d49", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Pin oak", 
+        "what_tree_" : "Oak", 
+        "scientific" : "Quercia palustris", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 8, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5892565033849, 42.9286949273291
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 8, 
+        "globalid" : "95bc76a3-7daa-41a9-8b21-a471fd093884", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Silver maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer saccharinum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 9, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5895673882243, 42.9286908318165
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 9, 
+        "globalid" : "3a01436f-6916-4232-a131-f34b0e383896", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "English oak", 
+        "what_tree_" : "Oak", 
+        "scientific" : "Quercus robur", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 10, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5894803464408, 42.9293217574931
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 10, 
+        "globalid" : "edd8a0f6-2cfb-4c06-acb7-dee7b87ef94f", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "American elm", 
+        "what_tree_" : "Elm", 
+        "scientific" : "Ulmus americana", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ulmaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 11, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5901348793212, 42.9300990163566
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 11, 
+        "globalid" : "353eb725-2bec-41af-b633-ad3aa48615d3", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "London plane tree", 
+        "what_tree_" : "Other", 
+        "scientific" : "Platanus acerifolia 'Bloodgood", 
+        "cultivar" : "Bloodgood", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Platanaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 12, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5894187491759, 42.9294609374723
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 12, 
+        "globalid" : "f6ec4ff9-0871-4aa3-b32a-b0373268aef5", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Kentucky coffeetree", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Gymnocladus dioicus", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "In commemoration of the dedicated and skilled employees of the physical plant 1974-2021", 
+        "FamilyName" : "Fabaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 13, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5887953328383, 42.9292720330779
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 13, 
+        "globalid" : "6be498bf-e7d0-4653-a02f-d5ee5b8e1cd6", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Cedar of Lebanon", 
+        "what_tree_" : "Other", 
+        "scientific" : "Cedrus libani 'Stenocoma'", 
+        "cultivar" : "Stenocoma", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 14, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5871413482946, 42.9288062714923
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 14, 
+        "globalid" : "c3c9f3e3-ad01-46bc-b0de-2fcbef13635f", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Black walnut", 
+        "what_tree_" : "Walnut", 
+        "scientific" : "Juglans nigra", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Juglandaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 15, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5868429037769, 42.9287346216055
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 15, 
+        "globalid" : "fdb2299f-6fb9-4276-b61b-0357a8ebd506", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Sugar maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer saccharum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "In loving memory of Teun “Tom” van Keulen", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 16, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.586858466545, 42.9285776134661
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 16, 
+        "globalid" : "5e8de475-b82e-4c77-aa7d-5a7327ec20be", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Crimson king", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer platanoides", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "In memory of Charles Huizinga", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 17, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5869004837703, 42.9285064950787
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 17, 
+        "globalid" : "c1282c0f-5670-47dc-8d1d-5d61f7e6c3a6", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Bur oak", 
+        "what_tree_" : "Commemorative Oak", 
+        "scientific" : "Quercus macrocarpa", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : "In memory of William B. Fyfe", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 18, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5874010635083, 42.928239454887
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 18, 
+        "globalid" : "726ba021-7676-4ea8-a8c7-4dbdf661a335", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Weeping cherry", 
+        "what_tree_" : "Other", 
+        "scientific" : "Prunis x subhirtella 'Pendula'", 
+        "cultivar" : "Pendula", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 19, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5871706814817, 42.9292273619532
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 19, 
+        "globalid" : "34977b96-36ce-47b2-a4a2-69b1db8a41c1", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Scotch pine", 
+        "what_tree_" : "Pine", 
+        "scientific" : "Pinus sylvestris", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 20, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5871568624992, 42.9294813448882
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 20, 
+        "globalid" : "aa756273-e129-4e78-8130-f4b166da0fa0", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Sassafras", 
+        "what_tree_" : "Other", 
+        "scientific" : "Sassafras albidum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Lauraceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 21, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5871657702841, 42.9295109703551
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 21, 
+        "globalid" : "6012e5af-77e3-45af-9f92-869f172561c8", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Shagbark hickory", 
+        "what_tree_" : "Hickory", 
+        "scientific" : "Carya ovata", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Juglandaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 22, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5867515866164, 42.9293130358679
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 22, 
+        "globalid" : "3c901bc5-7420-4d0c-9814-a303cafc1139", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red oak", 
+        "what_tree_" : "Oak", 
+        "scientific" : "Quercus rubra", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 23, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5870504205405, 42.9294823836051
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 23, 
+        "globalid" : "67ecde4d-3c9f-4822-9e18-2fd36180f09f", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "White fir", 
+        "what_tree_" : "Other", 
+        "scientific" : "Abies concolor", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 24, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5852588262338, 42.9294587907906
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 24, 
+        "globalid" : "d789fd98-c106-4cc4-9408-0f836ca81644", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Seven-son flower", 
+        "what_tree_" : "Other", 
+        "scientific" : "Heptacodium miconioides", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Caprifoliaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 25, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5850631553403, 42.9294710026847
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 25, 
+        "globalid" : "43a20fd7-9b6a-4c6b-896f-3dc8a0d6a9d9", 
+        "CreationDa" : 1655164800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655164800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Giant sequoia", 
+        "what_tree_" : "Other", 
+        "scientific" : "Sequoiadendron giganteum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655164800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cupressaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 26, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885650569318, 42.9276874743975
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 26, 
+        "globalid" : "42e5ca65-2c5f-46f8-82d8-d1ff6793d5c9", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Dawn redwood", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Metasequoia glyptostroboides", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : "Given in loving memory of Thea Glupker by her family November 23,1997", 
+        "FamilyName" : "Cupressaceae", 
+        "YearPlaned" : "1997"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 27, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5889747970492, 42.9275857277992
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 27, 
+        "globalid" : "9cd02913-3091-4aa7-899a-c4cc53b83a69", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Sugar maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer saccharum 'Commemoration'", 
+        "cultivar" : "Commemoration Maple", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 28, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.589492522362, 42.9285704161918
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 28, 
+        "globalid" : "da62cdd6-10c4-4d89-b458-71f66438d489", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Tree of heaven", 
+        "what_tree_" : "Other", 
+        "scientific" : "Ailanthus altissima", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Simaroubaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 29, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5853189063424, 42.9280260997248
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 29, 
+        "globalid" : "b9fc61b9-23e4-4663-8993-04042ce0d7fc", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Japanese zelkova", 
+        "what_tree_" : "Other", 
+        "scientific" : "Zelkova serrated 'Green Vase'", 
+        "cultivar" : "Green Vase", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ulmaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 30, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5861005161259, 42.9296231248074
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 30, 
+        "globalid" : "cb61944b-7677-4f7f-87c7-72e53eddbdaf", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "American hornbeam", 
+        "what_tree_" : "Other", 
+        "scientific" : "Carpinus caroliniana", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Betulaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 31, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5855996081354, 42.929842160987
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 31, 
+        "globalid" : "6508d44c-3372-4495-806e-d2f51ab29d46", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "White ash", 
+        "what_tree_" : "Ash", 
+        "scientific" : "Fraxinus americana 'Autumn Purple'", 
+        "cultivar" : "Autum purple", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Oleaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 32, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5849591784233, 42.929995749904
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 32, 
+        "globalid" : "b2f06bfd-2555-4b2a-b2ff-45e5d6595620", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Hackberry", 
+        "what_tree_" : "Other", 
+        "scientific" : "Celtis occidentalis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ulmaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 33, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5849493326455, 42.9302043386593
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 33, 
+        "globalid" : "f3d37a94-9548-42f4-ac67-ef01fb825ef4", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Amur maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer ginnala 'Flame Maple'", 
+        "cultivar" : "Flame  Maple", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 34, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5851884893573, 42.9304186956663
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 34, 
+        "globalid" : "54fec703-066b-4da7-8046-8b258c44f7ac", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Thornless honey locust", 
+        "what_tree_" : "Other", 
+        "scientific" : "Gleditsia triacanthos inermis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fabaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 35, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5850035069063, 42.9306837177794
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 35, 
+        "globalid" : "c8ebe4be-9ef6-499a-adb5-7a89054a0eb3", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "American elm", 
+        "what_tree_" : "Elm", 
+        "scientific" : "Ulmus carpinifolia 'Accolade'", 
+        "cultivar" : "Accolade Elm", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ulmaceae", 
+        "YearPlaned" : "2010"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 36, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5850040473989, 42.930796040405
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 36, 
+        "globalid" : "d184b3a6-8c25-4122-a1de-91525948c969", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Norway spruce", 
+        "what_tree_" : "Spruce", 
+        "scientific" : "Picea abies", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 37, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5850410832794, 42.9310716610284
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 37, 
+        "globalid" : "8df12312-072d-4bb9-8a0e-1a515434fcc4", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Amur maackia", 
+        "what_tree_" : "Other", 
+        "scientific" : "Maackia amurensis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fabaceae", 
+        "YearPlaned" : "2018"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 38, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5853574000239, 42.930932919019
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 38, 
+        "globalid" : "69a7747d-df2c-4e22-a339-ecf5f92400a8", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Washington hawthorn", 
+        "what_tree_" : "Other", 
+        "scientific" : "Crataegus phaenopyrum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : "2010"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 39, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5854993130428, 42.9310596254014
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 39, 
+        "globalid" : "be833deb-7271-4414-8922-167afda33e12", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Colorado blue spruce", 
+        "what_tree_" : "Spruce", 
+        "scientific" : "Picea pungens", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 40, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5865539327178, 42.9307489402115
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 40, 
+        "globalid" : "c42ea50c-b560-4bdf-b2eb-7e68a36386a7", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Frontier elm", 
+        "what_tree_" : "Elm", 
+        "scientific" : "Ulmus x. 'Frontier'", 
+        "cultivar" : "Frontier", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ulmaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 41, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5865524911046, 42.9306728350833
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 41, 
+        "globalid" : "f48c8e20-58d7-42ac-a847-a08404227017", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Hawthorn", 
+        "what_tree_" : "Other", 
+        "scientific" : "Crataegus monogyna 'Crusader'", 
+        "cultivar" : "Crusader", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 42, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.586547862294, 42.9305887017073
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 42, 
+        "globalid" : "a532b381-01c1-4f64-b570-6bc866128588", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Little leaf linden", 
+        "what_tree_" : "Basswood (Linden)", 
+        "scientific" : "Tilia americana 'Glenleven'", 
+        "cultivar" : "Glenleven", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Malvaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 43, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5857617648935, 42.9302758203728
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 43, 
+        "globalid" : "f3401234-f34e-4115-863b-781f97b60a56", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Douglas fir", 
+        "what_tree_" : "Other", 
+        "scientific" : "Pseudotsuga menziesii", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 44, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.58551499632, 42.9300777779671
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 44, 
+        "globalid" : "a865956a-e194-4011-b137-6d25d3dc656c", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Cornelian cherry", 
+        "what_tree_" : "Other", 
+        "scientific" : "Cornus mas", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cornaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 45, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.585436110488, 42.9293697561094
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 45, 
+        "globalid" : "88979667-9a03-4dcf-a57d-cd80ab966909", 
+        "CreationDa" : 1655337600000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655337600000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Eastern cottonwood", 
+        "what_tree_" : "Cottonwood", 
+        "scientific" : "Populus deltoides", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655337600000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Salicaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 46, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5875092294673, 42.9309733885111
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 46, 
+        "globalid" : "80a35030-15b8-48d7-99b1-8a01eba10bb2", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Tree lilac", 
+        "what_tree_" : "Other", 
+        "scientific" : "Syringa reticulata 'Ivory Silk'", 
+        "cultivar" : "Ivory silk", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Oleaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 47, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5874409718234, 42.9308094555919
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 47, 
+        "globalid" : "afd6c977-d986-49a8-991b-6d75fa90a2e5", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Green ash", 
+        "what_tree_" : "Ash", 
+        "scientific" : "Fraxinus pennsylvanica 'Patmore'", 
+        "cultivar" : "Patmore", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Oleaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 48, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5876523412825, 42.9308235236867
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 48, 
+        "globalid" : "a2438b4e-f925-4822-bf9e-0fb656049cec", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Redbud crabapple", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Malus x. 'Zoni'", 
+        "cultivar" : "Zumi", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : "In memory of Stewart L. Huizenga, David J. Locke, and David L. Tamminga (1983)", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : "1983"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 49, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5869059561449, 42.9300037071055
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 49, 
+        "globalid" : "ada31a88-0365-47d8-9e39-8c850c90804e", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Magnolia", 
+        "what_tree_" : "Other", 
+        "scientific" : "Magnolia liliiflora 'Jane'", 
+        "cultivar" : "Jane", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Magnoliaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 50, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5870251118194, 42.9301003077831
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 50, 
+        "globalid" : "f33c61b0-5133-4339-be56-8565b902f01f", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Deciduous holly", 
+        "what_tree_" : "Other", 
+        "scientific" : "Ilex decidua", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Aquifoliaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 51, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5871256101588, 42.9300458151623
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 51, 
+        "globalid" : "dcf11495-d4f9-4ed9-99bd-8b042c7393e3", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Weeping white pine", 
+        "what_tree_" : "Pine", 
+        "scientific" : "Pinus strobus 'Pendula'", 
+        "cultivar" : "Pendula", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 52, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5879660652816, 42.9302499234952
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 52, 
+        "globalid" : "8c8dfbe4-5241-47d5-a2e2-2bed2f4e1988", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Kousa dogwood", 
+        "what_tree_" : "Dogwood", 
+        "scientific" : "Cornus kousa 'Milky Way'", 
+        "cultivar" : "Milky Way", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cornaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 53, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885300715055, 42.9300624481235
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 53, 
+        "globalid" : "884688a5-b9dc-4ca3-b87d-de56a3fab25d", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Pagoda dogwood", 
+        "what_tree_" : "Dogwood", 
+        "scientific" : "Cornus alternifolia", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cornaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 54, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885371914382, 42.9299075965584
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 54, 
+        "globalid" : "f6fce8e3-722e-4125-a070-9c26c88579aa", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red oak", 
+        "what_tree_" : "Commemorative Oak", 
+        "scientific" : "Quercus rubra", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : "In memory of Dr. Cheryl Kreykes Brandsen", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 55, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5887940540023, 42.9299369180544
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 55, 
+        "globalid" : "20d67069-e1d0-48f0-98d8-c2a64397b7f7", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Black cherry", 
+        "what_tree_" : "Other", 
+        "scientific" : "Prunus serotina", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 56, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.588693315544, 42.9297013334498
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 56, 
+        "globalid" : "543a7f45-2253-4c8f-8d03-948a2f51bea6", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Spring snow crabapple", 
+        "what_tree_" : "Other", 
+        "scientific" : "Malus x. 'Spring Snow'", 
+        "cultivar" : "Spring snow", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 57, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885943496495, 42.9296741919105
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 57, 
+        "globalid" : "cc85b2f8-7560-43b5-bb7e-40892054b7ba", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Tricolor european beech", 
+        "what_tree_" : "Other", 
+        "scientific" : "Fagus sylvatica 'Roseomarginata'", 
+        "cultivar" : " Roseomarginata", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 58, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5884312746836, 42.9295687886687
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 58, 
+        "globalid" : "450031b5-1596-4865-962e-0bac55ac5909", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Sargent crabapple", 
+        "what_tree_" : "Other", 
+        "scientific" : "Malus sargentii", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 59, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.588939727986, 42.9298043408976
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 59, 
+        "globalid" : "f5bd63ae-615c-48ed-8d67-e79d13cb264e", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Eastern hemlock", 
+        "what_tree_" : "Other", 
+        "scientific" : "Tsuga canadensis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 60, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5890895199653, 42.929926699058
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 60, 
+        "globalid" : "154188b6-b130-46f4-aa51-9bdcf72564c0", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "American beech", 
+        "what_tree_" : "Other", 
+        "scientific" : "Fagus grandifolia", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 61, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5889739813641, 42.9299698008656
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 61, 
+        "globalid" : "515def37-6708-4aa1-93b3-9316123a6c9c", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Norway maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer platanoides", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 62, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5881611462199, 42.9308859114557
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 62, 
+        "globalid" : "b2108927-5346-46ca-beb6-c48315b6486c", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "White spruce", 
+        "what_tree_" : "Spruce", 
+        "scientific" : "Picea glauca", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 63, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885332416158, 42.9309550423414
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 63, 
+        "globalid" : "b0bae98f-9329-4106-8a84-8b32d279e3bf", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "European hornbeam", 
+        "what_tree_" : "Other", 
+        "scientific" : "Carpinus betulus 'Fransfontain'", 
+        "cultivar" : "Fransfontain", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Betulaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 64, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5894606548853, 42.9305245323813
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 64, 
+        "globalid" : "5aade1ec-5275-4b6b-804a-887195cbe71e", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Witch hazel", 
+        "what_tree_" : "Other", 
+        "scientific" : "Hamamelis vernalis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Hamamelidaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 65, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5897299415835, 42.9303249080681
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 65, 
+        "globalid" : "f56d6a93-da29-490d-b289-3f3a5b7d39d6", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Sweetgum", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Liquidambar styraciflua", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : "In memory of Dr. Donald H. Bouma sociology professor 1946-1960", 
+        "FamilyName" : "Altingiaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 66, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5896577539022, 42.9307043985892
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 66, 
+        "globalid" : "2bff95cf-6ef5-41f8-b54e-dcf3bfff1453", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Tamarack", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Larix laricina", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : "In memory of Dr. David H. DeHeer Biology Professor 1986-2011", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 67, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5899202444237, 42.9302100412605
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 67, 
+        "globalid" : "7feaaa0a-31c5-40bd-832f-a7364a72a4ab", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Tulip tree", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Liriodendron tulipifera", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : "In memory of Kristy Dykhouse", 
+        "FamilyName" : "Magnoliaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 68, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5898511189339, 42.930835127639
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 68, 
+        "globalid" : "a3688b76-08e5-4897-9ab7-52bc6396fc9a", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red bud", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Cercis canadensis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : "In memory of Dr.Hessel (Bud) Bouma III Biology Professor 1978-2015", 
+        "FamilyName" : "Fabaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 69, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5873267911984, 42.9317305655133
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 69, 
+        "globalid" : "9be1a42c-2951-440a-a73d-f9c15e08f052", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Basswood", 
+        "what_tree_" : "Basswood (Linden)", 
+        "scientific" : "Tilia americana", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Malvaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 70, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5874873912301, 42.9320230394318
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 70, 
+        "globalid" : "a0b72a26-cbee-4659-a17f-30b761ad04c8", 
+        "CreationDa" : 1655683200000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1655683200000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "American hornbeam", 
+        "what_tree_" : "Other", 
+        "scientific" : "Carpinus caroliniana", 
+        "cultivar" : " ", 
+        "whats_the_" : 1655683200000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Betulaceae", 
+        "YearPlaned" : "2010"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 71, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5870201214814, 42.9308517965732
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 71, 
+        "globalid" : "228c454c-dc68-4051-8db7-f01be1919402", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Flowering dogwood", 
+        "what_tree_" : "Dogwood", 
+        "scientific" : "Cornus florida", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cornaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 72, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5869250469533, 42.9308383121385
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 72, 
+        "globalid" : "bd149d3c-0ca2-4a73-b0c4-540284a277d0", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Okame cherry", 
+        "what_tree_" : "Other", 
+        "scientific" : "Prunus x. 'Okame'", 
+        "cultivar" : "Okame", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 73, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5865741710611, 42.9314308079855
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 73, 
+        "globalid" : "98954347-b857-4bd2-9ab6-6f714eaecd14", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Ornamental pear", 
+        "what_tree_" : "Other", 
+        "scientific" : "Pyrus calleryana 'Cleveland Select'", 
+        "cultivar" : "Cleveland Select", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 74, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5869462925373, 42.9316369739672
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 74, 
+        "globalid" : "3b538158-3f3c-4091-b3e4-5883d3ebc15f", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Hedge maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer campestre", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 75, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.587076244573, 42.9320003036711
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 75, 
+        "globalid" : "9d39f1dd-85d6-412b-8e89-c1d1846e1591", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Sugar maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer saccharum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "In loving memory of Steve Schuitema", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 76, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5880056408476, 42.9324918308334
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 76, 
+        "globalid" : "64394a08-7d88-4f10-bbf2-e35399607824", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red horse chestnut", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Aesculus carnea 'Fort McNair'", 
+        "cultivar" : "Fort McNair", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "In loving memory of Tara Oskam 1995-2017", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 77, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5875334608006, 42.9324844312116
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 77, 
+        "globalid" : "8ea67d5c-0f44-4713-a2d3-e2d827e99bf0", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Flowering dogwood", 
+        "what_tree_" : "Dogwood", 
+        "scientific" : "Cornus florida", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cornaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 78, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5878191502335, 42.9331137947659
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 78, 
+        "globalid" : "4ba31480-a8f3-4ebf-a95a-472597c3a7f5", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Paperbark maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer griseum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 79, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5860967929326, 42.9323108179899
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 79, 
+        "globalid" : "909c12ff-f01e-4489-bd9c-1128a9189356", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Black gum", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Nyssa sylvatica", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "In memory of Mike Vander Wal September 1, 1982- January 12, 2002", 
+        "FamilyName" : "Cornaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 80, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5863131248508, 42.9326906790317
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 80, 
+        "globalid" : "89e6a9db-6147-4fdd-91ed-42a3532b204e", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Magnolia", 
+        "what_tree_" : "Other", 
+        "scientific" : "Magnolia loebneri 'Dr Merril'", 
+        "cultivar" : "Dr Merril", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Magnoliaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 81, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5867664739935, 42.9331120707655
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 81, 
+        "globalid" : "427f47bc-95dc-40c2-ac19-8e48470da5cd", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Swamp white oak", 
+        "what_tree_" : "Oak", 
+        "scientific" : "Quercus bicolor\n", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 82, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5868522531289, 42.9330915086662
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 82, 
+        "globalid" : "cb861a52-dce1-47b2-9eb3-0190f894c230", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Kwanzan cherry", 
+        "what_tree_" : "Other", 
+        "scientific" : "Prunus serrulata", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 83, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5867875963704, 42.9332278036203
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 83, 
+        "globalid" : "3bfd887e-f39b-40b8-8e5d-b063c7225c36", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "White oak", 
+        "what_tree_" : "Oak", 
+        "scientific" : "Quercus alba\n", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 84, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5862032654683, 42.9320615016371
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 84, 
+        "globalid" : "de19dba8-2609-4a59-a5e5-7014a8c23099", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Ginkgo", 
+        "what_tree_" : "Other", 
+        "scientific" : "Ginkgo biloba 'Autumn Gold'", 
+        "cultivar" : "Autumn Gold", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ginkgoaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 85, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5861086855674, 42.932895525708
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 85, 
+        "globalid" : "87c604e6-725c-4118-a58c-2ba6913cef12", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "European mountain ash", 
+        "what_tree_" : "Other", 
+        "scientific" : "Sorbus aucuparia 'Cardinal Royal'", 
+        "cultivar" : "Cardinal Royal", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 86, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5866708140068, 42.933537153317
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 86, 
+        "globalid" : "fc14d939-d3cb-451f-8cb5-dd42bd1e8de2", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Lacebark pine", 
+        "what_tree_" : "Pine", 
+        "scientific" : "Pinus bungeana", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 87, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5865724488594, 42.9337773208667
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 87, 
+        "globalid" : "b3c06e99-ed08-4179-b5ac-362325047ffc", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Cotinus smoke tree", 
+        "what_tree_" : "Other", 
+        "scientific" : "Cotinus spp. 'Velvet Cloak'", 
+        "cultivar" : "Velvet cloak", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Anacardiaceae", 
+        "YearPlaned" : "2009"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 88, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5864893434085, 42.9344492637226
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 88, 
+        "globalid" : "65901a46-463f-49bd-8e5a-88fda23e8639", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Trident maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer buergerianum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "In memory of Colby Morath", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 89, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5864448053835, 42.9347862990485
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 89, 
+        "globalid" : "c482e7fc-e817-4c33-a414-6b2991bdcc38", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Limber pine", 
+        "what_tree_" : "Pine", 
+        "scientific" : "Pinus flexilis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : "2010"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 90, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5887632414304, 42.9327249764765
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 90, 
+        "globalid" : "0a3c2899-6d02-4622-a061-e01f4fdd48f7", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Weeping katsura", 
+        "what_tree_" : "Other", 
+        "scientific" : "Cercidiphyllum japonicum 'Pendula'", 
+        "cultivar" : "Pendula", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cercidiphyllaceae", 
+        "YearPlaned" : "2009"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 91, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5888905080905, 42.9328769151376
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 91, 
+        "globalid" : "55b65bb7-22d4-485e-9355-cb8c009ae2f6", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "White spire birch", 
+        "what_tree_" : "Birch", 
+        "scientific" : "Betula populifolia 'Whitespire'", 
+        "cultivar" : "Whitespire", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Betulaceae", 
+        "YearPlaned" : "2009"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 92, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5891769286723, 42.9327047525223
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 92, 
+        "globalid" : "3b2687f9-6480-4c71-8f1d-05075ef4c4f4", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Full moon japanese maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer japonicum 'Aconitifolium'", 
+        "cultivar" : "Aconitifolium", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : "2009"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 93, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5891379421623, 42.9325158544232
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 93, 
+        "globalid" : "fca103c4-06d3-4e97-97e6-efa15036253a", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Persian parrotia", 
+        "what_tree_" : "Other", 
+        "scientific" : "Parrotia persica", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Hamamelidaceae", 
+        "YearPlaned" : "2009"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 94, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5890718644749, 42.9319509803535
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 94, 
+        "globalid" : "104429f3-9fab-4b51-9585-34d868b4b8c0", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Tulip tree", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Liriodendron tulipifera", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "In loving memory of Olivia Anne Haverkamp", 
+        "FamilyName" : "Magnoliaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 95, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5892281306736, 42.931816904027
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 95, 
+        "globalid" : "0d47d004-4c3c-4b3b-96e1-90b4c05bc251", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer rubrum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "In honor of Prof. Kenneth Piers Retirement Dept, of Chemistry 1968-2007", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 96, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5888035553398, 42.93192018307
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 96, 
+        "globalid" : "22315ab8-02d5-4d93-b3e5-e3595806c117", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer rubrum 'October Glory'", 
+        "cultivar" : "October Glory", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "In memory of Nathan Miller", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 97, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5885830514666, 42.931536308354
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 97, 
+        "globalid" : "dc65db76-7173-44ee-bba7-404eff57dc3c", 
+        "CreationDa" : 1656028800000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656028800000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Swamp white oak", 
+        "what_tree_" : "Commemorative Oak", 
+        "scientific" : "Quercus bicolor", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656028800000, 
+        "commemorat" : "Faith and International Development Conference 10th anniversary", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 98, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5891282735509, 42.9315326049458
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 98, 
+        "globalid" : "09ab231e-34ad-49f6-aeff-2b7d5e4a5d3a", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Pawpaw", 
+        "what_tree_" : "Other", 
+        "scientific" : "Asimina triloba", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Annonaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 99, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5894894062111, 42.9319547395197
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 99, 
+        "globalid" : "2a13cab4-2129-4ad6-8713-c4d493a0d0fa", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Bitternut hickory", 
+        "what_tree_" : "Hickory", 
+        "scientific" : "Carya cordiformis", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Juglandaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 100, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.590255552152, 42.9312968665572
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 100, 
+        "globalid" : "cc012a8e-e5a9-48c5-87a3-ad81838d3651", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Northern catalpa", 
+        "what_tree_" : "Other", 
+        "scientific" : "Catalpa speciosa", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Bignoniaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 101, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5902724054471, 42.9314892126571
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 101, 
+        "globalid" : "395d8874-f462-43f3-9ff6-4aec0459d1cd", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Bald cypress", 
+        "what_tree_" : "Other", 
+        "scientific" : "Taxodium distichum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Cupressaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 102, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5870122281318, 42.9366249926493
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 102, 
+        "globalid" : "5adddb3b-8a6d-4943-a7fc-8fd542b31c10", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Juneberry", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Amelanchier arborea 'Autumn Brilliance'", 
+        "cultivar" : "Autumn Brilliance", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : "In memory of Douglas S. Kok, transportation mechanic", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 103, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5870638609084, 42.9365219078598
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 103, 
+        "globalid" : "bd72b629-c5d8-410e-b1eb-841e60153a7c", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Yoshino cherry", 
+        "what_tree_" : "Other", 
+        "scientific" : "Prunus ×. 'Yedoensis'", 
+        "cultivar" : "Yedoensis", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Rosaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 104, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.587464162641, 42.9367637481485
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 104, 
+        "globalid" : "a1624b37-597d-407f-a934-6e35862dc0c6", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "European beech", 
+        "what_tree_" : "Commemorative Other", 
+        "scientific" : "Fagus sylvatica 'Riverseii'", 
+        "cultivar" : "Riverseii", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : "In memory of Bernie Kuiphof 2000", 
+        "FamilyName" : "Fagaceae", 
+        "YearPlaned" : "2000"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 105, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5840512624558, 42.9298872655849
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 105, 
+        "globalid" : "f06597f5-f3ec-4b80-b856-6b16dcb612db", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer rubrum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : "In memory of Kevin Dale De Rose whose life was tragically ended while crossing the East Beltline on October 27 1989", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : "1989"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 106, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5821683806662, 42.9286428565826
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 106, 
+        "globalid" : "cf5bce6f-6a81-419e-abea-9093d087248c", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red maple", 
+        "what_tree_" : "Commemorative Maple", 
+        "scientific" : "Acer rubrum", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : "In memory of Amanda Folkema Junior Education Student 2003", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : "2003"
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 107, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5819099919526, 42.9286113083652
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 107, 
+        "globalid" : "d716a2dd-ccd4-4fc4-9429-0744881f6d62", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Lacebark elm", 
+        "what_tree_" : "Elm", 
+        "scientific" : "Ulmus parvifolia", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ulmaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 108, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5822031592484, 42.9283680498457
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 108, 
+        "globalid" : "3306947f-d98f-4c15-b19c-2af3dcf2b775", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Emerald sunshine elm", 
+        "what_tree_" : "Elm", 
+        "scientific" : "Ulmus propinqua", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Ulmaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 109, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.582167143199, 42.9271480952085
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 109, 
+        "globalid" : "df34e12c-b4d9-4692-a343-0d07f9d7b03b", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Siberian spruce", 
+        "what_tree_" : "Spruce", 
+        "scientific" : "Picea omorika", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 110, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.583545302074, 42.9290321515126
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 110, 
+        "globalid" : "9c6f7913-a41c-4db0-88a0-76edeeeae381", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "River birch", 
+        "what_tree_" : "Birch", 
+        "scientific" : "Betula nigra 'Dwarf Tecumseh'", 
+        "cultivar" : "Dwarf Tecumseh", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Betulaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 111, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5835414394858, 42.928708638393
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 111, 
+        "globalid" : "dfc8b3bf-23f8-4a9e-927d-5b74c15957dd", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Red maple", 
+        "what_tree_" : "Maple", 
+        "scientific" : "Acer x. freemanii 'Celebration'", 
+        "cultivar" : "Celebration maple", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : " "
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 112, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5853027572164, 42.9320514130424
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 112, 
+        "globalid" : "4b9da591-8c38-4d64-bba6-c3bb6f43a94c", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Austrian pine", 
+        "what_tree_" : "Pine", 
+        "scientific" : "Pinus nigra", 
+        "cultivar" : " ", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Pinaceae", 
+        "YearPlaned" : ""
+      }
+    }, 
+    {
+      "type" : "Feature", 
+      "id" : 113, 
+      "geometry" : 
+      {
+        "type" : "Point", 
+        "coordinates" : [
+          -85.5887586962568, 42.9372697202215
+        ]
+      }, 
+      "properties" : {
+        "OBJECTID" : 113, 
+        "globalid" : "37bc1dff-b1ca-483d-9a14-912f9a35047c", 
+        "CreationDa" : 1656374400000, 
+        "Creator" : "ecoCalvinGIS", 
+        "EditDate" : 1656374400000, 
+        "Editor" : "ecoCalvinGIS", 
+        "common_nam" : "Yellow horse chestnut", 
+        "what_tree_" : "Other", 
+        "scientific" : "Aesculus flava 'Flavamira'", 
+        "cultivar" : "Flavamira", 
+        "whats_the_" : 1656374400000, 
+        "commemorat" : " ", 
+        "FamilyName" : "Sapindaceae", 
+        "YearPlaned" : " "
+      }
+    }
+  ]
+}
