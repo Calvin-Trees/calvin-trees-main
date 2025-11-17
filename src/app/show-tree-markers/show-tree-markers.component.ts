@@ -7,15 +7,14 @@ import { NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-show-tree-markers',
-  templateUrl: './show-tree-markers.component.html',
-  styleUrls: ['./show-tree-markers.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    NgxMapLibreGLModule,
-  ],
+    selector: 'app-show-tree-markers',
+    templateUrl: './show-tree-markers.component.html',
+    styleUrls: ['./show-tree-markers.component.scss'],
+    imports: [
+        CommonModule,
+        IonicModule,
+        NgxMapLibreGLModule,
+    ]
 })
 export class ShowTreeMarkersComponent {
 
