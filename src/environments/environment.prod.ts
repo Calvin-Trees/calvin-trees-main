@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  maptilerApiKey: 'ted09kFoNPzbRYuDTi5B' // TODO: Replace with production API key
 };

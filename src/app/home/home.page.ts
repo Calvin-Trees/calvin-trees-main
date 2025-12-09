@@ -6,6 +6,7 @@ import treeJson from '../../assets/trees.json';
 import tour1Json from '../../assets/tour1_geojson.json';
 import { RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
+import { environment } from '../../environments/environment';
 
 export interface TreeInfo {
   treeId: number;
@@ -81,6 +82,7 @@ export class HomePage implements AfterViewInit {
 
   public mode: AppMode = 'wander';
   public tour1Json: any = tour1Json.routes[0].geometry;
+  public mapStyle: string = `https://api.maptiler.com/maps/streets/style.json?key=${environment.maptilerApiKey}`;
 
   @ViewChild('map') map: MapComponent | null = null;
 
@@ -328,30 +330,8 @@ To get tree info:
 https://services2.arcgis.com/DBcRJmfPI2l07jMS/ArcGIS/rest/services/Calvin_Campus_Speelman_Arboretum_WFL1/FeatureServer/7/113?f=json
 last number is 1 - 113.
 
-https://services2.arcgis.com/DBcRJmfPI2l07jMS/ArcGIS/rest/services/Calvin_Campus_Speelman_Arboretum_WFL1/FeatureServer/7/getEstimates/?f=pjson
-
-https://services2.arcgis.com/DBcRJmfPI2l07jMS/ArcGIS/rest/services/Calvin_Campus_Speelman_Arboretum_WFL1/FeatureServer/7/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=
-
 Get attachments for a tree:
 https://services2.arcgis.com/DBcRJmfPI2l07jMS/ArcGIS/rest/services/Calvin_Campus_Speelman_Arboretum_WFL1/FeatureServer/7/78/attachments?f=json
 
 The id field indicates how to access the image.  end url with attachment/{{id}}
-
-Mapbox API token: pk.eyJ1IjoidnRuMiIsImEiOiJjbGhnbTNoNzcwOW9yM2pwOGl0emFpNjhyIn0.AxiB76BK9PaUGaadHSOrDA
-
--85.5887953328383	, 42.9292720330779
--85.5870504205405	, 42.9294823836051
--85.5852588262338	, 42.9294587907906
--85.5850631553403, 42.9294710026847
--85.5857617648935, 42.9302758203728
--85.5885371914382, 42.9299075965584
--85.587076244573, 42.9320003036711
--85.5868522531289, 42.9330915086662
--85.5862032654683, 42.9320615016371
--85.5864893434085, 42.9344492637226
--85.5891379421623, 42.9325158544232
-
-
-Don't love these results...
-https://api.mapbox.com/directions/v5/mapbox/walking/-85.5887953328383%2C42.9292720330779%3B-85.5870504205405%2C42.9294823836051%3B-85.5852588262338%2C42.9294587907906%3B-85.5850631553403%2C42.9294710026847%3B-85.5857617648935%2C42.9302758203728%3B-85.5885371914382%2C42.9299075965584%3B-85.587076244573%2C42.9320003036711%3B-85.5868522531289%2C42.9330915086662%3B-85.5862032654683%2C42.9320615016371%3B-85.5864893434085%2C42.9344492637226%3B-85.5891379421623%2C42.9325158544232%3B-85.5891282735509%2C42.9315326049458?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=simplified&steps=true&access_token=pk.eyJ1IjoidnRuMiIsImEiOiJjbGhnbHpucGowNXBnM21xamxsNXBocGdjIn0.klEa91Svy8rM2OWA2bbMuA
 */

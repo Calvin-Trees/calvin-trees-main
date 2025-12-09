@@ -87,7 +87,7 @@
 
   <ion-content [fullscreen]="true">
     <!-- replace "streets" with "hybrid" to get a satellite view -->
-    <mgl-map #map [style]="'https://api.maptiler.com/maps/streets/style.json?key=ted09kFoNPzbRYuDTi5B'" [zoom]="[18]"
+    <mgl-map #map [style]="mapStyle" [zoom]="[18]"
       [center]="center" [bearing]="heading" [pitch]="[15]">
 
       <!-- central arrow: never moves -->
