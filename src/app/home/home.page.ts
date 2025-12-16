@@ -4,7 +4,7 @@ import { LngLat } from 'maplibre-gl';
 
 import treeJson from '../../assets/trees.json';
 import tour1Json from '../../assets/tour1_geojson.json';
-import { RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent } from '@ionic/angular';
+import { RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
 import { environment } from '../../environments/environment';
 
@@ -72,6 +72,12 @@ export class HomePage implements AfterViewInit {
   errorMsg: string = '';
   statusMsg: string = '';
 
+  // Retry mechanism properties
+  private geolocationWatchId: number | null = null;
+  private retryCount: number = 0;
+  private readonly MAX_RETRIES: number = 3;
+  private readonly TIMEOUT_MS: number = 10000; // 10 seconds
+
   public showAllTreesChecked = true;
   public searching = false;
   public searchResultTrees: TreeInfo[] = [];
@@ -99,23 +105,8 @@ export class HomePage implements AfterViewInit {
     // }
   ];
 
-  constructor() {
-    window.navigator.geolocation.watchPosition(
-      (position) => {
-        if (position.coords.heading) {
-          this.heading = [position.coords.heading];
-        }
-        // update center of map.
-        this.center = new LngLat(position.coords.longitude, position.coords.latitude);
-        this.highlightNearbyTrees();
-      },
-      (error) => {
-        this.errorMsg = error.message;
-      },
-      {
-        enableHighAccuracy: true,
-      }
-    );
+  constructor(private toastController: ToastController) {
+    this.startGeolocationWatch();
 
     this.treesDb = treeJson.features.map((tree: any) => {
       return {
@@ -139,6 +130,153 @@ export class HomePage implements AfterViewInit {
         commemoration: jsonTree.properties.commemorat,
       }
     });
+  }
+
+  /**
+   * Starts the geolocation watch with timeout configuration
+   */
+  private startGeolocationWatch(): void {
+    // Clear any existing watch
+    if (this.geolocationWatchId !== null) {
+      window.navigator.geolocation.clearWatch(this.geolocationWatchId);
+    }
+
+    this.geolocationWatchId = window.navigator.geolocation.watchPosition(
+      (position) => {
+        // Reset retry count on success
+        this.retryCount = 0;
+        if (position.coords.heading) {
+          this.heading = [position.coords.heading];
+        }
+        // update center of map.
+        this.center = new LngLat(position.coords.longitude, position.coords.latitude);
+        this.highlightNearbyTrees();
+      },
+      (error) => {
+        this.handleGeolocationError(error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: this.TIMEOUT_MS,
+        maximumAge: 0 
+      }
+    );
+  }
+
+  /**
+   * Handles geolocation errors with specific handling for different error types
+   */
+  private handleGeolocationError(error: GeolocationPositionError): void {
+    if (error.code === 1) {
+      this.handlePermissionDenied();
+    } 
+    else if (error.code === 2) {
+      this.handlePositionUnavailable();
+    }
+    else if (error.code === 3) {
+      this.handleTimeout();
+    }
+    // Unknown error
+    else {
+      this.errorMsg = error.message;
+      this.statusMsg = 'Location error occurred';
+    }
+  }
+
+  /**
+   * Handles when location permission is denied
+   */
+  private async handlePermissionDenied(): Promise<void> {
+    this.errorMsg = 'Permission denied';
+    this.statusMsg = 'Location permission denied. Using default location.';
+    
+    // Ensure map centers on default location when permission is denied
+    this.center = new LngLat(this.defaultLng, this.defaultLat);
+    this.highlightNearbyTrees();
+    
+    // Show a visible toast notification to the user
+    const toast = await this.toastController.create({
+      message: 'Location permission denied. Using default location.',
+      duration: 5000,
+      position: 'top',
+      color: 'warning',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel'
+        }
+      ]
+    });
+    await toast.present();
+  }
+
+  /**
+   * Handles transient errors
+   */
+  private async handleTransientError(errorType: 'timeout' | 'unavailable'): Promise<void> {
+    this.retryCount++;
+    
+    // Error-specific messages
+    const errorConfig = {
+      timeout: {
+        errorName: 'Timeout',
+        retryMessage: 'Location timeout. Retrying...',
+        finalStatusMessage: 'Location timeout. Using default location.',
+        toastMessage: 'Location timeout. Using default location.'
+      },
+      unavailable: {
+        errorName: 'Unavailable',
+        retryMessage: 'Location unavailable. Retrying...',
+        finalStatusMessage: 'Location unavailable. Using default location.',
+        toastMessage: 'Location unavailable. Using default location.'
+      }
+    };
+    
+    const config = errorConfig[errorType];
+    
+    if (this.retryCount <= this.MAX_RETRIES) {
+      const retryDelay = Math.min(1000 * Math.pow(2, this.retryCount - 1), 5000); // max 5 seconds
+      this.statusMsg = `${config.retryMessage} (${this.retryCount}/${this.MAX_RETRIES})`;
+      
+      // Wait before retrying
+      setTimeout(() => {
+        this.startGeolocationWatch();
+      }, retryDelay);
+    } else {
+      // Max retries reached
+      this.errorMsg = config.errorName;
+      this.statusMsg = config.finalStatusMessage;
+      this.center = new LngLat(this.defaultLng, this.defaultLat);
+      this.highlightNearbyTrees();
+      
+      const toast = await this.toastController.create({
+        message: config.toastMessage,
+        duration: 5000,
+        position: 'top',
+        color: 'warning',
+        buttons: [
+          {
+            text: 'OK',
+            role: 'cancel'
+          }
+        ]
+      });
+      await toast.present();
+    }
+  }
+
+  /**
+   * Handles timeout errors with retry mechanism
+   */
+  private async handleTimeout(): Promise<void> {
+    await this.handleTransientError('timeout');
+  }
+
+  /**
+   * Handles position unavailable errors with retry mechanism
+   */
+  private async handlePositionUnavailable(): Promise<void> {
+    await this.handleTransientError('unavailable');
   }
 
   ngAfterViewInit() {

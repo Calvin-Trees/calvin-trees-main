@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
     selector: 'app-show-tree-markers',
     templateUrl: './show-tree-markers.component.html',
     styleUrls: ['./show-tree-markers.component.scss'],
+    standalone: true,
     imports: [
         CommonModule,
         IonicModule,
