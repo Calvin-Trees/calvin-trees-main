@@ -86,13 +86,23 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
+    <!-- Heading display overlay -->
+    <div class="heading-display">
+      @if (heading) {
+        <span class="heading-cardinal">{{ cardinalDirection }}</span>
+        <span class="heading-degrees">{{ headingDegrees }}°</span>
+      } @else {
+        <span class="heading-unavailable">--</span>
+      }
+    </div>
+
     <!-- replace "streets" with "hybrid" to get a satellite view -->
     <mgl-map #map [style]="mapStyle" [zoom]="[18]"
       [center]="center" [bearing]="heading" [pitch]="[15]">
 
       <!-- central arrow: never moves -->
       <mgl-marker [lngLat]="center">
-        <ion-img src="assets/icons/arrow.png" anchor="top-left"></ion-img>
+        <ion-icon name="navigate" color="primary" style="font-size: 32px;"></ion-icon>
       </mgl-marker>
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
@@ -105,6 +115,7 @@
       <mgl-control position="bottom-right">
         Status: {{ statusMsg }}
       </mgl-control>
+
 
       <!-- markers for nearbyTrees -->
       <app-show-tree-markers id="nearby-trees" color="green" [markerRadius]=7 [treesList]="nearbyTrees">

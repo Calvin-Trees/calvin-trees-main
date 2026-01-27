@@ -72,6 +72,19 @@ export class HomePage implements AfterViewInit {
   errorMsg: string = '';
   statusMsg: string = '';
 
+  // Cardinal direction from heading (N, NE, E, SE, S, SW, W, NW)
+  get cardinalDirection(): string {
+    if (!this.heading) return '--';
+    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    const index = Math.round(this.heading[0] / 45) % 8;
+    return directions[index];
+  }
+
+  // Heading in degrees for display
+  get headingDegrees(): number | null {
+    return this.heading ? Math.round(this.heading[0]) : null;
+  }
+
   // Retry mechanism properties
   private geolocationWatchId: number | null = null;
   private retryCount: number = 0;
