@@ -405,7 +405,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       if (tree.commonName.toLowerCase().indexOf(searchTerm) != -1) {
         this.searchResultStr.push(tree.commonName);
         found = true;
-        this.searchResultTrees.push(tree);
       } else if (tree.scientificName.toLowerCase().indexOf(searchTerm) != -1) {
         this.searchResultStr.push(tree.scientificName);
         found = true;
