@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
-import { TreeInfo } from '../home/home.page';
+import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 
 import { NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 import { CommonModule } from '@angular/common';

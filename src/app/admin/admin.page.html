@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Admin</ion-title>
+    <ion-buttons slot="end" *ngIf="isAuthenticated">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Passphrase Gate -->
+  <div *ngIf="!isAuthenticated" class="auth-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Admin Access</ion-card-title>
+        <ion-card-subtitle>Enter the passphrase to continue</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-input
+            type="password"
+            placeholder="Passphrase"
+            [(ngModel)]="passphraseInput"
+            (keyup.enter)="submitPassphrase()"
+          ></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="passphraseError">
+          <p class="error-text">{{ passphraseError }}</p>
+        </ion-text>
+        <ion-button expand="block" (click)="submitPassphrase()" class="submit-btn">
+          Submit
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Admin Content -->
+  <div *ngIf="isAuthenticated" class="admin-content">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="openCreateModal()" color="primary">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+          Add Tree
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="confirmReset()" color="warning">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Reset Data
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+
+    <app-tree-list
+      (editTree)="openEditModal($event)"
+      (deleteTree)="confirmDelete($event)"
+    ></app-tree-list>
+  </div>
+</ion-content>

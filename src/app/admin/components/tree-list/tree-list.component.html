@@ -1,0 +1,40 @@
+<div class="tree-list-container">
+  <ion-searchbar
+    [(ngModel)]="searchQuery"
+    (ionInput)="onSearchChange()"
+    placeholder="Search by name, scientific name, or commemoration"
+    debounce="300"
+  ></ion-searchbar>
+
+  <ion-text color="medium" class="tree-count">
+    <p>{{ filteredTrees.length }} trees</p>
+  </ion-text>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let tree of filteredTrees">
+      <ion-item>
+        <ion-label>
+          <h2>{{ tree.commonName }}</h2>
+          <p class="scientific-name">{{ tree.scientificName }}</p>
+          <p *ngIf="tree.commemoration && tree.commemoration.trim()" class="commemoration">
+            {{ tree.commemoration }}
+          </p>
+        </ion-label>
+        <ion-note slot="end">ID: {{ tree.treeId }}</ion-note>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="onEdit(tree)">
+          <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="onDelete(tree)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-text *ngIf="filteredTrees.length === 0" color="medium" class="no-results">
+    <p>No trees found</p>
+  </ion-text>
+</div>

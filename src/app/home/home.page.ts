@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MapComponent } from '@maplibre/ngx-maplibre-gl';
 import { LngLat } from 'maplibre-gl';
 
@@ -7,17 +7,9 @@ import tour1Json from '../../assets/tour1_geojson.json';
 import { RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
 import { environment } from '../../environments/environment';
-
-export interface TreeInfo {
-  treeId: number;
-  lng: number;
-  lat: number;
-  commonName: string;
-  scientificName: string;
-  commemoration: string;
-  // attachmentURL?: string;
-  localImgFile?: string;
-}
+import { TreeService } from '../services/tree.service';
+import { TreeInfo } from '../shared/interfaces/tree-info.interface';
+import { Subscription } from 'rxjs';
 type AppMode = 'tour1' | 'wander' | 'tour2';
 
 interface TourInfo {
@@ -56,7 +48,7 @@ interface GeometryType {
     styleUrls: ['home.page.scss'],
     standalone: false
 })
-export class HomePage implements AfterViewInit {
+export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   public imageLoaded = false;
   public isTreePictureModalOpen = false;
@@ -105,32 +97,15 @@ export class HomePage implements AfterViewInit {
 
   @ViewChild('map') map: MapComponent | null = null;
 
-  public treesDb: TreeInfo[] = [
-    // {
-    //   lng: -85.59002609659022,
-    //   lat: 42.932341568753785,
-    //   description: "Fancy pine",
-    // },
-    // {
-    //   lng: -85.591,
-    //   lat: 42.93245,
-    //   description: "Redwood",
-    // }
-  ];
+  public treesDb: TreeInfo[] = [];
 
-  constructor(private toastController: ToastController) {
+  private treeSubscription: Subscription | null = null;
+
+  constructor(
+    private toastController: ToastController,
+    private treeService: TreeService
+  ) {
     this.startGeolocationWatch();
-
-    this.treesDb = treeJson.features.map((tree: any) => {
-      return {
-        treeId: tree.properties.OBJECTID,
-        lng: tree.geometry.coordinates[0],
-        lat: tree.geometry.coordinates[1],
-        scientificName: tree.properties.scientific,
-        commonName: tree.properties.common_nam,
-        commemoration: tree.properties.commemorat,
-      }
-    });
 
     this.tour1Trees = Tour1.map((tourTree: TourInfo) => {
       const jsonTree = treeJson.features.find((json: any) => json.id === tourTree.id)!;
@@ -143,6 +118,20 @@ export class HomePage implements AfterViewInit {
         commemoration: jsonTree.properties.commemorat,
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.treeSubscription = this.treeService.trees$.subscribe(trees => {
+      this.treesDb = trees;
+      this.highlightNearbyTrees();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.treeSubscription?.unsubscribe();
+    if (this.geolocationWatchId !== null) {
+      window.navigator.geolocation.clearWatch(this.geolocationWatchId);
+    }
   }
 
   /**

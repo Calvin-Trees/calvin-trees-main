@@ -1,0 +1,28 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 16px;
+
+  ion-card {
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .error-text {
+    margin: 8px 0;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    margin-top: 16px;
+  }
+}
+
+.admin-content {
+  ion-toolbar {
+    --background: transparent;
+    padding: 8px;
+  }
+}
