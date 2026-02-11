@@ -30,7 +30,7 @@ const Tour1: TourInfo[] = [
   { id: 98, localImgFile: 'IMG_2079.JPG' },
   { id: 93, localImgFile: 'IMG_2120.JPG' },
   { id: 82, localImgFile: 'IMG_2128.JPG' },
-  { id: 88, localImgFile: '' },
+  { id: 88, localImgFile: 'IMG_2122.JPG' },
   { id: 75, localImgFile: 'IMG_2102.JPG' },
   { id: 84, localImgFile: 'IMG_2107.JPG' },
 ];
@@ -43,10 +43,10 @@ interface GeometryType {
 
 
 @Component({
-    selector: 'app-home',
-    templateUrl: 'home.page.html',
-    styleUrls: ['home.page.scss'],
-    standalone: false
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+  standalone: false
 })
 export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
@@ -160,7 +160,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       {
         enableHighAccuracy: true,
         timeout: this.TIMEOUT_MS,
-        maximumAge: 0 
+        maximumAge: 0
       }
     );
   }
@@ -171,7 +171,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   private handleGeolocationError(error: GeolocationPositionError): void {
     if (error.code === 1) {
       this.handlePermissionDenied();
-    } 
+    }
     else if (error.code === 2) {
       this.handlePositionUnavailable();
     }
@@ -191,11 +191,11 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   private async handlePermissionDenied(): Promise<void> {
     this.errorMsg = 'Permission denied';
     this.statusMsg = 'Location permission denied. Using default location.';
-    
+
     // Ensure map centers on default location when permission is denied
     this.center = new LngLat(this.defaultLng, this.defaultLat);
     this.highlightNearbyTrees();
-    
+
     // Show a visible toast notification to the user
     const toast = await this.toastController.create({
       message: 'Location permission denied. Using default location.',
@@ -217,7 +217,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
    */
   private async handleTransientError(errorType: 'timeout' | 'unavailable'): Promise<void> {
     this.retryCount++;
-    
+
     // Error-specific messages
     const errorConfig = {
       timeout: {
@@ -233,13 +233,13 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         toastMessage: 'Location unavailable. Using default location.'
       }
     };
-    
+
     const config = errorConfig[errorType];
-    
+
     if (this.retryCount <= this.MAX_RETRIES) {
       const retryDelay = Math.min(1000 * Math.pow(2, this.retryCount - 1), 5000); // max 5 seconds
       this.statusMsg = `${config.retryMessage} (${this.retryCount}/${this.MAX_RETRIES})`;
-      
+
       // Wait before retrying
       setTimeout(() => {
         this.startGeolocationWatch();
@@ -250,7 +250,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       this.statusMsg = config.finalStatusMessage;
       this.center = new LngLat(this.defaultLng, this.defaultLat);
       this.highlightNearbyTrees();
-      
+
       const toast = await this.toastController.create({
         message: config.toastMessage,
         duration: 5000,
