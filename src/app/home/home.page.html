@@ -20,6 +20,19 @@
           Show all tree markers
         </ion-checkbox>
       </ion-item>
+      <ion-item>
+        <ion-label>Phone direction (compass)</ion-label>
+        @if (compassActive) {
+          <ion-button fill="outline" size="small" (click)="disableCompass()">Disable</ion-button>
+        } @else {
+          <ion-button fill="outline" size="small" (click)="enableCompass()">Enable</ion-button>
+        }
+      </ion-item>
+      @if (compassError) {
+        <ion-item lines="none">
+          <ion-note color="warning">{{ compassError }}</ion-note>
+        </ion-item>
+      }
       <ion-item lines="none">
         <ion-range min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
         </ion-range>
@@ -86,24 +99,39 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    <!-- Heading display overlay -->
-    <div class="heading-display">
-      @if (heading) {
-        <span class="heading-cardinal">{{ cardinalDirection }}</span>
-        <span class="heading-degrees">{{ headingDegrees }}°</span>
-      } @else {
-        <span class="heading-unavailable">--</span>
-      }
+    <!-- Debug overlay (NOT a map control, should always be visible) -->
+    <div class="debug-overlay">
+      <div class="debug-overlay__inner">
+        <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
+        @if (lastGeo) {
+          <div><b>lng:</b> {{ lastGeo.lng }}</div>
+          <div><b>lat:</b> {{ lastGeo.lat }}</div>
+          <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
+        } @else {
+          <div><b>geo:</b> (none yet)</div>
+        }
+        <div style="margin-top: 6px;">
+          <div><b>center.lng:</b> {{ center.lng }}</div>
+          <div><b>center.lat:</b> {{ center.lat }}</div>
+        </div>
+        <div style="margin-top: 6px;">
+          @if (heading) {
+            <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
+          } @else {
+            <div><b>heading:</b> --</div>
+          }
+        </div>
+        <div style="margin-top: 6px; opacity: 0.9;">
+          <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
+          <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
+          <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
+        </div>
+      </div>
     </div>
 
     <!-- replace "streets" with "hybrid" to get a satellite view -->
     <mgl-map #map [style]="mapStyle" [zoom]="[18]"
       [center]="center" [bearing]="heading" [pitch]="[15]">
-
-      <!-- central arrow: never moves -->
-      <mgl-marker [lngLat]="center">
-        <ion-icon name="navigate" color="primary" style="font-size: 32px;"></ion-icon>
-      </mgl-marker>
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
@@ -114,6 +142,27 @@
 
       <mgl-control position="bottom-right">
         Status: {{ statusMsg }}
+      </mgl-control>
+
+      <!-- Debug readout (top-right). White background so it can't "disappear". -->
+      <mgl-control position="top-right">
+        <div style="background: rgba(255,255,255,0.92); padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+          <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; color: #111;">
+            <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
+            @if (lastGeo) {
+              <div><b>lng:</b> {{ lastGeo.lng }}</div>
+              <div><b>lat:</b> {{ lastGeo.lat }}</div>
+              <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
+            } @else {
+              <div><b>geo:</b> (none yet)</div>
+            }
+            <div style="margin-top: 6px; opacity: 0.9;">
+              <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
+              <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
+              <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
+            </div>
+          </div>
+        </div>
       </mgl-control>
 
 
@@ -177,6 +226,21 @@
       <app-show-tree-markers id="search-trees" [treesList]="searchResultTrees" color="gold" [markerRadius]=5>
       </app-show-tree-markers>
       }
+
+      <!-- User location rendered using tracking_dot.png image -->
+      <mgl-geojson-source id="user-location-source">
+        <mgl-feature *ngFor="let marker of userLocationTrees" [geometry]="{
+                          type: 'Point',
+                          coordinates: [marker.lng, marker.lat]
+                        }">
+        </mgl-feature>
+      </mgl-geojson-source>
+      <mgl-layer id="user-location-layer" type="symbol" source="user-location-source" [layout]="{
+                        'icon-image': 'tracking-dot',
+                        'icon-size': 0.5,
+                        'icon-anchor': 'center'
+                      }">
+      </mgl-layer>
 
     </mgl-map>
 
