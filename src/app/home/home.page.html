@@ -99,20 +99,6 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    <!-- Heading display overlay (direction phone is pointing when compass enabled) -->
-    <div class="heading-display">
-      @if (heading) {
-        <span class="heading-cardinal">{{ cardinalDirection }}</span>
-        <span class="heading-degrees">{{ headingDegrees }}°</span>
-        @if (compassActive) {
-          <span class="heading-hint">compass</span>
-        }
-      } @else {
-        <span class="heading-unavailable">--</span>
-        <span class="heading-hint">Menu → Enable compass</span>
-      }
-    </div>
-
     <!-- Debug overlay (NOT a map control, should always be visible) -->
     <div class="debug-overlay">
       <div class="debug-overlay__inner">
@@ -127,6 +113,13 @@
         <div style="margin-top: 6px;">
           <div><b>center.lng:</b> {{ center.lng }}</div>
           <div><b>center.lat:</b> {{ center.lat }}</div>
+        </div>
+        <div style="margin-top: 6px;">
+          @if (heading) {
+            <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
+          } @else {
+            <div><b>heading:</b> --</div>
+          }
         </div>
         <div style="margin-top: 6px; opacity: 0.9;">
           <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
