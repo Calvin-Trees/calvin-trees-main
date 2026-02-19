@@ -96,14 +96,32 @@
       }
     </div>
 
+    <!-- Debug overlay (NOT a map control, should always be visible) -->
+    <div class="debug-overlay">
+      <div class="debug-overlay__inner">
+        <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
+        @if (lastGeo) {
+          <div><b>lng:</b> {{ lastGeo.lng }}</div>
+          <div><b>lat:</b> {{ lastGeo.lat }}</div>
+          <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
+        } @else {
+          <div><b>geo:</b> (none yet)</div>
+        }
+        <div style="margin-top: 6px;">
+          <div><b>center.lng:</b> {{ center.lng }}</div>
+          <div><b>center.lat:</b> {{ center.lat }}</div>
+        </div>
+        <div style="margin-top: 6px; opacity: 0.9;">
+          <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
+          <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
+          <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
+        </div>
+      </div>
+    </div>
+
     <!-- replace "streets" with "hybrid" to get a satellite view -->
     <mgl-map #map [style]="mapStyle" [zoom]="[18]"
       [center]="center" [bearing]="heading" [pitch]="[15]">
-
-      <!-- central arrow: never moves -->
-      <mgl-marker [lngLat]="center">
-        <ion-icon name="navigate" color="primary" style="font-size: 32px;"></ion-icon>
-      </mgl-marker>
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
@@ -114,6 +132,27 @@
 
       <mgl-control position="bottom-right">
         Status: {{ statusMsg }}
+      </mgl-control>
+
+      <!-- Debug readout (top-right). White background so it can't "disappear". -->
+      <mgl-control position="top-right">
+        <div style="background: rgba(255,255,255,0.92); padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+          <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; color: #111;">
+            <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
+            @if (lastGeo) {
+              <div><b>lng:</b> {{ lastGeo.lng }}</div>
+              <div><b>lat:</b> {{ lastGeo.lat }}</div>
+              <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
+            } @else {
+              <div><b>geo:</b> (none yet)</div>
+            }
+            <div style="margin-top: 6px; opacity: 0.9;">
+              <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
+              <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
+              <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
+            </div>
+          </div>
+        </div>
       </mgl-control>
 
 
@@ -177,6 +216,28 @@
       <app-show-tree-markers id="search-trees" [treesList]="searchResultTrees" color="gold" [markerRadius]=5>
       </app-show-tree-markers>
       }
+
+      <!-- User location rendered via same component, but with GPS-style styling -->
+      <!-- Outer soft ring -->
+      <app-show-tree-markers
+        id="user-location-ring"
+        [treesList]="userLocationTrees"
+        color="rgba(30, 144, 255, 0.25)"
+        [markerRadius]=16
+        [strokeColor]="'transparent'"
+        [strokeWidth]=0
+        [circleOpacity]=1>
+      </app-show-tree-markers>
+      <!-- Inner solid dot -->
+      <app-show-tree-markers
+        id="user-location"
+        [treesList]="userLocationTrees"
+        color="#1e90ff"
+        [markerRadius]=7
+        [strokeColor]="'#ffffff'"
+        [strokeWidth]=2
+        [circleOpacity]=1>
+      </app-show-tree-markers>
 
     </mgl-map>
 

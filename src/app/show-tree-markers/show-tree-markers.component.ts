@@ -23,6 +23,9 @@ export class ShowTreeMarkersComponent {
   @Input() treesList: TreeInfo[] = [];
   @Input() color: string = '';
   @Input() markerRadius: number = 5;
+  @Input() strokeColor: string = 'transparent';
+  @Input() strokeWidth: number = 0;
+  @Input() circleOpacity: number = 0.95;
 
   constructor() { }
 

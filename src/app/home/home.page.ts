@@ -54,8 +54,36 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public isTreePictureModalOpen = false;
   public currentTree: TreeInfo | null = null;    // for when clicking on a popup to see the tree's full image.
 
+  // Debug helpers (safe to leave on; mostly logs in devtools)
+  public debugGeo = true;
+  public geoUpdateCount = 0;
+  public mapDebug = true;
+  public mapDebugState: {
+    hasMapInstance: boolean;
+    hasUserSource: boolean;
+    hasUserLayer: boolean;
+    hasDebugFixedSource: boolean;
+    hasDebugFixedLayer: boolean;
+  } = {
+    hasMapInstance: false,
+    hasUserSource: false,
+    hasUserLayer: false,
+    hasDebugFixedSource: false,
+    hasDebugFixedLayer: false,
+  };
+  public lastGeo:
+    | {
+        lng: number;
+        lat: number;
+        accuracy: number | null;
+        heading: number | null;
+        timestamp: number;
+      }
+    | null = null;
+
   public nearbyTrees: TreeInfo[] = [];
   public tour1Trees: TreeInfo[] = [];
+  public userLocationTrees: TreeInfo[] = [];
 
   private defaultLng = -85.5871801;
   private defaultLat = 42.9308076;
@@ -147,14 +175,53 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       (position) => {
         // Reset retry count on success
         this.retryCount = 0;
+        this.geoUpdateCount++;
+
+        this.lastGeo = {
+          lng: position.coords.longitude,
+          lat: position.coords.latitude,
+          accuracy: typeof position.coords.accuracy === 'number' ? position.coords.accuracy : null,
+          heading: typeof position.coords.heading === 'number' ? position.coords.heading : null,
+          timestamp: position.timestamp
+        };
+
+        if (this.debugGeo) {
+          // eslint-disable-next-line no-console
+          console.debug('[geo] update', {
+            count: this.geoUpdateCount,
+            lng: this.lastGeo.lng,
+            lat: this.lastGeo.lat,
+            accuracy: this.lastGeo.accuracy,
+            heading: this.lastGeo.heading,
+            timestamp: this.lastGeo.timestamp
+          });
+        }
+
         if (position.coords.heading) {
           this.heading = [position.coords.heading];
         }
         // update center of map.
         this.center = new LngLat(position.coords.longitude, position.coords.latitude);
+
+        // Update single-point "user location" list for marker rendering
+        this.userLocationTrees = [
+          {
+            treeId: -1,
+            lng: position.coords.longitude,
+            lat: position.coords.latitude,
+            commonName: 'You are here',
+            scientificName: '',
+            commemoration: '',
+          }
+        ];
+
         this.highlightNearbyTrees();
       },
       (error) => {
+        if (this.debugGeo) {
+          // eslint-disable-next-line no-console
+          console.warn('[geo] error', { code: error.code, message: error.message });
+        }
         this.handleGeolocationError(error);
       },
       {
@@ -282,7 +349,53 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => this.map!.mapInstance.resize(), 0);
+    setTimeout(() => {
+      const mapInstance = this.map?.mapInstance;
+
+      if (!mapInstance) {
+        this.mapDebugState = {
+          hasMapInstance: false,
+          hasUserSource: false,
+          hasUserLayer: false,
+          hasDebugFixedSource: false,
+          hasDebugFixedLayer: false,
+        };
+        if (this.mapDebug) {
+          // eslint-disable-next-line no-console
+          console.warn('[map] no map instance yet');
+        }
+        return;
+      }
+
+      mapInstance.resize();
+
+      const refreshMapDebugState = (tag: string) => {
+        // Note: getSource/getLayer exist on the MapLibre map instance.
+        const hasUserSource = !!mapInstance.getSource('user-location-source');
+        const hasUserLayer = !!mapInstance.getLayer('user-location-layer');
+        const hasDebugFixedSource = !!mapInstance.getSource('debug-fixed-source');
+        const hasDebugFixedLayer = !!mapInstance.getLayer('debug-fixed-layer');
+
+        this.mapDebugState = {
+          hasMapInstance: true,
+          hasUserSource,
+          hasUserLayer,
+          hasDebugFixedSource,
+          hasDebugFixedLayer,
+        };
+
+        if (this.mapDebug) {
+          // eslint-disable-next-line no-console
+          console.debug('[map] state', tag, this.mapDebugState);
+        }
+      };
+
+      // Capture state after style loads / changes
+      mapInstance.once('load', () => refreshMapDebugState('load'));
+      mapInstance.on('styledata', () => refreshMapDebugState('styledata'));
+      // Also do an immediate check
+      refreshMapDebugState('afterViewInit');
+    }, 0);
   }
 
   showAllTreesSelected() {
