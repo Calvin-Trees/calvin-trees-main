@@ -20,6 +20,19 @@
           Show all tree markers
         </ion-checkbox>
       </ion-item>
+      <ion-item>
+        <ion-label>Phone direction (compass)</ion-label>
+        @if (compassActive) {
+          <ion-button fill="outline" size="small" (click)="disableCompass()">Disable</ion-button>
+        } @else {
+          <ion-button fill="outline" size="small" (click)="enableCompass()">Enable</ion-button>
+        }
+      </ion-item>
+      @if (compassError) {
+        <ion-item lines="none">
+          <ion-note color="warning">{{ compassError }}</ion-note>
+        </ion-item>
+      }
       <ion-item lines="none">
         <ion-range min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
         </ion-range>
@@ -86,13 +99,17 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    <!-- Heading display overlay -->
+    <!-- Heading display overlay (direction phone is pointing when compass enabled) -->
     <div class="heading-display">
       @if (heading) {
         <span class="heading-cardinal">{{ cardinalDirection }}</span>
         <span class="heading-degrees">{{ headingDegrees }}°</span>
+        @if (compassActive) {
+          <span class="heading-hint">compass</span>
+        }
       } @else {
         <span class="heading-unavailable">--</span>
+        <span class="heading-hint">Menu → Enable compass</span>
       }
     </div>
 

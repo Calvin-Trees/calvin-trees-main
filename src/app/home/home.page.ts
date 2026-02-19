@@ -111,6 +111,12 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   private readonly MAX_RETRIES: number = 3;
   private readonly TIMEOUT_MS: number = 10000; // 10 seconds
 
+  // Compass (device orientation) — direction the phone is pointing
+  public compassActive = false;
+  public compassError: string | null = null;
+  private deviceOrientationHandler = (event: DeviceOrientationEvent) => this.onDeviceOrientation(event);
+  private deviceOrientationAbsoluteHandler = (event: DeviceOrientationEvent) => this.onDeviceOrientation(event);
+
   public showAllTreesChecked = true;
   public searching = false;
   public searchResultTrees: TreeInfo[] = [];
@@ -160,6 +166,81 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     if (this.geolocationWatchId !== null) {
       window.navigator.geolocation.clearWatch(this.geolocationWatchId);
     }
+    this.stopCompass();
+  }
+
+  /**
+   * Get compass heading in degrees 0–360 from a DeviceOrientationEvent.
+   * Uses webkitCompassHeading on iOS (absolute) and alpha elsewhere (normalized).
+   */
+  private getCompassHeadingFromEvent(event: DeviceOrientationEvent): number | null {
+    const raw = (event as DeviceOrientationEvent & { webkitCompassHeading?: number }).webkitCompassHeading;
+    if (typeof raw === 'number' && !Number.isNaN(raw)) {
+      return (raw % 360 + 360) % 360;
+    }
+    const alpha = event.alpha;
+    if (typeof alpha !== 'number' || Number.isNaN(alpha)) return null;
+    // alpha can be 0–360 or -180–180 depending on browser
+    return (alpha % 360 + 360) % 360;
+  }
+
+  private onDeviceOrientation(event: DeviceOrientationEvent): void {
+    const headingDeg = this.getCompassHeadingFromEvent(event);
+    if (headingDeg !== null) {
+      this.heading = [headingDeg];
+      this.compassError = null;
+    }
+  }
+
+  private startCompassListeners(): void {
+    window.addEventListener('deviceorientation', this.deviceOrientationHandler, true);
+    if (typeof (window as any).ondeviceorientationabsolute !== 'undefined') {
+      window.addEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
+    }
+    this.compassActive = true;
+    this.compassError = null;
+  }
+
+  private stopCompass(): void {
+    window.removeEventListener('deviceorientation', this.deviceOrientationHandler, true);
+    window.removeEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
+    this.compassActive = false;
+    this.compassError = null;
+    // Leave heading as-is; geolocation will update it when moving if available
+  }
+
+  /**
+   * Enable compass (device orientation) for "direction phone is pointing".
+   * On iOS 13+ this must be called from a user gesture (e.g. button tap);
+   * permission will be requested and the compass used for heading and map bearing.
+   */
+  public async enableCompass(): Promise<void> {
+    this.compassError = null;
+    const DevOrient = (window as any).DeviceOrientationEvent;
+    if (typeof DevOrient?.requestPermission === 'function') {
+      try {
+        const result = await DevOrient.requestPermission();
+        if (result === 'granted') {
+          this.startCompassListeners();
+        } else {
+          this.compassError = 'Compass permission denied';
+        }
+      } catch (e) {
+        this.compassError = e instanceof Error ? e.message : 'Compass permission failed';
+      }
+      return;
+    }
+    // No permission API (Android, desktop, or older iOS): start listening
+    if (typeof window.DeviceOrientationEvent === 'undefined') {
+      this.compassError = 'Compass not supported on this device';
+      return;
+    }
+    this.startCompassListeners();
+  }
+
+  /** Turn off compass; heading will fall back to GPS direction-of-travel when moving. */
+  public disableCompass(): void {
+    this.stopCompass();
   }
 
   /**
@@ -197,7 +278,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
           });
         }
 
-        if (position.coords.heading) {
+        if (!this.compassActive && typeof position.coords.heading === 'number') {
           this.heading = [position.coords.heading];
         }
         // update center of map.
