@@ -390,8 +390,19 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         }
       };
 
-      // Capture state after style loads / changes
-      mapInstance.once('load', () => refreshMapDebugState('load'));
+      // Load tracking_dot.png image into the map when style loads
+      mapInstance.once('load', () => {
+        const img = new Image();
+        img.onload = () => {
+          mapInstance.addImage('tracking-dot', img);
+        };
+        img.onerror = (error) => {
+          // eslint-disable-next-line no-console
+          console.error('[map] Error loading tracking_dot.png:', error);
+        };
+        img.src = 'assets/tracking_dot.png';
+        refreshMapDebugState('load');
+      });
       mapInstance.on('styledata', () => refreshMapDebugState('styledata'));
       // Also do an immediate check
       refreshMapDebugState('afterViewInit');

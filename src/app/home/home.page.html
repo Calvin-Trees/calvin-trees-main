@@ -217,27 +217,20 @@
       </app-show-tree-markers>
       }
 
-      <!-- User location rendered via same component, but with GPS-style styling -->
-      <!-- Outer soft ring -->
-      <app-show-tree-markers
-        id="user-location-ring"
-        [treesList]="userLocationTrees"
-        color="rgba(30, 144, 255, 0.25)"
-        [markerRadius]=16
-        [strokeColor]="'transparent'"
-        [strokeWidth]=0
-        [circleOpacity]=1>
-      </app-show-tree-markers>
-      <!-- Inner solid dot -->
-      <app-show-tree-markers
-        id="user-location"
-        [treesList]="userLocationTrees"
-        color="#1e90ff"
-        [markerRadius]=7
-        [strokeColor]="'#ffffff'"
-        [strokeWidth]=2
-        [circleOpacity]=1>
-      </app-show-tree-markers>
+      <!-- User location rendered using tracking_dot.png image -->
+      <mgl-geojson-source id="user-location-source">
+        <mgl-feature *ngFor="let marker of userLocationTrees" [geometry]="{
+                          type: 'Point',
+                          coordinates: [marker.lng, marker.lat]
+                        }">
+        </mgl-feature>
+      </mgl-geojson-source>
+      <mgl-layer id="user-location-layer" type="symbol" source="user-location-source" [layout]="{
+                        'icon-image': 'tracking-dot',
+                        'icon-size': 0.5,
+                        'icon-anchor': 'center'
+                      }">
+      </mgl-layer>
 
     </mgl-map>
 
