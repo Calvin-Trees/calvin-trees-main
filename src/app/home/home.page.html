@@ -14,6 +14,23 @@
           <ion-radio value="tour1">Bob Speelman's Favs</ion-radio>
         </ion-item> -->
       </ion-radio-group>
+      @if (!randomTourActive) {
+        <ion-item>
+          <ion-button expand="block" fill="outline" (click)="startRandomTour()">
+            Start Random Tour
+          </ion-button>
+        </ion-item>
+      } @else {
+        <ion-item>
+          <ion-label>
+            <h3>Random Tour Active</h3>
+            <p>Tree {{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</p>
+          </ion-label>
+          <ion-button fill="outline" color="danger" size="small" (click)="endRandomTour()">
+            End Tour
+          </ion-button>
+        </ion-item>
+      }
       <ion-item></ion-item>
       <ion-item>
         <ion-checkbox [checked]="showAllTreesChecked" (ionChange)="showAllTreesSelected()">
@@ -219,6 +236,17 @@
             'line-width': 3,
           }">
         </mgl-layer> -->
+      }
+
+      @if (mode === 'randomTour' && randomTourCurrentTarget.length > 0) {
+      <app-show-tree-markers
+        id="random-tour-target"
+        [treesList]="randomTourCurrentTarget"
+        color="orange"
+        [markerRadius]="9"
+        strokeColor="white"
+        [strokeWidth]="2">
+      </app-show-tree-markers>
       }
 
       <!-- show round gold markers for all trees selected when searched -->

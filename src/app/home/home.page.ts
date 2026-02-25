@@ -4,13 +4,13 @@ import { LngLat } from 'maplibre-gl';
 
 import treeJson from '../../assets/trees.json';
 import tour1Json from '../../assets/tour1_geojson.json';
-import { RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
+import { AlertController, RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
 import { environment } from '../../environments/environment';
 import { TreeService } from '../services/tree.service';
 import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 import { Subscription } from 'rxjs';
-type AppMode = 'tour1' | 'wander' | 'tour2';
+type AppMode = 'tour1' | 'wander' | 'tour2' | 'randomTour';
 
 interface TourInfo {
   id: number;
@@ -85,6 +85,13 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public tour1Trees: TreeInfo[] = [];
   public userLocationTrees: TreeInfo[] = [];
 
+  // Random Tour state
+  public randomTourActive = false;
+  public randomTourTrees: TreeInfo[] = [];
+  public randomTourCurrentIndex = 0;
+  public randomTourCurrentTarget: TreeInfo[] = [];
+  private randomTourProximityAlertShown = false;
+
   private defaultLng = -85.5871801;
   private defaultLat = 42.9308076;
   public center: LngLat = new LngLat(this.defaultLng, this.defaultLat);
@@ -137,7 +144,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   constructor(
     private toastController: ToastController,
-    private treeService: TreeService
+    private treeService: TreeService,
+    private alertController: AlertController
   ) {
     this.startGeolocationWatch();
 
@@ -508,56 +516,135 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   highlightNearbyTrees() {
-    const db2Use = this.mode === 'wander' ? this.treesDb : (this.mode === 'tour1' ? this.tour1Trees : []);
+    let db2Use: TreeInfo[] = [];
+    if (this.mode === 'wander') {
+      db2Use = this.treesDb;
+    } else if (this.mode === 'tour1') {
+      db2Use = this.tour1Trees;
+    } else if (this.mode === 'randomTour') {
+      db2Use = this.randomTourCurrentTarget;
+    }
+
     this.nearbyTrees = db2Use.filter(tree =>
-      this.center.distanceTo(new LngLat(tree.lng, tree.lat)) < HOW_CLOSE_IS_CLOSE // meters
+      this.center.distanceTo(new LngLat(tree.lng, tree.lat)) < HOW_CLOSE_IS_CLOSE
     );
-
-
-    // get the tree.localImgFile by mapping from the tree id to the img name using treeImgs
-    // that was imported from treeId2Img.ts in assets/ directory.
 
     this.nearbyTrees.forEach(tree => {
       const res = treeImgs.find((t: any) => t.treeId === tree.treeId);
       tree.localImgFile = res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '';
     });
 
-    // For each tree, we need to get attachment numbers. To do this, build a URL ending in,
-    // ...FeatureServer/7/{{tree.treeId}}/attachments?f=json. Using the REST API gives back a json object like this:
-    // {
-    //   "attachmentInfos" : [
-    //     {
-    //       "id": 70,
-    //       "parentObjectId": 97,
-    //       "name": "IMG_2084.JPG",
-    //       "contentType": "image/jpeg",
-    //       "size": 3880050,
-    //       "keywords": "",
-    //       "exifInfo": null
-    //     }
-    //   ]
-    // }
-    /*
-       All old stuff when retriving images from the online databas, which used a l9ot of bandwidth.
-          const response = await fetch(`${baseURL}/${tree.treeId}/attachments?f=json`);
-    const baseURL = 'https://services2.arcgis.com/DBcRJmfPI2l07jMS/arcgis/rest/services/Calvin_Campus_Speelman_Arboretum_WFL1/FeatureServer/7';
-      const treeAttachmentData = await response.json();
-      // console.log(JSON.stringify(treeAttachmentData, null, 2));
-      if (treeAttachmentData.attachmentInfos.length > 0) {
-        // if (fs.existsSync(`assets/tree_imgs/${treeAttachmentData.attachmentInfos[0].name}`)) {
-        // console.log('found local file ' + `assets/tree_imgs/${treeAttachmentData.attachmentInfos[0].name}`);
-        tree.localImgFile = `assets/tree_imgs/${treeAttachmentData.attachmentInfos[0].name}`;
-        // } else {
-        // console.log('did NOT find local file ' + `assets/tree_imgs/${treeAttachmentData.attachmentInfos[0].name}`);
-        tree.attachmentURL = `${baseURL}/${tree.treeId}/attachments/${treeAttachmentData.attachmentInfos[0].id}`;
-        // }
+    // Random tour: check if user reached the current target tree
+    if (this.randomTourActive && !this.randomTourProximityAlertShown && this.randomTourCurrentTarget.length > 0) {
+      const target = this.randomTourCurrentTarget[0];
+      const distToTarget = this.center.distanceTo(new LngLat(target.lng, target.lat));
+      if (distToTarget < HOW_CLOSE_IS_CLOSE) {
+        this.randomTourProximityAlertShown = true;
+        this.onReachedRandomTourTree();
       }
- */
+    }
   }
 
   public modeChanged(event: Event) {
     const ev = event as RadioGroupCustomEvent;
+    if (this.randomTourActive && ev.detail.value !== 'randomTour') {
+      this.endRandomTour();
+      return;
+    }
     this.mode = ev.detail.value;
+  }
+
+  public async startRandomTour(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Random Tour',
+      message: 'How many trees would you like to visit?',
+      inputs: [
+        {
+          name: 'count',
+          type: 'number',
+          placeholder: '1-10',
+          min: 1,
+          max: 10,
+          value: 5,
+        }
+      ],
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Start Tour',
+          handler: (data) => {
+            const count = Math.min(10, Math.max(1, parseInt(data.count, 10) || 5));
+            this.initRandomTour(count);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  private initRandomTour(count: number): void {
+    const allTrees = [...this.treesDb];
+    const n = allTrees.length;
+    const selected: TreeInfo[] = [];
+
+    for (let i = 0; i < count && i < n; i++) {
+      const j = i + Math.floor(Math.random() * (n - i));
+      [allTrees[i], allTrees[j]] = [allTrees[j], allTrees[i]];
+      selected.push(allTrees[i]);
+    }
+
+    this.randomTourTrees = selected;
+    this.randomTourCurrentIndex = 0;
+    this.randomTourActive = true;
+    this.randomTourProximityAlertShown = false;
+    this.mode = 'randomTour';
+    this.updateRandomTourTarget();
+  }
+
+  private updateRandomTourTarget(): void {
+    if (this.randomTourCurrentIndex < this.randomTourTrees.length) {
+      const tree = { ...this.randomTourTrees[this.randomTourCurrentIndex] };
+      const res = treeImgs.find((t: any) => t.treeId === tree.treeId);
+      tree.localImgFile = res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '';
+      this.randomTourCurrentTarget = [tree];
+    } else {
+      this.randomTourCurrentTarget = [];
+    }
+  }
+
+  private async onReachedRandomTourTree(): Promise<void> {
+    const tree = this.randomTourTrees[this.randomTourCurrentIndex];
+    const treeNumber = this.randomTourCurrentIndex + 1;
+    const totalTrees = this.randomTourTrees.length;
+    const isLastTree = treeNumber === totalTrees;
+
+    const alert = await this.alertController.create({
+      header: `Tree ${treeNumber} of ${totalTrees}`,
+      message: `You found ${tree.commonName}!${isLastTree ? ' This is the last tree on your tour.' : ''}`,
+      buttons: isLastTree
+        ? [{ text: 'Finish Tour', handler: () => this.endRandomTour() }]
+        : [
+            { text: 'End Tour', role: 'cancel', handler: () => this.endRandomTour() },
+            { text: 'Next Tree', handler: () => this.advanceRandomTour() }
+          ]
+    });
+    await alert.present();
+  }
+
+  private advanceRandomTour(): void {
+    this.randomTourCurrentIndex++;
+    this.randomTourProximityAlertShown = false;
+    this.updateRandomTourTarget();
+  }
+
+  public endRandomTour(): void {
+    this.randomTourActive = false;
+    this.randomTourTrees = [];
+    this.randomTourCurrentIndex = 0;
+    this.randomTourCurrentTarget = [];
+    this.randomTourProximityAlertShown = false;
+    this.mode = 'wander';
+    this.highlightNearbyTrees();
   }
 
   public distanceToTreeChanged(event: Event) {
