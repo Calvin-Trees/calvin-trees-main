@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 import { TreeService } from '../services/tree.service';
 import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 import { Subscription } from 'rxjs';
-type AppMode = 'tour1' | 'wander' | 'tour2' | 'randomTour';
+type AppMode = 'tour1' | 'wander' | 'randomTour';
 
 interface TourInfo {
   id: number;

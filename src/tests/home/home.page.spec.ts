@@ -275,8 +275,7 @@ describe('HomePage', () => {
     });
 
     it('should use empty db for unrecognized modes', () => {
-      // tour2 is not handled → db2Use stays []
-      (component as any).mode = 'tour2';
+      (component as any).mode = 'unknownMode';
       component.highlightNearbyTrees();
       expect(component.nearbyTrees.length).toBe(0);
     });
@@ -386,6 +385,260 @@ describe('HomePage', () => {
       spyOn(component, 'highlightNearbyTrees');
       component.endRandomTour();
       expect(component.highlightNearbyTrees).toHaveBeenCalled();
+    });
+
+    it('Cancel button in startRandomTour should not start a tour', async () => {
+      let capturedButtons: any[] = [];
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedButtons = opts.buttons;
+        return Promise.resolve(fakeAlert as any);
+      });
+
+      await component.startRandomTour();
+
+      const cancelBtn = capturedButtons.find((b: any) => b.text === 'Cancel');
+      expect(cancelBtn).toBeTruthy();
+      expect(cancelBtn.role).toBe('cancel');
+      expect(component.randomTourActive).toBeFalse();
+    });
+
+    it('initRandomTour should clamp count to minimum 1', async () => {
+      let capturedButtons: any[] = [];
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedButtons = opts.buttons;
+        return Promise.resolve(fakeAlert as any);
+      });
+      await component.startRandomTour();
+      capturedButtons.find((b: any) => b.text === 'Start Tour').handler({ count: '0' });
+      expect(component.randomTourTrees.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('randomTourCurrentTarget should contain the first tree after init', async () => {
+      let capturedButtons: any[] = [];
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedButtons = opts.buttons;
+        return Promise.resolve(fakeAlert as any);
+      });
+      await component.startRandomTour();
+      capturedButtons.find((b: any) => b.text === 'Start Tour').handler({ count: '2' });
+
+      expect(component.randomTourCurrentTarget.length).toBe(1);
+      expect(component.randomTourCurrentTarget[0].treeId).toBe(component.randomTourTrees[0].treeId);
+    });
+
+    it('selected trees should all come from treesDb', async () => {
+      let capturedButtons: any[] = [];
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedButtons = opts.buttons;
+        return Promise.resolve(fakeAlert as any);
+      });
+      await component.startRandomTour();
+      capturedButtons.find((b: any) => b.text === 'Start Tour').handler({ count: '3' });
+
+      const dbIds = component.treesDb.map(t => t.treeId);
+      component.randomTourTrees.forEach(t => {
+        expect(dbIds).toContain(t.treeId);
+      });
+    });
+
+    it('selected trees should have no duplicates', async () => {
+      let capturedButtons: any[] = [];
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedButtons = opts.buttons;
+        return Promise.resolve(fakeAlert as any);
+      });
+      await component.startRandomTour();
+      capturedButtons.find((b: any) => b.text === 'Start Tour').handler({ count: '3' });
+
+      const ids = component.randomTourTrees.map(t => t.treeId);
+      const unique = new Set(ids);
+      expect(unique.size).toBe(ids.length);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Random Tour: proximity detection & advancement
+  // ---------------------------------------------------------------------------
+  describe('random tour proximity & advancement', () => {
+    beforeEach(async () => {
+      // Start a tour with 2 trees via the alert handler
+      let capturedButtons: any[] = [];
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedButtons = opts.buttons;
+        return Promise.resolve(fakeAlert as any);
+      });
+      await component.startRandomTour();
+      capturedButtons.find((b: any) => b.text === 'Start Tour').handler({ count: '2' });
+      // Reset alert spy for proximity checks
+      alertCtrlSpy.create.calls.reset();
+    });
+
+    it('should trigger proximity alert when user reaches current target', async () => {
+      const target = component.randomTourCurrentTarget[0];
+      let capturedOpts: any = {};
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedOpts = opts;
+        return Promise.resolve(fakeAlert as any);
+      });
+
+      // Move user to the target tree location
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      expect(alertCtrlSpy.create).toHaveBeenCalled();
+      expect(capturedOpts.header).toBe('Tree 1 of 2');
+      expect(capturedOpts.message).toContain('You found');
+    });
+
+    it('should not trigger proximity alert twice for the same tree', () => {
+      const target = component.randomTourCurrentTarget[0];
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.returnValue(Promise.resolve(fakeAlert as any));
+
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+      alertCtrlSpy.create.calls.reset();
+
+      // Call again at the same location
+      component.highlightNearbyTrees();
+      expect(alertCtrlSpy.create).not.toHaveBeenCalled();
+    });
+
+    it('should not trigger proximity alert when user is far from target', () => {
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.returnValue(Promise.resolve(fakeAlert as any));
+
+      component.center = new LngLat(0, 0);
+      component.highlightNearbyTrees();
+
+      expect(alertCtrlSpy.create).not.toHaveBeenCalled();
+    });
+
+    it('advancing should move to the next tree', () => {
+      const firstTarget = component.randomTourCurrentTarget[0].treeId;
+      (component as any).advanceRandomTour();
+
+      expect(component.randomTourCurrentIndex).toBe(1);
+      expect(component.randomTourCurrentTarget.length).toBe(1);
+      expect(component.randomTourCurrentTarget[0].treeId).not.toBe(firstTarget);
+    });
+
+    it('advancing should reset proximity alert flag', () => {
+      (component as any).randomTourProximityAlertShown = true;
+      (component as any).advanceRandomTour();
+      expect((component as any).randomTourProximityAlertShown).toBeFalse();
+    });
+
+    it('advancing past the last tree should clear target', () => {
+      (component as any).advanceRandomTour(); // index 1
+      (component as any).advanceRandomTour(); // index 2, past end
+      expect(component.randomTourCurrentTarget.length).toBe(0);
+    });
+
+    it('last tree alert should show "Finish Tour" button', async () => {
+      // Advance to last tree (index 1)
+      (component as any).advanceRandomTour();
+      expect(component.randomTourCurrentIndex).toBe(1);
+
+      let capturedOpts: any;
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedOpts = opts;
+        return Promise.resolve(fakeAlert as any);
+      });
+
+      // Simulate reaching the last tree
+      const target = component.randomTourCurrentTarget[0];
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      expect(capturedOpts.header).toBe('Tree 2 of 2');
+      expect(capturedOpts.message).toContain('last tree');
+      expect(capturedOpts.buttons.length).toBe(1);
+      expect(capturedOpts.buttons[0].text).toBe('Finish Tour');
+    });
+
+    it('non-last tree alert should show Next Tree and End Tour buttons', async () => {
+      let capturedOpts: any;
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedOpts = opts;
+        return Promise.resolve(fakeAlert as any);
+      });
+
+      // Reach the first tree (not the last)
+      const target = component.randomTourCurrentTarget[0];
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      expect(capturedOpts.buttons.length).toBe(2);
+      const labels = capturedOpts.buttons.map((b: any) => b.text);
+      expect(labels).toContain('Next Tree');
+      expect(labels).toContain('End Tour');
+    });
+
+    it('Next Tree button handler should advance the tour', async () => {
+      let capturedOpts: any;
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedOpts = opts;
+        return Promise.resolve(fakeAlert as any);
+      });
+
+      const target = component.randomTourCurrentTarget[0];
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      const nextBtn = capturedOpts.buttons.find((b: any) => b.text === 'Next Tree');
+      nextBtn.handler();
+
+      expect(component.randomTourCurrentIndex).toBe(1);
+    });
+
+    it('End Tour button handler in proximity alert should end the tour', async () => {
+      let capturedOpts: any;
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedOpts = opts;
+        return Promise.resolve(fakeAlert as any);
+      });
+
+      const target = component.randomTourCurrentTarget[0];
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      const endBtn = capturedOpts.buttons.find((b: any) => b.text === 'End Tour');
+      endBtn.handler();
+
+      expect(component.randomTourActive).toBeFalse();
+      expect(component.mode).toBe('wander');
+    });
+
+    it('Finish Tour button on last tree should end the tour', async () => {
+      (component as any).advanceRandomTour(); // move to last tree
+
+      let capturedOpts: any;
+      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+      alertCtrlSpy.create.and.callFake((opts: any) => {
+        capturedOpts = opts;
+        return Promise.resolve(fakeAlert as any);
+      });
+
+      const target = component.randomTourCurrentTarget[0];
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      capturedOpts.buttons[0].handler(); // "Finish Tour"
+
+      expect(component.randomTourActive).toBeFalse();
+      expect(component.mode).toBe('wander');
     });
   });
 
