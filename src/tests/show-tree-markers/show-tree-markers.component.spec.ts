@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ShowTreeMarkersComponent } from './show-tree-markers.component';
-import { TreeInfo } from '../shared/interfaces/tree-info.interface';
+import { ShowTreeMarkersComponent } from '../../app/show-tree-markers/show-tree-markers.component';
+import { TreeInfo } from '../../app/shared/interfaces/tree-info.interface';
 
 const MOCK_TREES: TreeInfo[] = [
   { treeId: 1, lng: -85.58, lat: 42.93, commonName: 'Oak', scientificName: 'Quercus', commemoration: '' },

@@ -5,9 +5,9 @@ import { AlertController, IonicModule, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { LngLat } from 'maplibre-gl';
 
-import { HomePage } from './home.page';
-import { TreeService } from '../services/tree.service';
-import { TreeInfo } from '../shared/interfaces/tree-info.interface';
+import { HomePage } from '../../app/home/home.page';
+import { TreeService } from '../../app/services/tree.service';
+import { TreeInfo } from '../../app/shared/interfaces/tree-info.interface';
 
 // ---------------------------------------------------------------------------
 // Helpers

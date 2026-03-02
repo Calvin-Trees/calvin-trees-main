@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
-import { AdminPage } from './admin.page';
-import { TreeService } from '../services/tree.service';
-import { TreeInfo } from '../shared/interfaces/tree-info.interface';
+import { AdminPage } from '../../app/admin/admin.page';
+import { TreeService } from '../../app/services/tree.service';
+import { TreeInfo } from '../../app/shared/interfaces/tree-info.interface';
 
 const AUTH_SESSION_KEY = 'calvin-trees-admin-auth';
 

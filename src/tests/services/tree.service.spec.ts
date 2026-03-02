@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { TreeService } from './tree.service';
-import { TreeInfo } from '../shared/interfaces/tree-info.interface';
+import { TreeService } from '../../app/services/tree.service';
+import { TreeInfo } from '../../app/shared/interfaces/tree-info.interface';
 import treeJson from '../../assets/trees.json';
 
 const STORAGE_KEY = 'calvin-trees-admin-data';

@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { TreeFormComponent } from './tree-form.component';
-import { TreeInfo } from '../../../shared/interfaces/tree-info.interface';
+import { TreeFormComponent } from '../../../../app/admin/components/tree-form/tree-form.component';
+import { TreeInfo } from '../../../../app/shared/interfaces/tree-info.interface';
 
 describe('TreeFormComponent', () => {
   let component: TreeFormComponent;

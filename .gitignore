@@ -70,7 +70,8 @@ testem.log
 Thumbs.db
 
 # env files
-/src/environments
+/src/environments/*
+!/src/environments/environment.example.ts
 
 # Local Netlify folder
 .netlify/

@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { TreeListComponent } from './tree-list.component';
-import { TreeService } from '../../../services/tree.service';
-import { TreeInfo } from '../../../shared/interfaces/tree-info.interface';
+import { TreeListComponent } from '../../../../app/admin/components/tree-list/tree-list.component';
+import { TreeService } from '../../../../app/services/tree.service';
+import { TreeInfo } from '../../../../app/shared/interfaces/tree-info.interface';
 
 const MOCK_TREES: TreeInfo[] = [
   { treeId: 1, lng: -85.58, lat: 42.93, commonName: 'American chestnut', scientificName: 'Castanea dentata', commemoration: '' },
