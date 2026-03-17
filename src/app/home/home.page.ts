@@ -95,6 +95,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   private defaultLng = -85.5871801;
   private defaultLat = 42.9308076;
   public center: LngLat = new LngLat(this.defaultLng, this.defaultLat);
+  public mapCenter: LngLat = new LngLat(this.defaultLng, this.defaultLat);
+  public followUserLocation = true;
   heading: [number] | undefined = undefined;
   errorMsg: string = '';
   statusMsg: string = '';
@@ -289,8 +291,11 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         if (!this.compassActive && typeof position.coords.heading === 'number') {
           this.heading = [position.coords.heading];
         }
-        // update center of map.
+        // Keep latest user location updated independently of map viewport.
         this.center = new LngLat(position.coords.longitude, position.coords.latitude);
+        if (this.followUserLocation) {
+          this.mapCenter = new LngLat(position.coords.longitude, position.coords.latitude);
+        }
 
         // Update single-point "user location" list for marker rendering
         this.userLocationTrees = [
@@ -350,6 +355,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
     // Ensure map centers on default location when permission is denied
     this.center = new LngLat(this.defaultLng, this.defaultLat);
+    this.mapCenter = new LngLat(this.defaultLng, this.defaultLat);
     this.highlightNearbyTrees();
 
     // Show a visible toast notification to the user
@@ -405,6 +411,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       this.errorMsg = config.errorName;
       this.statusMsg = config.finalStatusMessage;
       this.center = new LngLat(this.defaultLng, this.defaultLat);
+      this.mapCenter = new LngLat(this.defaultLng, this.defaultLat);
       this.highlightNearbyTrees();
 
       const toast = await this.toastController.create({
@@ -652,6 +659,18 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const dist = ev.detail.value as number;
     HOW_CLOSE_IS_CLOSE = dist;
     this.highlightNearbyTrees
+  }
+
+  public onMapMoveStart(event: { originalEvent?: unknown } | undefined): void {
+    // Ignore programmatic map moves; only user interactions should disable follow mode.
+    if (event?.originalEvent) {
+      this.followUserLocation = false;
+    }
+  }
+
+  public recenterToUserLocation(): void {
+    this.followUserLocation = true;
+    this.mapCenter = new LngLat(this.center.lng, this.center.lat);
   }
 
   handlePopupOpen(tree: TreeInfo) {

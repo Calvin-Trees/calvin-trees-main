@@ -147,7 +147,8 @@
     </div>
 
     <!-- replace "streets" with "hybrid" to get a satellite view -->
-    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="center" [bearing]="heading" [pitch]="[15]">
+    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter" [bearing]="heading" [pitch]="[15]"
+      (moveStart)="onMapMoveStart($event)">
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
@@ -158,6 +159,12 @@
 
       <mgl-control position="bottom-right">
         Status: {{ statusMsg }}
+      </mgl-control>
+
+      <mgl-control position="top-left">
+        <ion-button size="small" (click)="recenterToUserLocation()" [disabled]="followUserLocation">
+          Recenter
+        </ion-button>
       </mgl-control>
 
       <!-- Debug readout (top-right). White background so it can't "disappear". -->
