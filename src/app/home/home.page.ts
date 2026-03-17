@@ -65,20 +65,20 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     hasDebugFixedSource: boolean;
     hasDebugFixedLayer: boolean;
   } = {
-    hasMapInstance: false,
-    hasUserSource: false,
-    hasUserLayer: false,
-    hasDebugFixedSource: false,
-    hasDebugFixedLayer: false,
-  };
+      hasMapInstance: false,
+      hasUserSource: false,
+      hasUserLayer: false,
+      hasDebugFixedSource: false,
+      hasDebugFixedLayer: false,
+    };
   public lastGeo:
     | {
-        lng: number;
-        lat: number;
-        accuracy: number | null;
-        heading: number | null;
-        timestamp: number;
-      }
+      lng: number;
+      lat: number;
+      accuracy: number | null;
+      heading: number | null;
+      timestamp: number;
+    }
     | null = null;
 
   public nearbyTrees: TreeInfo[] = [];
@@ -624,9 +624,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       buttons: isLastTree
         ? [{ text: 'Finish Tour', handler: () => this.endRandomTour() }]
         : [
-            { text: 'End Tour', role: 'cancel', handler: () => this.endRandomTour() },
-            { text: 'Next Tree', handler: () => this.advanceRandomTour() }
-          ]
+          { text: 'End Tour', role: 'cancel', handler: () => this.endRandomTour() },
+          { text: 'Next Tree', handler: () => this.advanceRandomTour() }
+        ]
     });
     await alert.present();
   }
@@ -655,10 +655,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   handlePopupOpen(tree: TreeInfo) {
-    if (!window.navigator || !window.navigator.vibrate) {
-      this.statusMsg = 'No haptics';
-    } else {
-      window.navigator?.vibrate(200);
+    if (window.navigator?.vibrate) {
+      window.navigator.vibrate(200);
     }
   }
 

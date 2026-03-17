@@ -15,21 +15,21 @@
         </ion-item> -->
       </ion-radio-group>
       @if (!randomTourActive) {
-        <ion-item>
-          <ion-button expand="block" fill="outline" (click)="startRandomTour()">
-            Start Random Tour
-          </ion-button>
-        </ion-item>
+      <ion-item>
+        <ion-button expand="block" fill="outline" (click)="startRandomTour()">
+          Start Random Tour
+        </ion-button>
+      </ion-item>
       } @else {
-        <ion-item>
-          <ion-label>
-            <h3>Random Tour Active</h3>
-            <p>Tree {{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</p>
-          </ion-label>
-          <ion-button fill="outline" color="danger" size="small" (click)="endRandomTour()">
-            End Tour
-          </ion-button>
-        </ion-item>
+      <ion-item>
+        <ion-label>
+          <h3>Random Tour Active</h3>
+          <p>Tree {{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</p>
+        </ion-label>
+        <ion-button fill="outline" color="danger" size="small" (click)="endRandomTour()">
+          End Tour
+        </ion-button>
+      </ion-item>
       }
       <ion-item></ion-item>
       <ion-item>
@@ -40,15 +40,15 @@
       <ion-item>
         <ion-label>Phone direction (compass)</ion-label>
         @if (compassActive) {
-          <ion-button fill="outline" size="small" (click)="disableCompass()">Disable</ion-button>
+        <ion-button fill="outline" size="small" (click)="disableCompass()">Disable</ion-button>
         } @else {
-          <ion-button fill="outline" size="small" (click)="enableCompass()">Enable</ion-button>
+        <ion-button fill="outline" size="small" (click)="enableCompass()">Enable</ion-button>
         }
       </ion-item>
       @if (compassError) {
-        <ion-item lines="none">
-          <ion-note color="warning">{{ compassError }}</ion-note>
-        </ion-item>
+      <ion-item lines="none">
+        <ion-note color="warning">{{ compassError }}</ion-note>
+      </ion-item>
       }
       <ion-item lines="none">
         <ion-range min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
@@ -121,11 +121,11 @@
       <div class="debug-overlay__inner">
         <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
         @if (lastGeo) {
-          <div><b>lng:</b> {{ lastGeo.lng }}</div>
-          <div><b>lat:</b> {{ lastGeo.lat }}</div>
-          <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
+        <div><b>lng:</b> {{ lastGeo.lng }}</div>
+        <div><b>lat:</b> {{ lastGeo.lat }}</div>
+        <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
         } @else {
-          <div><b>geo:</b> (none yet)</div>
+        <div><b>geo:</b> (none yet)</div>
         }
         <div style="margin-top: 6px;">
           <div><b>center.lng:</b> {{ center.lng }}</div>
@@ -133,9 +133,9 @@
         </div>
         <div style="margin-top: 6px;">
           @if (heading) {
-            <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
+          <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
           } @else {
-            <div><b>heading:</b> --</div>
+          <div><b>heading:</b> --</div>
           }
         </div>
         <div style="margin-top: 6px; opacity: 0.9;">
@@ -147,8 +147,7 @@
     </div>
 
     <!-- replace "streets" with "hybrid" to get a satellite view -->
-    <mgl-map #map [style]="mapStyle" [zoom]="[18]"
-      [center]="center" [bearing]="heading" [pitch]="[15]">
+    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="center" [bearing]="heading" [pitch]="[15]">
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
@@ -163,15 +162,17 @@
 
       <!-- Debug readout (top-right). White background so it can't "disappear". -->
       <mgl-control position="top-right">
-        <div style="background: rgba(255,255,255,0.92); padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
-          <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; color: #111;">
+        <div
+          style="background: rgba(255,255,255,0.92); padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+          <div
+            style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; color: #111;">
             <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
             @if (lastGeo) {
-              <div><b>lng:</b> {{ lastGeo.lng }}</div>
-              <div><b>lat:</b> {{ lastGeo.lat }}</div>
-              <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
+            <div><b>lng:</b> {{ lastGeo.lng }}</div>
+            <div><b>lat:</b> {{ lastGeo.lat }}</div>
+            <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
             } @else {
-              <div><b>geo:</b> (none yet)</div>
+            <div><b>geo:</b> (none yet)</div>
             }
             <div style="margin-top: 6px; opacity: 0.9;">
               <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
@@ -239,13 +240,8 @@
       }
 
       @if (mode === 'randomTour' && randomTourCurrentTarget.length > 0) {
-      <app-show-tree-markers
-        id="random-tour-target"
-        [treesList]="randomTourCurrentTarget"
-        color="orange"
-        [markerRadius]="9"
-        strokeColor="white"
-        [strokeWidth]="2">
+      <app-show-tree-markers id="random-tour-target" [treesList]="randomTourCurrentTarget" color="orange"
+        [markerRadius]="9" strokeColor="white" [strokeWidth]="2">
       </app-show-tree-markers>
       }
 
@@ -274,6 +270,15 @@
 
     <ion-modal [isOpen]="isTreePictureModalOpen" (click)="isTreePictureModalOpen = false">
       <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="isTreePictureModalOpen = false">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
         <ion-content>
           <img [src]="currentTree!.localImgFile" />
           <ion-item lines="none">
