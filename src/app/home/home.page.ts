@@ -92,6 +92,11 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public randomTourCurrentTarget: TreeInfo[] = [];
   private randomTourProximityAlertShown = false;
 
+  // Tour UI state
+  public distanceToTarget: number | null = null;
+  public showTourArrival = false;
+  public arrivalTree: TreeInfo | null = null;
+
   private defaultLng = -85.5871801;
   private defaultLat = 42.9308076;
   public center: LngLat = new LngLat(this.defaultLng, this.defaultLat);
@@ -534,11 +539,12 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       tree.localImgFile = res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '';
     });
 
-    // Random tour: check if user reached the current target tree
-    if (this.randomTourActive && !this.randomTourProximityAlertShown && this.randomTourCurrentTarget.length > 0) {
+    // Random tour: update distance and check if user reached the current target tree
+    if (this.randomTourActive && this.randomTourCurrentTarget.length > 0) {
       const target = this.randomTourCurrentTarget[0];
       const distToTarget = this.center.distanceTo(new LngLat(target.lng, target.lat));
-      if (distToTarget < HOW_CLOSE_IS_CLOSE) {
+      this.distanceToTarget = Math.round(distToTarget);
+      if (!this.randomTourProximityAlertShown && distToTarget < HOW_CLOSE_IS_CLOSE) {
         this.randomTourProximityAlertShown = true;
         this.onReachedRandomTourTree();
       }
@@ -612,23 +618,24 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  private async onReachedRandomTourTree(): Promise<void> {
+  private onReachedRandomTourTree(): void {
     const tree = this.randomTourTrees[this.randomTourCurrentIndex];
-    const treeNumber = this.randomTourCurrentIndex + 1;
-    const totalTrees = this.randomTourTrees.length;
-    const isLastTree = treeNumber === totalTrees;
+    const res = treeImgs.find((t: any) => t.treeId === tree.treeId);
+    this.arrivalTree = {
+      ...tree,
+      localImgFile: res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '',
+    };
+    this.showTourArrival = true;
+  }
 
-    const alert = await this.alertController.create({
-      header: `Tree ${treeNumber} of ${totalTrees}`,
-      message: `You found ${tree.commonName}!${isLastTree ? ' This is the last tree on your tour.' : ''}`,
-      buttons: isLastTree
-        ? [{ text: 'Finish Tour', handler: () => this.endRandomTour() }]
-        : [
-            { text: 'End Tour', role: 'cancel', handler: () => this.endRandomTour() },
-            { text: 'Next Tree', handler: () => this.advanceRandomTour() }
-          ]
-    });
-    await alert.present();
+  public dismissArrival(): void {
+    this.showTourArrival = false;
+    this.arrivalTree = null;
+  }
+
+  public advanceAndDismiss(): void {
+    this.dismissArrival();
+    this.advanceRandomTour();
   }
 
   private advanceRandomTour(): void {
@@ -643,6 +650,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.randomTourCurrentIndex = 0;
     this.randomTourCurrentTarget = [];
     this.randomTourProximityAlertShown = false;
+    this.distanceToTarget = null;
     this.mode = 'wander';
     this.highlightNearbyTrees();
   }

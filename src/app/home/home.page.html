@@ -272,6 +272,85 @@
 
     </mgl-map>
 
+    <!-- Tour HUD: floating card when random tour is active -->
+    @if (randomTourActive && randomTourCurrentTarget.length > 0) {
+      <div class="tour-hud">
+        <!-- Progress dots -->
+        <div class="tour-hud__progress">
+          @for (tree of randomTourTrees; track $index) {
+            <div class="tour-hud__dot"
+              [class.tour-hud__dot--done]="$index < randomTourCurrentIndex"
+              [class.tour-hud__dot--active]="$index === randomTourCurrentIndex"
+              [class.tour-hud__dot--upcoming]="$index > randomTourCurrentIndex">
+            </div>
+          }
+        </div>
+
+        <!-- Current target card -->
+        <div class="tour-hud__card">
+          <div class="tour-hud__img-wrap">
+            @if (randomTourCurrentTarget[0].localImgFile) {
+              <img [src]="randomTourCurrentTarget[0].localImgFile" class="tour-hud__img" />
+            } @else {
+              <div class="tour-hud__img-placeholder">
+                <ion-icon name="leaf-outline"></ion-icon>
+              </div>
+            }
+          </div>
+          <div class="tour-hud__info">
+            <div class="tour-hud__label">Next up &middot; {{ randomTourCurrentIndex + 1 }}/{{ randomTourTrees.length }}</div>
+            <div class="tour-hud__name">{{ randomTourCurrentTarget[0].commonName }}</div>
+            <div class="tour-hud__scientific">{{ randomTourCurrentTarget[0].scientificName }}</div>
+            @if (distanceToTarget !== null) {
+              <div class="tour-hud__distance">
+                <ion-icon name="navigate-outline"></ion-icon>
+                {{ distanceToTarget < 1000 ? (distanceToTarget | number:'1.0-0') + ' m' : (distanceToTarget / 1000 | number:'1.1-1') + ' km' }} away
+              </div>
+            }
+          </div>
+          <button class="tour-hud__close" (click)="endRandomTour()" aria-label="End tour">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Tour arrival celebration overlay -->
+    @if (showTourArrival) {
+      <div class="tour-arrival-overlay" (click)="dismissArrival()">
+        <div class="tour-arrival" (click)="$event.stopPropagation()">
+          <div class="tour-arrival__badge">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
+          <div class="tour-arrival__count">{{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</div>
+          @if (arrivalTree) {
+            @if (arrivalTree.localImgFile) {
+              <img [src]="arrivalTree.localImgFile" class="tour-arrival__img" />
+            }
+            <h2 class="tour-arrival__name">{{ arrivalTree.commonName }}</h2>
+            <p class="tour-arrival__scientific">{{ arrivalTree.scientificName }}</p>
+            @if (arrivalTree.commemoration && arrivalTree.commemoration.length > 1) {
+              <p class="tour-arrival__commemoration">{{ arrivalTree.commemoration }}</p>
+            }
+          }
+          <div class="tour-arrival__actions">
+            @if (randomTourCurrentIndex + 1 < randomTourTrees.length) {
+              <ion-button fill="outline" color="medium" (click)="endRandomTour(); dismissArrival()">End Tour</ion-button>
+              <ion-button color="success" (click)="advanceAndDismiss()">
+                <ion-icon name="arrow-forward-outline" slot="start"></ion-icon>
+                Next Tree
+              </ion-button>
+            } @else {
+              <ion-button color="success" expand="block" (click)="endRandomTour(); dismissArrival()">
+                <ion-icon name="trophy-outline" slot="start"></ion-icon>
+                Finish Tour
+              </ion-button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
     <ion-modal [isOpen]="isTreePictureModalOpen" (click)="isTreePictureModalOpen = false">
       <ng-template>
         <ion-content>
