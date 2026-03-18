@@ -24,27 +24,23 @@ All test files are located under `src/tests/`, mirroring the `src/app/` structur
 | File | Tests | Covers |
 |---|---|---|
 | `src/tests/services/tree.service.spec.ts` | 46 | CRUD, search, localStorage persistence, observable behavior, GeoJSON parsing, reset |
-| `src/tests/home/home.page.spec.ts` | 92 | Initialization, cardinal direction, heading degrees, highlightNearbyTrees, mode switching, random tour lifecycle + proximity + advancement, geolocation error/retry, search + selection, showAllTrees, showMarkersForOnlySelected, popup handling, distanceToTreeChanged, compass, ngOnDestroy |
+| `src/tests/home/home.page.spec.ts` | 91 | Initialization, cardinal direction, heading degrees, highlightNearbyTrees, mode switching, random tour lifecycle + proximity + advancement, geolocation error/retry, search + selection, showAllTrees, showMarkersForOnlySelected, popup handling, distanceToTreeChanged, compass, ngOnDestroy |
 | `src/tests/admin/admin.page.spec.ts` | 19 | Passphrase auth, sessionStorage, create/edit modals, delete/reset confirmation alerts, logout |
 | `src/tests/admin/components/tree-form/tree-form.component.spec.ts` | 18 | Reactive form validation, create vs edit mode, save/cancel dismiss |
 | `src/tests/admin/components/tree-list/tree-list.component.spec.ts` | 15 | Tree loading, search filtering, editTree/deleteTree event emission, subscription cleanup |
 | `src/tests/show-tree-markers/show-tree-markers.component.spec.ts` | 14 | Input defaults, input binding |
 | `src/tests/app.component.spec.ts` | 1 | Smoke test |
 
-**Total: 205 tests (197 passing, 7 failing, 1 known issue)**
+**Total: 203 tests (all passing)**
 
 ## Coverage
 
 | Metric | Coverage |
 |---|---|
-| Statements | 85.04% (398/468) |
+| Statements | 87.17% (408/468) |
 | Branches | 83.19% (99/119) |
-| Functions | 80.86% (93/115) |
-| Lines | 85.84% (382/445) |
-
-## Known Issues
-
-- 7 tests are currently failing due to an Ionic `Menu` error: `'Menu: must have a "content" element to listen for drag events on.'` — this is a test environment setup issue with `ion-menu`, not a logic bug.
+| Functions | 84.34% (97/115) |
+| Lines | 88.08% (392/445) |
 
 ## Notes
 

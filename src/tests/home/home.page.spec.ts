@@ -479,46 +479,38 @@ describe('HomePage', () => {
       alertCtrlSpy.create.calls.reset();
     });
 
-    it('should trigger proximity alert when user reaches current target', async () => {
+    it('should show arrival overlay when user reaches current target', () => {
       const target = component.randomTourCurrentTarget[0];
-      let capturedOpts: any = {};
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.callFake((opts: any) => {
-        capturedOpts = opts;
-        return Promise.resolve(fakeAlert as any);
-      });
 
       // Move user to the target tree location
       component.center = new LngLat(target.lng, target.lat);
       component.highlightNearbyTrees();
 
-      expect(alertCtrlSpy.create).toHaveBeenCalled();
-      expect(capturedOpts.header).toBe('Tree 1 of 2');
-      expect(capturedOpts.message).toContain('You found');
+      expect(component.showTourArrival).toBeTrue();
+      expect(component.arrivalTree).not.toBeNull();
+      expect(component.arrivalTree!.treeId).toBe(target.treeId);
     });
 
-    it('should not trigger proximity alert twice for the same tree', () => {
+    it('should not trigger arrival twice for the same tree', () => {
       const target = component.randomTourCurrentTarget[0];
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.returnValue(Promise.resolve(fakeAlert as any));
 
       component.center = new LngLat(target.lng, target.lat);
       component.highlightNearbyTrees();
-      alertCtrlSpy.create.calls.reset();
+      expect(component.showTourArrival).toBeTrue();
 
-      // Call again at the same location
+      // Dismiss and trigger again at the same location
+      component.dismissArrival();
       component.highlightNearbyTrees();
-      expect(alertCtrlSpy.create).not.toHaveBeenCalled();
+      // Should not re-show because proximityAlertShown is still true
+      expect(component.showTourArrival).toBeFalse();
     });
 
-    it('should not trigger proximity alert when user is far from target', () => {
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.returnValue(Promise.resolve(fakeAlert as any));
-
+    it('should not show arrival overlay when user is far from target', () => {
       component.center = new LngLat(0, 0);
       component.highlightNearbyTrees();
 
-      expect(alertCtrlSpy.create).not.toHaveBeenCalled();
+      expect(component.showTourArrival).toBeFalse();
+      expect(component.arrivalTree).toBeNull();
     });
 
     it('advancing should move to the next tree', () => {
@@ -542,103 +534,52 @@ describe('HomePage', () => {
       expect(component.randomTourCurrentTarget.length).toBe(0);
     });
 
-    it('last tree alert should show "Finish Tour" button', async () => {
+    it('advanceAndDismiss should dismiss arrival and advance tour', () => {
+      const target = component.randomTourCurrentTarget[0];
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      expect(component.showTourArrival).toBeTrue();
+
+      component.advanceAndDismiss();
+
+      expect(component.showTourArrival).toBeFalse();
+      expect(component.arrivalTree).toBeNull();
+      expect(component.randomTourCurrentIndex).toBe(1);
+    });
+
+    it('dismissArrival should clear arrival state without advancing', () => {
+      const target = component.randomTourCurrentTarget[0];
+      component.center = new LngLat(target.lng, target.lat);
+      component.highlightNearbyTrees();
+
+      component.dismissArrival();
+
+      expect(component.showTourArrival).toBeFalse();
+      expect(component.arrivalTree).toBeNull();
+      expect(component.randomTourCurrentIndex).toBe(0); // did not advance
+    });
+
+    it('endRandomTour should end the tour and return to wander mode', () => {
+      component.endRandomTour();
+
+      expect(component.randomTourActive).toBeFalse();
+      expect(component.mode).toBe('wander');
+      expect(component.randomTourTrees.length).toBe(0);
+      expect(component.randomTourCurrentTarget.length).toBe(0);
+    });
+
+    it('arrival on last tree should still show overlay', () => {
       // Advance to last tree (index 1)
       (component as any).advanceRandomTour();
       expect(component.randomTourCurrentIndex).toBe(1);
 
-      let capturedOpts: any;
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.callFake((opts: any) => {
-        capturedOpts = opts;
-        return Promise.resolve(fakeAlert as any);
-      });
-
-      // Simulate reaching the last tree
       const target = component.randomTourCurrentTarget[0];
       component.center = new LngLat(target.lng, target.lat);
       component.highlightNearbyTrees();
 
-      expect(capturedOpts.header).toBe('Tree 2 of 2');
-      expect(capturedOpts.message).toContain('last tree');
-      expect(capturedOpts.buttons.length).toBe(1);
-      expect(capturedOpts.buttons[0].text).toBe('Finish Tour');
-    });
-
-    it('non-last tree alert should show Next Tree and End Tour buttons', async () => {
-      let capturedOpts: any;
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.callFake((opts: any) => {
-        capturedOpts = opts;
-        return Promise.resolve(fakeAlert as any);
-      });
-
-      // Reach the first tree (not the last)
-      const target = component.randomTourCurrentTarget[0];
-      component.center = new LngLat(target.lng, target.lat);
-      component.highlightNearbyTrees();
-
-      expect(capturedOpts.buttons.length).toBe(2);
-      const labels = capturedOpts.buttons.map((b: any) => b.text);
-      expect(labels).toContain('Next Tree');
-      expect(labels).toContain('End Tour');
-    });
-
-    it('Next Tree button handler should advance the tour', async () => {
-      let capturedOpts: any;
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.callFake((opts: any) => {
-        capturedOpts = opts;
-        return Promise.resolve(fakeAlert as any);
-      });
-
-      const target = component.randomTourCurrentTarget[0];
-      component.center = new LngLat(target.lng, target.lat);
-      component.highlightNearbyTrees();
-
-      const nextBtn = capturedOpts.buttons.find((b: any) => b.text === 'Next Tree');
-      nextBtn.handler();
-
-      expect(component.randomTourCurrentIndex).toBe(1);
-    });
-
-    it('End Tour button handler in proximity alert should end the tour', async () => {
-      let capturedOpts: any;
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.callFake((opts: any) => {
-        capturedOpts = opts;
-        return Promise.resolve(fakeAlert as any);
-      });
-
-      const target = component.randomTourCurrentTarget[0];
-      component.center = new LngLat(target.lng, target.lat);
-      component.highlightNearbyTrees();
-
-      const endBtn = capturedOpts.buttons.find((b: any) => b.text === 'End Tour');
-      endBtn.handler();
-
-      expect(component.randomTourActive).toBeFalse();
-      expect(component.mode).toBe('wander');
-    });
-
-    it('Finish Tour button on last tree should end the tour', async () => {
-      (component as any).advanceRandomTour(); // move to last tree
-
-      let capturedOpts: any;
-      const fakeAlert = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
-      alertCtrlSpy.create.and.callFake((opts: any) => {
-        capturedOpts = opts;
-        return Promise.resolve(fakeAlert as any);
-      });
-
-      const target = component.randomTourCurrentTarget[0];
-      component.center = new LngLat(target.lng, target.lat);
-      component.highlightNearbyTrees();
-
-      capturedOpts.buttons[0].handler(); // "Finish Tour"
-
-      expect(component.randomTourActive).toBeFalse();
-      expect(component.mode).toBe('wander');
+      expect(component.showTourArrival).toBeTrue();
+      expect(component.arrivalTree).not.toBeNull();
     });
   });
 
