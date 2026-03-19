@@ -161,13 +161,11 @@
         Status: {{ statusMsg }}
       </mgl-control>
 
-      @if (!followUserLocation) {
-      <mgl-control position="bottom-left">
+      <mgl-control position="bottom-left" [style.display]="followUserLocation ? 'none' : 'block'">
         <ion-button size="small" color="primary" (click)="recenterToUserLocation()" class="recenter-button">
           Recenter
         </ion-button>
       </mgl-control>
-      }
 
       <!-- Debug readout (top-right). White background so it can't "disappear". -->
       <mgl-control position="top-right">
