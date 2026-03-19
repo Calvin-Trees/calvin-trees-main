@@ -120,11 +120,28 @@ mgl-map {
 // remains visible even if MapLibre moves the marker DOM outside Angular's
 // style scoping.
 
+// Recenter button styling - appears on bottom-left when user has panned away
+.recenter-button {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin: 10px;
+}
+
 @media (prefers-color-scheme: dark) {
   .heading-display {
     background: rgba(30, 30, 30, 0.9);
-    .heading-cardinal { color: #52b788; }
-    .heading-degrees { color: #aaa; }
-    .heading-hint { color: #888; }
+
+    .heading-cardinal {
+      color: #52b788;
+    }
+
+    .heading-degrees {
+      color: #aaa;
+    }
+
+    .heading-hint {
+      color: #888;
+    }
   }
 }
