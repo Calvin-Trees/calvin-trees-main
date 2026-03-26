@@ -7,27 +7,6 @@ mgl-map {
   height: 100%;
 }
 
-// mgl-popup {
-//   text-align: center;
-// }
-
-// ng-deep is deprecated but I don't know of an alternative.
-::ng-deep .maplibregl-popup-content {
-  color: var(--ct-popup-text);
-  border-radius: 5px;
-  padding: 0px 5px;
-}
-
-::ng-deep .maplibregl-popup-close-button {
-  color: var(--ct-popup-text);
-  font-size: large;
-  padding-right: 3px;
-}
-
-// .card-content-md {
-//   padding-top: 100px;
-// }
-
 .center-text {
   margin-left: auto;
   margin-right: auto;
@@ -37,6 +16,8 @@ mgl-map {
 .tree-search-list {
   padding-top: 0px;
   padding-bottom: 0px;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .no-padding {
@@ -116,14 +97,18 @@ mgl-map {
   max-width: 220px;
 }
 
-// NOTE: user location dot is styled inline in the template to ensure it
-// remains visible even if MapLibre moves the marker DOM outside Angular's
-// style scoping.
+.debug-overlay__section {
+  margin-top: 6px;
+
+  &--faded {
+    opacity: 0.9;
+  }
+}
 
 // ── Tour HUD (floating card over map) ──
 .tour-hud {
   position: absolute;
-  bottom: 16px;
+  bottom: calc(16px + var(--ion-safe-area-bottom, 0px));
   left: 12px;
   right: 12px;
   z-index: 1500;

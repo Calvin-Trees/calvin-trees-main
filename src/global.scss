@@ -35,3 +35,16 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+// MapLibre popup styles (global because MapLibre renders popups outside Angular's encapsulation)
+.maplibregl-popup-content {
+  color: var(--ct-popup-text);
+  border-radius: 5px;
+  padding: 0px 5px;
+}
+
+.maplibregl-popup-close-button {
+  color: var(--ct-popup-text);
+  font-size: large;
+  padding-right: 3px;
+}

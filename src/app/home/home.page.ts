@@ -296,17 +296,25 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   private handleGeolocationError(error: GeolocationPositionError): void {
     if (error.code === 1) {
       this.handlePermissionDenied();
-    }
-    else if (error.code === 2) {
-      this.handlePositionUnavailable();
-    }
-    else if (error.code === 3) {
-      this.handleTimeout();
-    }
-    else {
+    } else if (error.code === 2) {
+      this.handleTransientError('unavailable');
+    } else if (error.code === 3) {
+      this.handleTransientError('timeout');
+    } else {
       this.errorMsg = error.message;
       this.statusMsg = 'Location error occurred';
     }
+  }
+
+  private async showWarningToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 5000,
+      position: 'top',
+      color: 'warning',
+      buttons: [{ text: 'OK', role: 'cancel' }]
+    });
+    await toast.present();
   }
 
   private async handlePermissionDenied(): Promise<void> {
@@ -315,20 +323,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
     this.center = new LngLat(this.defaultLng, this.defaultLat);
     this.highlightNearbyTrees();
-
-    const toast = await this.toastController.create({
-      message: 'Location permission denied. Using default location.',
-      duration: 5000,
-      position: 'top',
-      color: 'warning',
-      buttons: [
-        {
-          text: 'OK',
-          role: 'cancel'
-        }
-      ]
-    });
-    await toast.present();
+    await this.showWarningToast('Location permission denied. Using default location.');
   }
 
   private async handleTransientError(errorType: 'timeout' | 'unavailable'): Promise<void> {
@@ -338,14 +333,12 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       timeout: {
         errorName: 'Timeout',
         retryMessage: 'Location timeout. Retrying...',
-        finalStatusMessage: 'Location timeout. Using default location.',
-        toastMessage: 'Location timeout. Using default location.'
+        finalMessage: 'Location timeout. Using default location.',
       },
       unavailable: {
         errorName: 'Unavailable',
         retryMessage: 'Location unavailable. Retrying...',
-        finalStatusMessage: 'Location unavailable. Using default location.',
-        toastMessage: 'Location unavailable. Using default location.'
+        finalMessage: 'Location unavailable. Using default location.',
       }
     };
 
@@ -360,32 +353,11 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       }, retryDelay);
     } else {
       this.errorMsg = config.errorName;
-      this.statusMsg = config.finalStatusMessage;
+      this.statusMsg = config.finalMessage;
       this.center = new LngLat(this.defaultLng, this.defaultLat);
       this.highlightNearbyTrees();
-
-      const toast = await this.toastController.create({
-        message: config.toastMessage,
-        duration: 5000,
-        position: 'top',
-        color: 'warning',
-        buttons: [
-          {
-            text: 'OK',
-            role: 'cancel'
-          }
-        ]
-      });
-      await toast.present();
+      await this.showWarningToast(config.finalMessage);
     }
-  }
-
-  private async handleTimeout(): Promise<void> {
-    await this.handleTransientError('timeout');
-  }
-
-  private async handlePositionUnavailable(): Promise<void> {
-    await this.handleTransientError('unavailable');
   }
 
   ngAfterViewInit() {

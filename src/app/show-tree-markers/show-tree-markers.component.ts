@@ -25,7 +25,4 @@ export class ShowTreeMarkersComponent {
   @Input() strokeColor: string = 'transparent';
   @Input() strokeWidth: number = 0;
   @Input() circleOpacity: number = 0.95;
-
-  constructor() { }
-
 }

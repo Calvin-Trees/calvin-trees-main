@@ -48,7 +48,7 @@
         </ion-item>
       }
       <ion-item lines="none">
-        <ion-range min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
+        <ion-range aria-label="Proximity distance in meters" min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
         </ion-range>
       </ion-item>
       <ion-item>
@@ -74,7 +74,7 @@
         Calvin Trees v0.3.2
       </ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="searchClicked()">
+        <ion-button (click)="searchClicked()" aria-label="Search for a tree">
           <ion-icon name="search"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -120,18 +120,18 @@
         } @else {
           <div><b>geo:</b> (none yet)</div>
         }
-        <div style="margin-top: 6px;">
+        <div class="debug-overlay__section">
           <div><b>center.lng:</b> {{ center.lng }}</div>
           <div><b>center.lat:</b> {{ center.lat }}</div>
         </div>
-        <div style="margin-top: 6px;">
+        <div class="debug-overlay__section">
           @if (heading) {
             <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
           } @else {
             <div><b>heading:</b> --</div>
           }
         </div>
-        <div style="margin-top: 6px; opacity: 0.9;">
+        <div class="debug-overlay__section debug-overlay__section--faded">
           <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
           <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
           <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
@@ -139,16 +139,8 @@
       </div>
     </div>
 
-    <!-- replace "streets" with "hybrid" to get a satellite view -->
     <mgl-map #map [style]="mapStyle" [zoom]="[18]"
       [center]="center" [bearing]="heading" [pitch]="[15]">
-
-      <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
-        position="top-left">
-      </mgl-control> -->
-
-      <!-- <mgl-control mglNavigation [showCompass]="true" position="bottom-left">
-      </mgl-control> -->
 
       <mgl-control position="bottom-right">
         Status: {{ statusMsg }}
@@ -167,7 +159,7 @@
 
       @for (tree of nearbyTrees; track tree.treeId) {
       <mgl-popup [lngLat]="[tree.lng, tree.lat]" (popupOpen)="handlePopupOpen(tree)">
-        <div (click)="handleClickOnPopup(tree)">
+        <div role="button" tabindex="0" (click)="handleClickOnPopup(tree)" (keydown.enter)="handleClickOnPopup(tree)">
           <ion-grid class="no-padding">
             <ion-row>
               <ion-col size="4">
@@ -176,7 +168,6 @@
               <ion-col>
                 <ion-note class="display-block">{{tree.scientificName}}</ion-note>
                 <ion-text class="display-block common-name">{{tree.commonName}}</ion-text>
-                <!-- commemration field is " " when empty -->
                 @if (tree.commemoration.length > 1) {
                 <ion-text class="display-block commemoration-text">
                   {{tree.commemoration}}</ion-text>
@@ -228,12 +219,13 @@
     @if (randomTourActive && randomTourCurrentTarget.length > 0) {
       <div class="tour-hud">
         <!-- Progress dots -->
-        <div class="tour-hud__progress">
+        <div class="tour-hud__progress" role="group" aria-label="Tour progress">
           @for (tree of randomTourTrees; track $index) {
             <div class="tour-hud__dot"
               [class.tour-hud__dot--done]="$index < randomTourCurrentIndex"
               [class.tour-hud__dot--active]="$index === randomTourCurrentIndex"
-              [class.tour-hud__dot--upcoming]="$index > randomTourCurrentIndex">
+              [class.tour-hud__dot--upcoming]="$index > randomTourCurrentIndex"
+              [attr.aria-label]="'Tree ' + ($index + 1) + ' of ' + randomTourTrees.length + ($index < randomTourCurrentIndex ? ' (visited)' : $index === randomTourCurrentIndex ? ' (current)' : ' (upcoming)')">
             </div>
           }
         </div>
