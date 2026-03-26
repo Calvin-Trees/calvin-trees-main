@@ -11,14 +11,17 @@
   </ion-text>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let tree of filteredTrees">
+    @for (tree of filteredTrees; track tree.treeId) {
+    <ion-item-sliding>
       <ion-item>
         <ion-label>
           <h2>{{ tree.commonName }}</h2>
           <p class="scientific-name">{{ tree.scientificName }}</p>
-          <p *ngIf="tree.commemoration && tree.commemoration.trim()" class="commemoration">
+          @if (tree.commemoration && tree.commemoration.trim()) {
+          <p class="commemoration">
             {{ tree.commemoration }}
           </p>
+          }
         </ion-label>
         <ion-note slot="end">ID: {{ tree.treeId }}</ion-note>
       </ion-item>
@@ -32,9 +35,12 @@
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
+    }
   </ion-list>
 
-  <ion-text *ngIf="filteredTrees.length === 0" color="medium" class="no-results">
+  @if (filteredTrees.length === 0) {
+  <ion-text color="medium" class="no-results">
     <p>No trees found</p>
   </ion-text>
+  }
 </div>

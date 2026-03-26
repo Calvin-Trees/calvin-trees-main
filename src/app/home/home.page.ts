@@ -1,16 +1,23 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MapComponent } from '@maplibre/ngx-maplibre-gl';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MapComponent, NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 import { LngLat } from 'maplibre-gl';
+import { DecimalPipe } from '@angular/common';
 
-import { AlertController, RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
+import { AlertController, IonicModule, RadioGroupCustomEvent, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
 import { environment } from '../../environments/environment';
 import { TreeService } from '../services/tree.service';
 import { TreeInfo } from '../shared/interfaces/tree-info.interface';
+import { ShowTreeMarkersComponent } from '../show-tree-markers/show-tree-markers.component';
 import { Subscription } from 'rxjs';
+
 type AppMode = 'wander' | 'randomTour';
 
-let HOW_CLOSE_IS_CLOSE = 10;   // how close to be to see tree popup, in meters.
+interface SearchResult {
+  tree: TreeInfo;
+  displayStr: string;
+  selected: boolean;
+}
 
 /** Look up the local image path for a tree by its ID. */
 function getTreeImagePath(treeId: number): string {
@@ -23,12 +30,19 @@ function getTreeImagePath(treeId: number): string {
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  standalone: false
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    IonicModule,
+    NgxMapLibreGLModule,
+    ShowTreeMarkersComponent,
+    DecimalPipe,
+  ]
 })
 export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   public isTreePictureModalOpen = false;
-  public currentTree: TreeInfo | null = null;    // for when clicking on a popup to see the tree's full image.
+  public currentTree: TreeInfo | null = null;
 
   // Debug helpers (safe to leave on; mostly logs in devtools)
   public debugGeo = false;
@@ -95,10 +109,11 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   // Retry mechanism properties
   private geolocationWatchId: number | null = null;
   private retryCount: number = 0;
+  private retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private readonly MAX_RETRIES: number = 3;
-  private readonly TIMEOUT_MS: number = 10000; // 10 seconds
+  private readonly TIMEOUT_MS: number = 10000;
 
-  // Compass (device orientation) — direction the phone is pointing
+  // Compass (device orientation)
   public compassActive = false;
   public compassError: string | null = null;
   private deviceOrientationHandler = (event: DeviceOrientationEvent) => this.onDeviceOrientation(event);
@@ -106,12 +121,11 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   public showAllTreesChecked = true;
   public searching = false;
-  public searchResultTrees: TreeInfo[] = [];
-  public searchResultStr: string[] = [];
-  public selectedSearchResults: boolean[] = []
+  public searchResults: SearchResult[] = [];
   public selectAllSelected = false;
   public showOnlySearchedForTrees = false;
 
+  public howCloseIsClose = 10;
   public mode: AppMode = 'wander';
   public mapStyle: string = `https://api.maptiler.com/maps/streets/style.json?key=${environment.maptilerApiKey}`;
 
@@ -121,18 +135,23 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   private treeSubscription: Subscription | null = null;
 
+  get selectedSearchTrees(): TreeInfo[] {
+    return this.searchResults.filter(r => r.selected).map(r => r.tree);
+  }
+
   constructor(
     private toastController: ToastController,
     private treeService: TreeService,
-    private alertController: AlertController
-  ) {
-    this.startGeolocationWatch();
-  }
+    private alertController: AlertController,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    this.startGeolocationWatch();
     this.treeSubscription = this.treeService.trees$.subscribe(trees => {
       this.treesDb = trees;
       this.highlightNearbyTrees();
+      this.cdr.markForCheck();
     });
   }
 
@@ -141,13 +160,12 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     if (this.geolocationWatchId !== null) {
       window.navigator.geolocation.clearWatch(this.geolocationWatchId);
     }
+    if (this.retryTimeoutId !== null) {
+      clearTimeout(this.retryTimeoutId);
+    }
     this.stopCompass();
   }
 
-  /**
-   * Get compass heading in degrees 0–360 from a DeviceOrientationEvent.
-   * Uses webkitCompassHeading on iOS (absolute) and alpha elsewhere (normalized).
-   */
   private getCompassHeadingFromEvent(event: DeviceOrientationEvent): number | null {
     const raw = (event as DeviceOrientationEvent & { webkitCompassHeading?: number }).webkitCompassHeading;
     if (typeof raw === 'number' && !Number.isNaN(raw)) {
@@ -155,7 +173,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
     const alpha = event.alpha;
     if (typeof alpha !== 'number' || Number.isNaN(alpha)) return null;
-    // alpha can be 0–360 or -180–180 depending on browser
     return (alpha % 360 + 360) % 360;
   }
 
@@ -164,6 +181,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     if (headingDeg !== null) {
       this.heading = [headingDeg];
       this.compassError = null;
+      this.cdr.markForCheck();
     }
   }
 
@@ -181,14 +199,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     window.removeEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
     this.compassActive = false;
     this.compassError = null;
-    // Leave heading as-is; geolocation will update it when moving if available
   }
 
-  /**
-   * Enable compass (device orientation) for "direction phone is pointing".
-   * On iOS 13+ this must be called from a user gesture (e.g. button tap);
-   * permission will be requested and the compass used for heading and map bearing.
-   */
   public async enableCompass(): Promise<void> {
     this.compassError = null;
     const DevOrient = (window as any).DeviceOrientationEvent;
@@ -205,7 +217,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       }
       return;
     }
-    // No permission API (Android, desktop, or older iOS): start listening
     if (typeof window.DeviceOrientationEvent === 'undefined') {
       this.compassError = 'Compass not supported on this device';
       return;
@@ -213,23 +224,17 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.startCompassListeners();
   }
 
-  /** Turn off compass; heading will fall back to GPS direction-of-travel when moving. */
   public disableCompass(): void {
     this.stopCompass();
   }
 
-  /**
-   * Starts the geolocation watch with timeout configuration
-   */
   private startGeolocationWatch(): void {
-    // Clear any existing watch
     if (this.geolocationWatchId !== null) {
       window.navigator.geolocation.clearWatch(this.geolocationWatchId);
     }
 
     this.geolocationWatchId = window.navigator.geolocation.watchPosition(
       (position) => {
-        // Reset retry count on success
         this.retryCount = 0;
         this.geoUpdateCount++;
 
@@ -256,10 +261,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         if (!this.compassActive && typeof position.coords.heading === 'number') {
           this.heading = [position.coords.heading];
         }
-        // update center of map.
         this.center = new LngLat(position.coords.longitude, position.coords.latitude);
 
-        // Update single-point "user location" list for marker rendering
         this.userLocationTrees = [
           {
             treeId: -1,
@@ -272,6 +275,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         ];
 
         this.highlightNearbyTrees();
+        this.cdr.markForCheck();
       },
       (error) => {
         if (this.debugGeo) {
@@ -279,6 +283,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
           console.warn('[geo] error', { code: error.code, message: error.message });
         }
         this.handleGeolocationError(error);
+        this.cdr.markForCheck();
       },
       {
         enableHighAccuracy: true,
@@ -288,9 +293,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     );
   }
 
-  /**
-   * Handles geolocation errors with specific handling for different error types
-   */
   private handleGeolocationError(error: GeolocationPositionError): void {
     if (error.code === 1) {
       this.handlePermissionDenied();
@@ -301,25 +303,19 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     else if (error.code === 3) {
       this.handleTimeout();
     }
-    // Unknown error
     else {
       this.errorMsg = error.message;
       this.statusMsg = 'Location error occurred';
     }
   }
 
-  /**
-   * Handles when location permission is denied
-   */
   private async handlePermissionDenied(): Promise<void> {
     this.errorMsg = 'Permission denied';
     this.statusMsg = 'Location permission denied. Using default location.';
 
-    // Ensure map centers on default location when permission is denied
     this.center = new LngLat(this.defaultLng, this.defaultLat);
     this.highlightNearbyTrees();
 
-    // Show a visible toast notification to the user
     const toast = await this.toastController.create({
       message: 'Location permission denied. Using default location.',
       duration: 5000,
@@ -335,13 +331,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     await toast.present();
   }
 
-  /**
-   * Handles transient errors
-   */
   private async handleTransientError(errorType: 'timeout' | 'unavailable'): Promise<void> {
     this.retryCount++;
 
-    // Error-specific messages
     const errorConfig = {
       timeout: {
         errorName: 'Timeout',
@@ -360,15 +352,13 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const config = errorConfig[errorType];
 
     if (this.retryCount <= this.MAX_RETRIES) {
-      const retryDelay = Math.min(1000 * Math.pow(2, this.retryCount - 1), 5000); // max 5 seconds
+      const retryDelay = Math.min(1000 * Math.pow(2, this.retryCount - 1), 5000);
       this.statusMsg = `${config.retryMessage} (${this.retryCount}/${this.MAX_RETRIES})`;
 
-      // Wait before retrying
-      setTimeout(() => {
+      this.retryTimeoutId = setTimeout(() => {
         this.startGeolocationWatch();
       }, retryDelay);
     } else {
-      // Max retries reached
       this.errorMsg = config.errorName;
       this.statusMsg = config.finalStatusMessage;
       this.center = new LngLat(this.defaultLng, this.defaultLat);
@@ -390,16 +380,10 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Handles timeout errors with retry mechanism
-   */
   private async handleTimeout(): Promise<void> {
     await this.handleTransientError('timeout');
   }
 
-  /**
-   * Handles position unavailable errors with retry mechanism
-   */
   private async handlePositionUnavailable(): Promise<void> {
     await this.handleTransientError('unavailable');
   }
@@ -426,7 +410,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       mapInstance.resize();
 
       const refreshMapDebugState = (tag: string) => {
-        // Note: getSource/getLayer exist on the MapLibre map instance.
         const hasUserSource = !!mapInstance.getSource('user-location-source');
         const hasUserLayer = !!mapInstance.getLayer('user-location-layer');
         const hasDebugFixedSource = !!mapInstance.getSource('debug-fixed-source');
@@ -446,7 +429,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         }
       };
 
-      // Load tracking_dot.png image into the map when style loads
       mapInstance.once('load', () => {
         const img = new Image();
         img.onload = () => {
@@ -460,7 +442,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         refreshMapDebugState('load');
       });
       mapInstance.on('styledata', () => refreshMapDebugState('styledata'));
-      // Also do an immediate check
       refreshMapDebugState('afterViewInit');
     }, 0);
   }
@@ -469,15 +450,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.showAllTreesChecked = !this.showAllTreesChecked;
   }
 
-  // when the "Show markers for selected trees" button is clicked.
   showMarkersForOnlySelectedTrees() {
-    // clear all markers
     this.showAllTreesChecked = false;
-
-    // indicate we are showing only searched-for trees.
     this.showOnlySearchedForTrees = true;
-
-    // close the search box and results list.
     this.searching = false;
     setTimeout(() => this.map!.mapInstance.resize(), 0);
   }
@@ -485,20 +460,15 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   highlightNearbyTrees() {
     const db2Use = this.mode === 'randomTour' ? this.randomTourCurrentTarget : this.treesDb;
 
-    this.nearbyTrees = db2Use.filter(tree =>
-      this.center.distanceTo(new LngLat(tree.lng, tree.lat)) < HOW_CLOSE_IS_CLOSE
-    );
+    this.nearbyTrees = db2Use
+      .filter(tree => this.center.distanceTo(new LngLat(tree.lng, tree.lat)) < this.howCloseIsClose)
+      .map(tree => ({ ...tree, localImgFile: getTreeImagePath(tree.treeId) }));
 
-    this.nearbyTrees.forEach(tree => {
-      tree.localImgFile = getTreeImagePath(tree.treeId);
-    });
-
-    // Random tour: update distance and check if user reached the current target tree
     if (this.randomTourActive && this.randomTourCurrentTarget.length > 0) {
       const target = this.randomTourCurrentTarget[0];
       const distToTarget = this.center.distanceTo(new LngLat(target.lng, target.lat));
       this.distanceToTarget = Math.round(distToTarget);
-      if (!this.randomTourProximityAlertShown && distToTarget < HOW_CLOSE_IS_CLOSE) {
+      if (!this.randomTourProximityAlertShown && distToTarget < this.howCloseIsClose) {
         this.randomTourProximityAlertShown = true;
         this.onReachedRandomTourTree();
       }
@@ -610,7 +580,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public distanceToTreeChanged(event: Event) {
     const ev = event as RangeCustomEvent;
     const dist = ev.detail.value as number;
-    HOW_CLOSE_IS_CLOSE = dist;
+    this.howCloseIsClose = dist;
     this.highlightNearbyTrees();
   }
 
@@ -627,11 +597,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.isTreePictureModalOpen = true;
   }
 
-  // toggle search toolbar.
   searchClicked() {
-    this.searchResultTrees = [];
-    this.searchResultStr = []
-    this.selectedSearchResults = [];
+    this.searchResults = [];
     this.searching = !this.searching;
     this.selectAllSelected = false;
   }
@@ -643,9 +610,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
     const searchTerm = (ev.target!.value ?? '').trim();
 
-    this.searchResultTrees = [];
-    this.searchResultStr = [];
-    this.selectedSearchResults = [];
+    this.searchResults = [];
     this.showOnlySearchedForTrees = false;
 
     if (searchTerm === '') {
@@ -653,66 +618,40 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
 
     const lowerTerm = searchTerm.toLowerCase();
-    this.searchResultTrees = this.treeService.searchTrees(searchTerm);
-    this.searchResultStr = this.searchResultTrees.map(tree => {
-      if (tree.commonName.toLowerCase().includes(lowerTerm)) return tree.commonName;
-      if (tree.scientificName.toLowerCase().includes(lowerTerm)) return tree.scientificName;
-      return tree.commemoration;
-    });
-    this.selectedSearchResults = new Array(this.searchResultTrees.length).fill(false);
+    const matchedTrees = this.treeService.searchTrees(searchTerm);
+    this.searchResults = matchedTrees.map(tree => ({
+      tree,
+      displayStr: this.getSearchDisplayStr(tree, lowerTerm),
+      selected: false,
+    }));
+  }
+
+  private getSearchDisplayStr(tree: TreeInfo, lowerTerm: string): string {
+    if (tree.commonName.toLowerCase().includes(lowerTerm)) return tree.commonName;
+    if (tree.scientificName.toLowerCase().includes(lowerTerm)) return tree.scientificName;
+    return tree.commemoration;
   }
 
   onSearchCancel() {
     this.searching = false;
-    this.searchResultTrees = [];
-    this.searchResultStr = [];
-    this.selectedSearchResults = [];
+    this.searchResults = [];
     this.selectAllSelected = false;
     this.showOnlySearchedForTrees = false;
   }
 
-  // i-th search result checkbox has been checked or unchecked.
   searchSelectionChanged(i: number) {
-    this.selectedSearchResults[i] = !this.selectedSearchResults[i];
-    // if all the boxes have been manually selected, then turn on the
-    // Select All checkbox.
-    if (!this.selectAllSelected && this.selectedSearchResults.every(x => x)) {
-      this.selectAllSelected = true;
-    }
-    // if any the boxes has been manually unselected, then turn off the
-    // Select All checkbox.
-    if (this.selectAllSelected && !this.selectedSearchResults.every(x => x)) {
-      this.selectAllSelected = false;
-    }
+    this.searchResults = this.searchResults.map((r, idx) =>
+      idx === i ? { ...r, selected: !r.selected } : r
+    );
+    this.selectAllSelected = this.searchResults.every(r => r.selected);
   }
 
   areNoSearchResultsSelected(): boolean {
-    return !this.selectedSearchResults.some(x => x);
+    return !this.searchResults.some(r => r.selected);
   }
 
   selectAllCheckboxChanged() {
     this.selectAllSelected = !this.selectAllSelected;
-    if (this.selectAllSelected) {
-      for (let i = 0; i < this.selectedSearchResults.length; i++) {
-        this.selectedSearchResults[i] = true;
-      }
-    } else if (!this.selectAllSelected) {
-      for (let i = 0; i < this.selectedSearchResults.length; i++) {
-        this.selectedSearchResults[i] = false;
-      }
-    }
+    this.searchResults = this.searchResults.map(r => ({ ...r, selected: this.selectAllSelected }));
   }
 }
-
-
-
-/*
-To get tree info:
-https://services2.arcgis.com/DBcRJmfPI2l07jMS/ArcGIS/rest/services/Calvin_Campus_Speelman_Arboretum_WFL1/FeatureServer/7/113?f=json
-last number is 1 - 113.
-
-Get attachments for a tree:
-https://services2.arcgis.com/DBcRJmfPI2l07jMS/ArcGIS/rest/services/Calvin_Campus_Speelman_Arboretum_WFL1/FeatureServer/7/78/attachments?f=json
-
-The id field indicates how to access the image.  end url with attachment/{{id}}
-*/

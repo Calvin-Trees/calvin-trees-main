@@ -84,29 +84,25 @@
       <ion-searchbar placeholder="Search for a tree" (ionInput)="doSearch($event)" (ionClear)="onSearchCancel()"
         [debounce]="300"></ion-searchbar>
     </ion-toolbar>
-    @if (searchResultStr.length > 0) {
+    @if (searchResults.length > 0) {
     <ion-list class="tree-search-list">
-      @if (searchResultTrees.length > 0) {
       <ion-item>
         <ion-checkbox [checked]="selectAllSelected" (ionChange)="selectAllCheckboxChanged()">
           <b>Select all</b>
         </ion-checkbox>
       </ion-item>
-      }
-      @for (res of searchResultStr; track $index) {
+      @for (result of searchResults; track $index) {
       <ion-item>
-        <ion-checkbox [checked]="selectedSearchResults[$index]" (ionChange)="searchSelectionChanged($index)">
-          {{res}}
+        <ion-checkbox [checked]="result.selected" (ionChange)="searchSelectionChanged($index)">
+          {{result.displayStr}}
         </ion-checkbox>
       </ion-item>
       }
-      @if (searchResultTrees.length > 0) {
       <ion-item>
         <ion-button [disabled]="areNoSearchResultsSelected()" (click)="showMarkersForOnlySelectedTrees()">
           Show markers for selected items
         </ion-button>
       </ion-item>
-      }
     </ion-list>
     }
     }
@@ -205,17 +201,19 @@
 
       <!-- show round gold markers for all trees selected when searched -->
       @if (showOnlySearchedForTrees) {
-      <app-show-tree-markers id="search-trees" [treesList]="searchResultTrees" color="gold" [markerRadius]=5>
+      <app-show-tree-markers id="search-trees" [treesList]="selectedSearchTrees" color="gold" [markerRadius]=5>
       </app-show-tree-markers>
       }
 
       <!-- User location rendered using tracking_dot.png image -->
       <mgl-geojson-source id="user-location-source">
-        <mgl-feature *ngFor="let marker of userLocationTrees" [geometry]="{
-                          type: 'Point',
-                          coordinates: [marker.lng, marker.lat]
-                        }">
-        </mgl-feature>
+        @for (marker of userLocationTrees; track $index) {
+          <mgl-feature [geometry]="{
+                            type: 'Point',
+                            coordinates: [marker.lng, marker.lat]
+                          }">
+          </mgl-feature>
+        }
       </mgl-geojson-source>
       <mgl-layer id="user-location-layer" type="symbol" source="user-location-source" [layout]="{
                         'icon-image': 'tracking-dot',

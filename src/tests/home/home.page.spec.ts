@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule, ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { LngLat } from 'maplibre-gl';
@@ -122,8 +121,7 @@ describe('HomePage', () => {
     alertCtrlSpy.create.and.returnValue(Promise.resolve(fakeAlert as any));
 
     await TestBed.configureTestingModule({
-      declarations: [HomePage],
-      imports: [FormsModule, IonicModule.forRoot()],
+      imports: [HomePage, IonicModule.forRoot()],
       providers: [
         { provide: TreeService, useValue: treeServiceSpy },
         { provide: ToastController, useValue: toastCtrlSpy },
@@ -670,84 +668,76 @@ describe('HomePage', () => {
     });
 
     it('searchClicked should clear previous results', () => {
-      component.searchResultTrees = [NEARBY_TREE];
-      component.searchResultStr = ['test'];
-      component.selectedSearchResults = [true];
+      component.searchResults = [{ tree: NEARBY_TREE, displayStr: 'Nearby Oak', selected: true }];
       component.searchClicked();
-      expect(component.searchResultTrees.length).toBe(0);
-      expect(component.searchResultStr.length).toBe(0);
-      expect(component.selectedSearchResults.length).toBe(0);
+      expect(component.searchResults.length).toBe(0);
     });
 
     it('doSearch should find trees by common name', () => {
       const event = { target: { value: 'oak' } } as any;
       component.doSearch(event);
-      expect(component.searchResultTrees.length).toBeGreaterThan(0);
-      expect(component.searchResultTrees.some(t => t.commonName === 'Nearby Oak')).toBeTrue();
+      expect(component.searchResults.length).toBeGreaterThan(0);
+      expect(component.searchResults.some(r => r.tree.commonName === 'Nearby Oak')).toBeTrue();
     });
 
     it('doSearch should find trees by scientific name', () => {
       const event = { target: { value: 'acer' } } as any;
       component.doSearch(event);
-      expect(component.searchResultTrees.some(t => t.scientificName === 'Acer saccharum')).toBeTrue();
+      expect(component.searchResults.some(r => r.tree.scientificName === 'Acer saccharum')).toBeTrue();
     });
 
     it('doSearch should find trees by commemoration', () => {
       const event = { target: { value: 'alice' } } as any;
       component.doSearch(event);
-      expect(component.searchResultTrees.length).toBe(1);
+      expect(component.searchResults.length).toBe(1);
     });
 
     it('doSearch should return empty for no match', () => {
       const event = { target: { value: 'zzzzNotFoundzzzz' } } as any;
       component.doSearch(event);
-      expect(component.searchResultTrees.length).toBe(0);
+      expect(component.searchResults.length).toBe(0);
     });
 
     it('doSearch should return empty for empty query', () => {
       const event = { target: { value: '' } } as any;
       component.doSearch(event);
-      expect(component.searchResultTrees.length).toBe(0);
+      expect(component.searchResults.length).toBe(0);
     });
 
-    it('doSearch should populate searchResultStr with matching field value', () => {
+    it('doSearch should populate displayStr with matching field value', () => {
       const event = { target: { value: 'nearby' } } as any;
       component.doSearch(event);
-      expect(component.searchResultStr.length).toBeGreaterThan(0);
+      expect(component.searchResults.length).toBeGreaterThan(0);
+      expect(component.searchResults[0].displayStr).toBeTruthy();
     });
 
-    it('doSearch should initialize selectedSearchResults to false', () => {
+    it('doSearch should initialize selected to false', () => {
       const event = { target: { value: 'oak' } } as any;
       component.doSearch(event);
-      expect(component.selectedSearchResults.every(v => v === false)).toBeTrue();
+      expect(component.searchResults.every(r => r.selected === false)).toBeTrue();
     });
 
     it('doSearch should return early if event is null', () => {
       component.doSearch(null as any);
-      expect(component.searchResultTrees.length).toBe(0);
+      expect(component.searchResults.length).toBe(0);
     });
 
     it('doSearch should match by commonName before scientificName', () => {
-      // 'Nearby Oak' matches by commonName → searchResultStr should show commonName
       const event = { target: { value: 'nearby' } } as any;
       component.doSearch(event);
-      expect(component.searchResultStr[0]).toBe('Nearby Oak');
+      expect(component.searchResults[0].displayStr).toBe('Nearby Oak');
     });
 
     it('onSearchCancel should clear all search state', () => {
       component.searching = true;
-      component.searchResultTrees = [NEARBY_TREE];
-      component.searchResultStr = ['test'];
-      component.selectedSearchResults = [true];
+      component.searchResults = [{ tree: NEARBY_TREE, displayStr: 'test', selected: true }];
       component.selectAllSelected = true;
       component.showOnlySearchedForTrees = true;
 
       component.onSearchCancel();
 
       expect(component.searching).toBeFalse();
-      expect(component.searchResultTrees.length).toBe(0);
-      expect(component.searchResultStr.length).toBe(0);
-      expect(component.selectedSearchResults.length).toBe(0);
+      expect(component.searchResults.length).toBe(0);
       expect(component.selectAllSelected).toBeFalse();
       expect(component.showOnlySearchedForTrees).toBeFalse();
     });
@@ -758,15 +748,19 @@ describe('HomePage', () => {
   // ---------------------------------------------------------------------------
   describe('search selection', () => {
     beforeEach(() => {
-      component.selectedSearchResults = [false, false, false];
+      component.searchResults = [
+        { tree: NEARBY_TREE, displayStr: 'Nearby Oak', selected: false },
+        { tree: FAR_TREE, displayStr: 'Far Elm', selected: false },
+        { tree: MOCK_TREES[2], displayStr: 'Sugar maple', selected: false },
+      ];
       component.selectAllSelected = false;
     });
 
     it('searchSelectionChanged should toggle the i-th item', () => {
       component.searchSelectionChanged(1);
-      expect(component.selectedSearchResults[1]).toBeTrue();
+      expect(component.searchResults[1].selected).toBeTrue();
       component.searchSelectionChanged(1);
-      expect(component.selectedSearchResults[1]).toBeFalse();
+      expect(component.searchResults[1].selected).toBeFalse();
     });
 
     it('should auto-enable selectAll when all items are manually selected', () => {
@@ -777,7 +771,7 @@ describe('HomePage', () => {
     });
 
     it('should auto-disable selectAll when any item is deselected', () => {
-      component.selectedSearchResults = [true, true, true];
+      component.searchResults = component.searchResults.map(r => ({ ...r, selected: true }));
       component.selectAllSelected = true;
       component.searchSelectionChanged(1);
       expect(component.selectAllSelected).toBeFalse();
@@ -787,24 +781,23 @@ describe('HomePage', () => {
       component.selectAllSelected = false;
       component.selectAllCheckboxChanged();
       expect(component.selectAllSelected).toBeTrue();
-      expect(component.selectedSearchResults.every(v => v === true)).toBeTrue();
+      expect(component.searchResults.every(r => r.selected === true)).toBeTrue();
     });
 
     it('selectAllCheckboxChanged should deselect all when toggled off', () => {
-      component.selectedSearchResults = [true, true, true];
+      component.searchResults = component.searchResults.map(r => ({ ...r, selected: true }));
       component.selectAllSelected = true;
       component.selectAllCheckboxChanged();
       expect(component.selectAllSelected).toBeFalse();
-      expect(component.selectedSearchResults.every(v => v === false)).toBeTrue();
+      expect(component.searchResults.every(r => r.selected === false)).toBeTrue();
     });
 
     it('areNoSearchResultsSelected should return true when none selected', () => {
-      component.selectedSearchResults = [false, false, false];
       expect(component.areNoSearchResultsSelected()).toBeTrue();
     });
 
     it('areNoSearchResultsSelected should return false when at least one selected', () => {
-      component.selectedSearchResults = [false, true, false];
+      component.searchResults = component.searchResults.map((r, i) => ({ ...r, selected: i === 1 }));
       expect(component.areNoSearchResultsSelected()).toBeFalse();
     });
   });

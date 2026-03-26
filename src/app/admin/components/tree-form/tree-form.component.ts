@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { TreeInfo } from '../../../shared/interfaces/tree-info.interface';
@@ -9,7 +8,7 @@ import { TreeInfo } from '../../../shared/interfaces/tree-info.interface';
   templateUrl: './tree-form.component.html',
   styleUrls: ['./tree-form.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IonicModule]
+  imports: [ReactiveFormsModule, IonicModule]
 })
 export class TreeFormComponent implements OnInit {
   @Input() mode: 'create' | 'edit' = 'create';

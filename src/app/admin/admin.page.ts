@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { TreeService } from '../services/tree.service';
 import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 import { TreeFormComponent } from './components/tree-form/tree-form.component';
+import { TreeListComponent } from './components/tree-list/tree-list.component';
 
 const AUTH_SESSION_KEY = 'calvin-trees-admin-auth';
 const PASSPHRASE = 'calvin';
@@ -11,7 +13,8 @@ const PASSPHRASE = 'calvin';
   selector: 'app-admin',
   templateUrl: './admin.page.html',
   styleUrls: ['./admin.page.scss'],
-  standalone: false
+  standalone: true,
+  imports: [FormsModule, IonicModule, TreeListComponent, TreeFormComponent]
 })
 export class AdminPage implements OnInit {
   isAuthenticated = false;

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ShowTreeMarkersComponent } from '../../app/show-tree-markers/show-tree-markers.component';
 import { TreeInfo } from '../../app/shared/interfaces/tree-info.interface';
 
@@ -20,7 +19,7 @@ describe('ShowTreeMarkersComponent', () => {
     })
       .overrideComponent(ShowTreeMarkersComponent, {
         set: {
-          imports: [CommonModule],
+          imports: [],
           schemas: [CUSTOM_ELEMENTS_SCHEMA],
         },
       })

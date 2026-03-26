@@ -21,9 +21,11 @@
           placeholder="e.g., White Oak"
         ></ion-input>
       </ion-item>
-      <ion-text color="danger" *ngIf="form.get('commonName')?.touched && form.get('commonName')?.invalid">
+      @if (form.get('commonName')?.touched && form.get('commonName')?.invalid) {
+      <ion-text color="danger">
         <p class="error-text">Common name is required</p>
       </ion-text>
+      }
 
       <ion-item>
         <ion-input
@@ -33,9 +35,11 @@
           placeholder="e.g., Quercus alba"
         ></ion-input>
       </ion-item>
-      <ion-text color="danger" *ngIf="form.get('scientificName')?.touched && form.get('scientificName')?.invalid">
+      @if (form.get('scientificName')?.touched && form.get('scientificName')?.invalid) {
+      <ion-text color="danger">
         <p class="error-text">Scientific name is required</p>
       </ion-text>
+      }
 
       <ion-item>
         <ion-input
@@ -55,9 +59,11 @@
           step="any"
         ></ion-input>
       </ion-item>
-      <ion-text color="danger" *ngIf="form.get('lat')?.touched && form.get('lat')?.invalid">
+      @if (form.get('lat')?.touched && form.get('lat')?.invalid) {
+      <ion-text color="danger">
         <p class="error-text">Latitude is required</p>
       </ion-text>
+      }
 
       <ion-item>
         <ion-input
@@ -68,9 +74,11 @@
           step="any"
         ></ion-input>
       </ion-item>
-      <ion-text color="danger" *ngIf="form.get('lng')?.touched && form.get('lng')?.invalid">
+      @if (form.get('lng')?.touched && form.get('lng')?.invalid) {
+      <ion-text color="danger">
         <p class="error-text">Longitude is required</p>
       </ion-text>
+      }
     </ion-list>
   </form>
 </ion-content>
