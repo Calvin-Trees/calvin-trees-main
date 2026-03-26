@@ -2,43 +2,20 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { MapComponent } from '@maplibre/ngx-maplibre-gl';
 import { LngLat } from 'maplibre-gl';
 
-import treeJson from '../../assets/trees.json';
-import tour1Json from '../../assets/tour1_geojson.json';
 import { AlertController, RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
 import { environment } from '../../environments/environment';
 import { TreeService } from '../services/tree.service';
 import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 import { Subscription } from 'rxjs';
-type AppMode = 'tour1' | 'wander' | 'randomTour';
-
-interface TourInfo {
-  id: number;
-  localImgFile: string;
-}
+type AppMode = 'wander' | 'randomTour';
 
 let HOW_CLOSE_IS_CLOSE = 10;   // how close to be to see tree popup, in meters.
 
-// Bob Speelman's 12 favorite trees.
-const Tour1: TourInfo[] = [
-  { id: 54, localImgFile: 'IMG_2057.JPG' },
-  { id: 23, localImgFile: 'IMG_2173.JPG' },
-  { id: 13, localImgFile: 'IMG_2010.JPG' },
-  { id: 24, localImgFile: 'IMG_2032.JPG' },
-  { id: 25, localImgFile: 'IMG_2034.JPG' },
-  { id: 43, localImgFile: 'IMG_2036.JPG' },
-  { id: 98, localImgFile: 'IMG_2079.JPG' },
-  { id: 93, localImgFile: 'IMG_2120.JPG' },
-  { id: 82, localImgFile: 'IMG_2128.JPG' },
-  { id: 88, localImgFile: 'IMG_2122.JPG' },
-  { id: 75, localImgFile: 'IMG_2102.JPG' },
-  { id: 84, localImgFile: 'IMG_2107.JPG' },
-];
-
-
-interface GeometryType {
-  type: string;
-  coordinates: number[][];
+/** Look up the local image path for a tree by its ID. */
+function getTreeImagePath(treeId: number): string {
+  const res = treeImgs.find((t) => t.treeId === treeId);
+  return res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '';
 }
 
 
@@ -50,12 +27,11 @@ interface GeometryType {
 })
 export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
-  public imageLoaded = false;
   public isTreePictureModalOpen = false;
   public currentTree: TreeInfo | null = null;    // for when clicking on a popup to see the tree's full image.
 
   // Debug helpers (safe to leave on; mostly logs in devtools)
-  public debugGeo = true;
+  public debugGeo = false;
   public geoUpdateCount = 0;
   public mapDebug = true;
   public mapDebugState: {
@@ -82,7 +58,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     | null = null;
 
   public nearbyTrees: TreeInfo[] = [];
-  public tour1Trees: TreeInfo[] = [];
   public userLocationTrees: TreeInfo[] = [];
 
   // Random Tour state
@@ -138,7 +113,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public showOnlySearchedForTrees = false;
 
   public mode: AppMode = 'wander';
-  public tour1Json: any = tour1Json.routes[0].geometry;
   public mapStyle: string = `https://api.maptiler.com/maps/streets/style.json?key=${environment.maptilerApiKey}`;
 
   @ViewChild('map') map: MapComponent | null = null;
@@ -153,18 +127,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     private alertController: AlertController
   ) {
     this.startGeolocationWatch();
-
-    this.tour1Trees = Tour1.map((tourTree: TourInfo) => {
-      const jsonTree = treeJson.features.find((json: any) => json.id === tourTree.id)!;
-      return {
-        treeId: jsonTree.properties.OBJECTID,
-        lng: jsonTree.geometry.coordinates[0],
-        lat: jsonTree.geometry.coordinates[1],
-        scientificName: jsonTree.properties.scientific,
-        commonName: jsonTree.properties.common_nam,
-        commemoration: jsonTree.properties.commemorat,
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -521,22 +483,14 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   highlightNearbyTrees() {
-    let db2Use: TreeInfo[] = [];
-    if (this.mode === 'wander') {
-      db2Use = this.treesDb;
-    } else if (this.mode === 'tour1') {
-      db2Use = this.tour1Trees;
-    } else if (this.mode === 'randomTour') {
-      db2Use = this.randomTourCurrentTarget;
-    }
+    const db2Use = this.mode === 'randomTour' ? this.randomTourCurrentTarget : this.treesDb;
 
     this.nearbyTrees = db2Use.filter(tree =>
       this.center.distanceTo(new LngLat(tree.lng, tree.lat)) < HOW_CLOSE_IS_CLOSE
     );
 
     this.nearbyTrees.forEach(tree => {
-      const res = treeImgs.find((t: any) => t.treeId === tree.treeId);
-      tree.localImgFile = res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '';
+      tree.localImgFile = getTreeImagePath(tree.treeId);
     });
 
     // Random tour: update distance and check if user reached the current target tree
@@ -610,8 +564,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   private updateRandomTourTarget(): void {
     if (this.randomTourCurrentIndex < this.randomTourTrees.length) {
       const tree = { ...this.randomTourTrees[this.randomTourCurrentIndex] };
-      const res = treeImgs.find((t: any) => t.treeId === tree.treeId);
-      tree.localImgFile = res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '';
+      tree.localImgFile = getTreeImagePath(tree.treeId);
       this.randomTourCurrentTarget = [tree];
     } else {
       this.randomTourCurrentTarget = [];
@@ -620,10 +573,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   private onReachedRandomTourTree(): void {
     const tree = this.randomTourTrees[this.randomTourCurrentIndex];
-    const res = treeImgs.find((t: any) => t.treeId === tree.treeId);
     this.arrivalTree = {
       ...tree,
-      localImgFile: res ? `assets/tree_imgs/IMG_${res.imgId}.JPG` : '',
+      localImgFile: getTreeImagePath(tree.treeId),
     };
     this.showTourArrival = true;
   }
@@ -689,35 +641,25 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     if (!ev) {
       return;
     }
-    const searchTerm = ev.target!.value!.toLowerCase();
+    const searchTerm = (ev.target!.value ?? '').trim();
 
-    this.searchResultTrees = [];       // the trees in the search results
-    this.searchResultStr = [];    // the strings to display for search results
+    this.searchResultTrees = [];
+    this.searchResultStr = [];
     this.selectedSearchResults = [];
-    // don't show markers until we've finished searching.
     this.showOnlySearchedForTrees = false;
 
     if (searchTerm === '') {
       return;
     }
-    this.treesDb.forEach((tree) => {
-      let found = false;
-      if (tree.commonName.toLowerCase().indexOf(searchTerm) != -1) {
-        this.searchResultStr.push(tree.commonName);
-        found = true;
-      } else if (tree.scientificName.toLowerCase().indexOf(searchTerm) != -1) {
-        this.searchResultStr.push(tree.scientificName);
-        found = true;
-      } else if (tree.commemoration.toLowerCase().indexOf(searchTerm) != -1) {
-        this.searchResultStr.push(tree.commemoration);
-        found = true;
-      }
-      if (found) {
-        this.searchResultTrees.push(tree);
-        // set selection box for this tree to "not checked".
-        this.selectedSearchResults.push(false);
-      }
+
+    const lowerTerm = searchTerm.toLowerCase();
+    this.searchResultTrees = this.treeService.searchTrees(searchTerm);
+    this.searchResultStr = this.searchResultTrees.map(tree => {
+      if (tree.commonName.toLowerCase().includes(lowerTerm)) return tree.commonName;
+      if (tree.scientificName.toLowerCase().includes(lowerTerm)) return tree.scientificName;
+      return tree.commemoration;
     });
+    this.selectedSearchResults = new Array(this.searchResultTrees.length).fill(false);
   }
 
   onSearchCancel() {

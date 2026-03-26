@@ -103,6 +103,15 @@ describe('HomePage', () => {
       trees$: treesSubject.asObservable(),
     });
     treeServiceSpy.getTrees.and.returnValue(MOCK_TREES);
+    treeServiceSpy.searchTrees.and.callFake((query: string) => {
+      if (!query.trim()) return MOCK_TREES;
+      const lq = query.toLowerCase();
+      return MOCK_TREES.filter(t =>
+        t.commonName.toLowerCase().includes(lq) ||
+        t.scientificName.toLowerCase().includes(lq) ||
+        t.commemoration.toLowerCase().includes(lq)
+      );
+    });
 
     const fakeToast = { present: jasmine.createSpy('present').and.returnValue(Promise.resolve()) };
     toastCtrlSpy = jasmine.createSpyObj('ToastController', ['create']);
@@ -151,10 +160,6 @@ describe('HomePage', () => {
 
     it('should subscribe to trees$ and populate treesDb', () => {
       expect(component.treesDb.length).toBe(MOCK_TREES.length);
-    });
-
-    it('should populate tour1Trees from treeJson', () => {
-      expect(component.tour1Trees.length).toBe(12);
     });
 
     it('should default showAllTreesChecked to true', () => {
@@ -250,14 +255,6 @@ describe('HomePage', () => {
       expect(component.nearbyTrees.some(t => t.treeId === FAR_TREE.treeId)).toBeFalse();
     });
 
-    it('should use tour1Trees when in tour1 mode', () => {
-      component.mode = 'tour1';
-      const t1 = component.tour1Trees[0];
-      component.center = new LngLat(t1.lng, t1.lat);
-      component.highlightNearbyTrees();
-      expect(component.nearbyTrees.some(t => t.treeId === t1.treeId)).toBeTrue();
-    });
-
     it('should use randomTourCurrentTarget when in randomTour mode', () => {
       component.mode = 'randomTour';
       const target: TreeInfo = { ...NEARBY_TREE, treeId: 999 };
@@ -274,10 +271,10 @@ describe('HomePage', () => {
       expect(component.nearbyTrees.length).toBe(0);
     });
 
-    it('should use empty db for unrecognized modes', () => {
-      (component as any).mode = 'unknownMode';
+    it('should use treesDb for wander mode (default)', () => {
+      component.mode = 'wander';
       component.highlightNearbyTrees();
-      expect(component.nearbyTrees.length).toBe(0);
+      expect(component.nearbyTrees.some(t => t.treeId === NEARBY_TREE.treeId)).toBeTrue();
     });
   });
 
@@ -286,9 +283,9 @@ describe('HomePage', () => {
   // ---------------------------------------------------------------------------
   describe('modeChanged()', () => {
     it('should switch mode on radio change', () => {
-      const event = { detail: { value: 'tour1' } } as any;
+      const event = { detail: { value: 'wander' } } as any;
       component.modeChanged(event);
-      expect(component.mode).toBe('tour1');
+      expect(component.mode).toBe('wander');
     });
 
     it('should end random tour when switching away from randomTour', () => {

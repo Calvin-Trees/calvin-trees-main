@@ -10,9 +10,6 @@
         <ion-item>
           <ion-radio value="wander">Wander Mode</ion-radio>
         </ion-item>
-        <!-- <ion-item>
-          <ion-radio value="tour1">Bob Speelman's Favs</ion-radio>
-        </ion-item> -->
       </ion-radio-group>
       @if (!randomTourActive) {
         <ion-item>
@@ -161,27 +158,6 @@
         Status: {{ statusMsg }}
       </mgl-control>
 
-      <!-- Debug readout (top-right). White background so it can't "disappear". -->
-      <mgl-control position="top-right">
-        <div style="background: rgba(255,255,255,0.92); padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
-          <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; color: #111;">
-            <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
-            @if (lastGeo) {
-              <div><b>lng:</b> {{ lastGeo.lng }}</div>
-              <div><b>lat:</b> {{ lastGeo.lat }}</div>
-              <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
-            } @else {
-              <div><b>geo:</b> (none yet)</div>
-            }
-            <div style="margin-top: 6px; opacity: 0.9;">
-              <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
-              <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
-              <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
-            </div>
-          </div>
-        </div>
-      </mgl-control>
-
 
       <!-- markers for nearbyTrees -->
       <app-show-tree-markers id="nearby-trees" color="green" [markerRadius]=7 [treesList]="nearbyTrees">
@@ -214,28 +190,6 @@
           </ion-grid>
         </div>
       </mgl-popup>
-      }
-
-      @if (mode === 'tour1') {
-      <!-- If user is searching for a tree, don't show all tour trees -->
-      @if (!showOnlySearchedForTrees) {
-      <!-- show round green markers for trees on the tour -->
-      <app-show-tree-markers id="tour1" [treesList]="tour1Trees" color="green" [markerRadius]=7>
-      </app-show-tree-markers>
-      }
-
-      <!-- show route between trees on the tour -->
-      <!-- <mgl-geojson-source id="tour1-path-source">
-          <mgl-feature [geometry]="tour1Json"></mgl-feature>
-        </mgl-geojson-source>
-        <mgl-layer id="tour1-path-layer" type="line" source="tour1-path-source" [layout]="{
-            'line-join': 'round',
-            'line-cap': 'round'
-          }" [paint]="{
-            'line-color': 'green',
-            'line-width': 3,
-          }">
-        </mgl-layer> -->
       }
 
       @if (mode === 'randomTour' && randomTourCurrentTarget.length > 0) {
