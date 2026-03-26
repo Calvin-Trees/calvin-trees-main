@@ -659,7 +659,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const ev = event as RangeCustomEvent;
     const dist = ev.detail.value as number;
     HOW_CLOSE_IS_CLOSE = dist;
-    this.highlightNearbyTrees
+    this.highlightNearbyTrees();
   }
 
   handlePopupOpen(tree: TreeInfo) {

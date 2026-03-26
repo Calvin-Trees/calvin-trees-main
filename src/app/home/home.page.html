@@ -354,7 +354,9 @@
     <ion-modal [isOpen]="isTreePictureModalOpen" (click)="isTreePictureModalOpen = false">
       <ng-template>
         <ion-content>
-          <img [src]="currentTree!.localImgFile" />
+          @if (currentTree) {
+            <img [src]="currentTree.localImgFile" />
+          }
           <ion-item lines="none">
             <div class="center-text">{{currentTree?.commonName}}</div>
           </ion-item>
