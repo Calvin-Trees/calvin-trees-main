@@ -36,6 +36,15 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+// Map layout — must be global to bypass Angular's emulated view encapsulation.
+// Component-scoped styles compile to mgl-map[_ngcontent-xxx] which may not
+// match the host element reliably. Global styles have no attribute suffix.
+mgl-map {
+  display: block;
+  width: 100%;
+  height: 100vh;
+}
+
 // MapLibre popup styles (global because MapLibre renders popups outside Angular's encapsulation)
 .maplibregl-popup-content {
   color: var(--ct-text);

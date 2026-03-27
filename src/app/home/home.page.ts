@@ -85,6 +85,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public distanceToTarget: number | null = null;
   public showTourArrival = false;
   public arrivalTree: TreeInfo | null = null;
+  public testTourActive = false;
 
   private defaultLng = -85.5871801;
   private defaultLat = 42.9308076;
@@ -530,6 +531,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public advanceAndDismiss(): void {
     this.dismissArrival();
     this.advanceRandomTour();
+    if (this.testTourActive && this.randomTourCurrentIndex < this.randomTourTrees.length) {
+      this.onReachedRandomTourTree();
+    }
   }
 
   private advanceRandomTour(): void {
@@ -545,8 +549,23 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.randomTourCurrentTarget = [];
     this.randomTourProximityAlertShown = false;
     this.distanceToTarget = null;
+    this.testTourActive = false;
     this.mode = 'wander';
     this.highlightNearbyTrees();
+  }
+
+  public startTestTour(): void {
+    const count = Math.min(5, this.treesDb.length);
+    if (count === 0) return;
+    this.initRandomTour(count);
+    this.testTourActive = true;
+    this.onReachedRandomTourTree();
+  }
+
+  public viewArrivalTreeDetail(): void {
+    if (!this.arrivalTree) return;
+    this.currentTree = this.arrivalTree;
+    this.isTreePictureModalOpen = true;
   }
 
   public distanceToTreeChanged(event: Event) {

@@ -17,6 +17,11 @@
             Start Random Tour
           </ion-button>
         </ion-item>
+        <ion-item>
+          <ion-button expand="block" fill="outline" color="tertiary" (click)="startTestTour()">
+            Preview Tour UI
+          </ion-button>
+        </ion-item>
       } @else {
         <ion-item>
           <ion-label>
@@ -71,7 +76,7 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-title>
-        Calvin Trees v0.3.2
+        Calvin Trees v0.36t
       </ion-title>
       <ion-buttons slot="end">
         <ion-button (click)="searchClicked()" aria-label="Search for a tree">
@@ -281,6 +286,12 @@
             @if (arrivalTree.commemoration && arrivalTree.commemoration.length > 1) {
               <p class="tour-arrival__commemoration">{{ arrivalTree.commemoration }}</p>
             }
+          }
+          @if (testTourActive) {
+            <button class="tour-arrival__detail-link" (click)="viewArrivalTreeDetail()">
+              <ion-icon name="expand-outline"></ion-icon>
+              View full details
+            </button>
           }
           <div class="tour-arrival__actions">
             @if (randomTourCurrentIndex + 1 < randomTourTrees.length) {
