@@ -10,8 +10,9 @@ import { TreeService } from '../services/tree.service';
 import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 import { ShowTreeMarkersComponent } from '../show-tree-markers/show-tree-markers.component';
 import { Subscription } from 'rxjs';
+import { speelmanTour, SpeelmanTree } from '../../assets/speelman-tour';
 
-type AppMode = 'wander' | 'randomTour';
+type AppMode = 'wander' | 'randomTour' | 'speelmanTour';
 
 interface SearchResult {
   tree: TreeInfo;
@@ -85,7 +86,12 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public distanceToTarget: number | null = null;
   public showTourArrival = false;
   public arrivalTree: TreeInfo | null = null;
+  public arrivalStory: string | null = null;
+  public arrivalLocation: string | null = null;
   public testTourActive = false;
+
+  // Speelman tour state
+  public speelmanTourData: SpeelmanTree[] = speelmanTour;
 
   private defaultLng = -85.5871801;
   private defaultLat = 42.9308076;
@@ -431,7 +437,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   highlightNearbyTrees() {
-    const db2Use = this.mode === 'randomTour' ? this.randomTourCurrentTarget : this.treesDb;
+    const db2Use = (this.mode === 'randomTour' || this.mode === 'speelmanTour')
+      ? this.randomTourCurrentTarget : this.treesDb;
 
     this.nearbyTrees = db2Use
       .filter(tree => this.center.distanceTo(new LngLat(tree.lng, tree.lat)) < this.howCloseIsClose)
@@ -450,7 +457,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   public modeChanged(event: Event) {
     const ev = event as RadioGroupCustomEvent;
-    if (this.randomTourActive && ev.detail.value !== 'randomTour') {
+    if (this.randomTourActive && ev.detail.value !== 'randomTour' && ev.detail.value !== 'speelmanTour') {
       this.endRandomTour();
       return;
     }
@@ -520,12 +527,19 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       ...tree,
       localImgFile: getTreeImagePath(tree.treeId),
     };
+    const speelmanEntry = this.mode === 'speelmanTour'
+      ? this.speelmanTourData.find(s => s.treeId === tree.treeId)
+      : null;
+    this.arrivalStory = speelmanEntry?.story ?? null;
+    this.arrivalLocation = speelmanEntry?.location ?? null;
     this.showTourArrival = true;
   }
 
   public dismissArrival(): void {
     this.showTourArrival = false;
     this.arrivalTree = null;
+    this.arrivalStory = null;
+    this.arrivalLocation = null;
   }
 
   public advanceAndDismiss(): void {
@@ -550,8 +564,30 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.randomTourProximityAlertShown = false;
     this.distanceToTarget = null;
     this.testTourActive = false;
+    this.arrivalStory = null;
+    this.arrivalLocation = null;
     this.mode = 'wander';
     this.highlightNearbyTrees();
+  }
+
+  public startSpeelmanTour(): void {
+    const trees = this.speelmanTourData
+      .map(s => this.treesDb.find(t => t.treeId === s.treeId))
+      .filter((t): t is TreeInfo => !!t);
+    if (trees.length === 0) return;
+
+    this.randomTourTrees = trees;
+    this.randomTourCurrentIndex = 0;
+    this.randomTourActive = true;
+    this.randomTourProximityAlertShown = false;
+    this.mode = 'speelmanTour';
+    this.updateRandomTourTarget();
+  }
+
+  public startSpeelmanTestTour(): void {
+    this.startSpeelmanTour();
+    this.testTourActive = true;
+    this.onReachedRandomTourTree();
   }
 
   public startTestTour(): void {

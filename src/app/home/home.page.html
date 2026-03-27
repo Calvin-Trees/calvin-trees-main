@@ -13,19 +13,27 @@
       </ion-radio-group>
       @if (!randomTourActive) {
         <ion-item>
+          <ion-button expand="block" fill="outline" (click)="startSpeelmanTour()">
+            Bob Speelman's 12 Favorites
+          </ion-button>
+        </ion-item>
+        <ion-item>
           <ion-button expand="block" fill="outline" (click)="startRandomTour()">
             Start Random Tour
           </ion-button>
         </ion-item>
         <ion-item>
-          <ion-button expand="block" fill="outline" color="tertiary" (click)="startTestTour()">
-            Preview Tour UI
+          <ion-button expand="block" fill="outline" color="tertiary" size="small" (click)="startSpeelmanTestTour()">
+            Preview Speelman Tour
+          </ion-button>
+          <ion-button expand="block" fill="outline" color="tertiary" size="small" (click)="startTestTour()">
+            Preview Random Tour
           </ion-button>
         </ion-item>
       } @else {
         <ion-item>
           <ion-label>
-            <h3>Random Tour Active</h3>
+            <h3>{{ mode === 'speelmanTour' ? 'Speelman Tour' : 'Random Tour' }} Active</h3>
             <p>Tree {{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</p>
           </ion-label>
           <ion-button fill="outline" color="danger" size="small" (click)="endRandomTour()">
@@ -189,11 +197,11 @@
       </mgl-popup>
       }
 
-      @if (mode === 'randomTour' && randomTourCurrentTarget.length > 0) {
+      @if ((mode === 'randomTour' || mode === 'speelmanTour') && randomTourCurrentTarget.length > 0) {
       <app-show-tree-markers
         id="random-tour-target"
         [treesList]="randomTourCurrentTarget"
-        color="orange"
+        [color]="mode === 'speelmanTour' ? '#2d6a4f' : 'orange'"
         [markerRadius]="9"
         strokeColor="white"
         [strokeWidth]="2">
@@ -252,7 +260,7 @@
             }
           </div>
           <div class="tour-hud__info">
-            <div class="tour-hud__label">Next up &middot; {{ randomTourCurrentIndex + 1 }}/{{ randomTourTrees.length }}</div>
+            <div class="tour-hud__label">{{ mode === 'speelmanTour' ? 'Speelman\'s Favorites' : 'Next up' }} &middot; {{ randomTourCurrentIndex + 1 }}/{{ randomTourTrees.length }}</div>
             <div class="tour-hud__name">{{ randomTourCurrentTarget[0].commonName }}</div>
             <div class="tour-hud__scientific">{{ randomTourCurrentTarget[0].scientificName }}</div>
             @if (distanceToTarget !== null) {
@@ -274,8 +282,11 @@
       <div class="tour-arrival-overlay" (click)="dismissArrival()">
         <div class="tour-arrival" (click)="$event.stopPropagation()">
           <div class="tour-arrival__badge">
-            <ion-icon name="checkmark-circle"></ion-icon>
+            <ion-icon [name]="mode === 'speelmanTour' ? 'leaf' : 'checkmark-circle'"></ion-icon>
           </div>
+          @if (mode === 'speelmanTour') {
+            <div class="tour-arrival__tour-label">Bob Speelman's Favorites</div>
+          }
           <div class="tour-arrival__count">{{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</div>
           @if (arrivalTree) {
             @if (arrivalTree.localImgFile) {
@@ -283,8 +294,21 @@
             }
             <h2 class="tour-arrival__name">{{ arrivalTree.commonName }}</h2>
             <p class="tour-arrival__scientific">{{ arrivalTree.scientificName }}</p>
+            @if (arrivalLocation) {
+              <p class="tour-arrival__location-tag">
+                <ion-icon name="location-outline"></ion-icon>
+                {{ arrivalLocation }}
+              </p>
+            }
             @if (arrivalTree.commemoration && arrivalTree.commemoration.length > 1) {
               <p class="tour-arrival__commemoration">{{ arrivalTree.commemoration }}</p>
+            }
+            @if (arrivalStory) {
+              <div class="tour-arrival__story">
+                <div class="tour-arrival__story-quote">"</div>
+                <p class="tour-arrival__story-text">{{ arrivalStory }}</p>
+                <p class="tour-arrival__story-attr">— Bob Speelman</p>
+              </div>
             }
           }
           @if (testTourActive) {
