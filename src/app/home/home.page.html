@@ -159,22 +159,27 @@
 
       @for (tree of nearbyTrees; track tree.treeId) {
       <mgl-popup [lngLat]="[tree.lng, tree.lat]" (popupOpen)="handlePopupOpen(tree)">
-        <div role="button" tabindex="0" (click)="handleClickOnPopup(tree)" (keydown.enter)="handleClickOnPopup(tree)">
-          <ion-grid class="no-padding">
-            <ion-row>
-              <ion-col size="4">
-                <ion-img [src]="tree.localImgFile" />
-              </ion-col>
-              <ion-col>
-                <ion-note class="display-block">{{tree.scientificName}}</ion-note>
-                <ion-text class="display-block common-name">{{tree.commonName}}</ion-text>
-                @if (tree.commemoration.length > 1) {
-                <ion-text class="display-block commemoration-text">
-                  {{tree.commemoration}}</ion-text>
-                }
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+        <div class="tree-popup" role="button" tabindex="0" (click)="handleClickOnPopup(tree)" (keydown.enter)="handleClickOnPopup(tree)">
+          <div class="tree-popup__img-wrap">
+            @if (tree.localImgFile) {
+              <img [src]="tree.localImgFile" class="tree-popup__img" />
+            } @else {
+              <div class="tree-popup__img-placeholder">
+                <ion-icon name="leaf-outline"></ion-icon>
+              </div>
+            }
+          </div>
+          <div class="tree-popup__body">
+            <div class="tree-popup__name">{{ tree.commonName }}</div>
+            <div class="tree-popup__scientific">{{ tree.scientificName }}</div>
+            @if (tree.commemoration.length > 1) {
+              <div class="tree-popup__commemoration">{{ tree.commemoration }}</div>
+            }
+            <div class="tree-popup__hint">
+              <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+              Tap for details
+            </div>
+          </div>
         </div>
       </mgl-popup>
       }
@@ -299,17 +304,42 @@
       <ng-template>
         <ion-content>
           @if (currentTree) {
-            <img [src]="currentTree.localImgFile" />
+            <div class="tree-detail">
+              <div class="tree-detail__hero">
+                @if (currentTree.localImgFile) {
+                  <img [src]="currentTree.localImgFile" class="tree-detail__hero-img" />
+                } @else {
+                  <div class="tree-detail__hero-placeholder">
+                    <ion-icon name="leaf-outline"></ion-icon>
+                  </div>
+                }
+                <button class="tree-detail__close" (click)="isTreePictureModalOpen = false">
+                  <ion-icon name="close"></ion-icon>
+                </button>
+              </div>
+              <div class="tree-detail__content">
+                <div class="tree-detail__id-badge">#{{ currentTree.treeId }}</div>
+                <h1 class="tree-detail__name">{{ currentTree.commonName }}</h1>
+                <p class="tree-detail__scientific">{{ currentTree.scientificName }}</p>
+                @if (currentTree.commemoration && currentTree.commemoration.length > 1) {
+                  <div class="tree-detail__section">
+                    <div class="tree-detail__section-label">
+                      <ion-icon name="heart-outline"></ion-icon>
+                      Commemoration
+                    </div>
+                    <p class="tree-detail__commemoration">{{ currentTree.commemoration }}</p>
+                  </div>
+                }
+                <div class="tree-detail__section">
+                  <div class="tree-detail__section-label">
+                    <ion-icon name="location-outline"></ion-icon>
+                    Location
+                  </div>
+                  <p class="tree-detail__location">{{ currentTree.lat | number:'1.6-6' }}, {{ currentTree.lng | number:'1.6-6' }}</p>
+                </div>
+              </div>
+            </div>
           }
-          <ion-item lines="none">
-            <div class="center-text">{{currentTree?.commonName}}</div>
-          </ion-item>
-          <ion-item>
-            <div class="center-text">{{currentTree?.treeId}}</div>
-          </ion-item>
-          <ion-item>
-            <div class="center-text">{{currentTree?.localImgFile}}</div>
-          </ion-item>
         </ion-content>
       </ng-template>
     </ion-modal>
