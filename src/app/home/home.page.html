@@ -161,13 +161,6 @@
         Status: {{ statusMsg }}
       </mgl-control>
 
-      <!-- Recenter button overlay on map -->
-      <div class="recenter-button-container" [style.display]="followUserLocation ? 'none' : 'flex'">
-        <ion-button size="small" color="primary" (click)="recenterToUserLocation()" class="recenter-button">
-          Recenter
-        </ion-button>
-      </div>
-
       <!-- Debug readout (top-right). White background so it can't "disappear". -->
       <mgl-control position="top-right">
         <div
@@ -275,6 +268,13 @@
       </mgl-layer>
 
     </mgl-map>
+
+    <!-- Recenter button overlay on map -->
+    <div class="recenter-button-container" [style.display]="followUserLocation ? 'none' : 'flex'">
+      <ion-button size="small" color="primary" (click)="recenterToUserLocation()" class="recenter-button">
+        Recenter
+      </ion-button>
+    </div>
 
     <ion-modal [isOpen]="isTreePictureModalOpen" (click)="isTreePictureModalOpen = false">
       <ng-template>
