@@ -680,6 +680,34 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  public onMapDragStart(event: { originalEvent?: unknown } | undefined): void {
+    // Disable compass bearing during drag to prevent interference
+    if (event?.originalEvent) {
+      this.compassHeadingActive = false;
+    }
+  }
+
+  public onMapDragEnd(event: { originalEvent?: unknown } | undefined): void {
+    // Resume compass bearing after drag completes
+    if (event?.originalEvent && this.compassActive) {
+      this.compassHeadingActive = true;
+    }
+  }
+
+  public onMapZoomStart(event: { originalEvent?: unknown } | undefined): void {
+    // Disable compass bearing during zoom to prevent interference
+    if (event?.originalEvent) {
+      this.compassHeadingActive = false;
+    }
+  }
+
+  public onMapZoomEnd(event: { originalEvent?: unknown } | undefined): void {
+    // Resume compass bearing after zoom completes
+    if (event?.originalEvent && this.compassActive) {
+      this.compassHeadingActive = true;
+    }
+  }
+
   public recenterToUserLocation(): void {
     this.followUserLocation = true;
     this.mapCenter = new LngLat(this.center.lng, this.center.lat);
