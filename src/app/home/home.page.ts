@@ -664,7 +664,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.highlightNearbyTrees
   }
 
-  public onMapMoveStart(event: { originalEvent?: unknown } | undefined): void {
+  public onMapMoveStart(event: any): void {
     // Ignore programmatic map moves; only user interactions should disable follow mode.
     if (event?.originalEvent) {
       this.followUserLocation = false;
@@ -673,35 +673,35 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  public onMapMoveEnd(event: { originalEvent?: unknown } | undefined): void {
+  public onMapMoveEnd(event: any): void {
     // Resume compass bearing after user is done panning/dragging
     if (event?.originalEvent && this.compassActive) {
       this.compassHeadingActive = true;
     }
   }
 
-  public onMapDragStart(event: { originalEvent?: unknown } | undefined): void {
+  public onMapDragStart(event: any): void {
     // Disable compass bearing during drag to prevent interference
     if (event?.originalEvent) {
       this.compassHeadingActive = false;
     }
   }
 
-  public onMapDragEnd(event: { originalEvent?: unknown } | undefined): void {
+  public onMapDragEnd(event: any): void {
     // Resume compass bearing after drag completes
     if (event?.originalEvent && this.compassActive) {
       this.compassHeadingActive = true;
     }
   }
 
-  public onMapZoomStart(event: { originalEvent?: unknown } | undefined): void {
+  public onMapZoomStart(event: any): void {
     // Disable compass bearing during zoom to prevent interference
     if (event?.originalEvent) {
       this.compassHeadingActive = false;
     }
   }
 
-  public onMapZoomEnd(event: { originalEvent?: unknown } | undefined): void {
+  public onMapZoomEnd(event: any): void {
     // Resume compass bearing after zoom completes
     if (event?.originalEvent && this.compassActive) {
       this.compassHeadingActive = true;
