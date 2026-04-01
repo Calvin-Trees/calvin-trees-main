@@ -122,6 +122,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   // Compass (device orientation) — direction the phone is pointing
   public compassActive = false;
+  public compassHeadingActive = false;  // whether to apply compass bearing to map
   public compassError: string | null = null;
   private deviceOrientationHandler = (event: DeviceOrientationEvent) => this.onDeviceOrientation(event);
   private deviceOrientationAbsoluteHandler = (event: DeviceOrientationEvent) => this.onDeviceOrientation(event);
@@ -208,6 +209,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       window.addEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
     }
     this.compassActive = true;
+    this.compassHeadingActive = true;
     this.compassError = null;
   }
 
@@ -215,6 +217,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     window.removeEventListener('deviceorientation', this.deviceOrientationHandler, true);
     window.removeEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
     this.compassActive = false;
+    this.compassHeadingActive = false;
     this.compassError = null;
     // Leave heading as-is; geolocation will update it when moving if available
   }
@@ -665,6 +668,15 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     // Ignore programmatic map moves; only user interactions should disable follow mode.
     if (event?.originalEvent) {
       this.followUserLocation = false;
+      // Disable compass bearing during user pan/drag to avoid interference
+      this.compassHeadingActive = false;
+    }
+  }
+
+  public onMapMoveEnd(event: { originalEvent?: unknown } | undefined): void {
+    // Resume compass bearing after user is done panning/dragging
+    if (event?.originalEvent && this.compassActive) {
+      this.compassHeadingActive = true;
     }
   }
 

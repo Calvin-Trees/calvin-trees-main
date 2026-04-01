@@ -133,6 +133,13 @@ mgl-map {
   pointer-events: auto;
 }
 
+// Animation for smooth bearing transition
+@media (prefers-reduced-motion: no-preference) {
+  mgl-map {
+    transition: bearing 0.3s ease-out;
+  }
+}
+
 .recenter-button {
   --padding-start: 12px;
   --padding-end: 12px;

@@ -147,8 +147,9 @@
     </div>
 
     <!-- replace "streets" with "hybrid" to get a satellite view -->
-    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter" [bearing]="heading" [pitch]="[15]"
-      (moveStart)="onMapMoveStart($event)">
+    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter"
+      [bearing]="compassHeadingActive ? heading : undefined" [pitch]="[15]" (moveStart)="onMapMoveStart($event)"
+      (moveEnd)="onMapMoveEnd($event)">
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
