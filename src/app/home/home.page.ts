@@ -63,6 +63,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   // Debug helpers (safe to leave on; mostly logs in devtools)
   public debugGeo = true;
+  public showDebugWindow = true;
   public geoUpdateCount = 0;
   public mapDebug = true;
   public mapDebugState: {
@@ -259,6 +260,10 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   /** Turn off compass; heading will fall back to GPS direction-of-travel when moving. */
   public disableCompass(): void {
     this.stopCompass();
+  }
+
+  public toggleDebugWindow(): void {
+    this.showDebugWindow = !this.showDebugWindow;
   }
 
   /**

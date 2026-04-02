@@ -50,6 +50,12 @@
         <ion-note color="warning">{{ compassError }}</ion-note>
       </ion-item>
       }
+      <ion-item>
+        <ion-label>Debug window</ion-label>
+        <ion-button fill="outline" size="small" (click)="toggleDebugWindow()">
+          {{ showDebugWindow ? 'Hide' : 'Show' }}
+        </ion-button>
+      </ion-item>
       <ion-item lines="none">
         <ion-range min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
         </ion-range>
@@ -116,36 +122,6 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    <!-- Debug overlay (NOT a map control, should always be visible) -->
-    <div class="debug-overlay">
-      <div class="debug-overlay__inner">
-        <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
-        @if (lastGeo) {
-        <div><b>lng:</b> {{ lastGeo.lng }}</div>
-        <div><b>lat:</b> {{ lastGeo.lat }}</div>
-        <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
-        } @else {
-        <div><b>geo:</b> (none yet)</div>
-        }
-        <div style="margin-top: 6px;">
-          <div><b>center.lng:</b> {{ center.lng }}</div>
-          <div><b>center.lat:</b> {{ center.lat }}</div>
-        </div>
-        <div style="margin-top: 6px;">
-          @if (heading) {
-          <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
-          } @else {
-          <div><b>heading:</b> --</div>
-          }
-        </div>
-        <div style="margin-top: 6px; opacity: 0.9;">
-          <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
-          <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
-          <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
-        </div>
-      </div>
-    </div>
-
     <!-- replace "streets" with "hybrid" to get a satellite view -->
     <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter"
       [bearing]="compassHeadingActive ? heading : undefined" [pitch]="[15]" (moveStart)="onMapMoveStart($event)"
@@ -163,6 +139,7 @@
         Status: {{ statusMsg }}
       </mgl-control>
 
+      @if (showDebugWindow) {
       <!-- Debug readout (top-right). White background so it can't "disappear". -->
       <mgl-control position="top-right">
         <div
@@ -185,6 +162,7 @@
           </div>
         </div>
       </mgl-control>
+      }
 
 
       <!-- markers for nearbyTrees -->
