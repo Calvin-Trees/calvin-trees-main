@@ -102,6 +102,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   private defaultLng = -85.5871801;
   private defaultLat = 42.9308076;
   public center: LngLat = new LngLat(this.defaultLng, this.defaultLat);
+  public mapCenter: LngLat = new LngLat(this.defaultLng, this.defaultLat);
+  public followUserLocation = true;
   heading: [number] | undefined = undefined;
   errorMsg: string = '';
   statusMsg: string = '';
@@ -127,6 +129,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   // Compass (device orientation) — direction the phone is pointing
   public compassActive = false;
+  public compassHeadingActive = false;  // whether to apply compass bearing to map
   public compassError: string | null = null;
   private deviceOrientationHandler = (event: DeviceOrientationEvent) => this.onDeviceOrientation(event);
   private deviceOrientationAbsoluteHandler = (event: DeviceOrientationEvent) => this.onDeviceOrientation(event);
@@ -211,6 +214,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       window.addEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
     }
     this.compassActive = true;
+    this.compassHeadingActive = true;
     this.compassError = null;
   }
 
@@ -218,6 +222,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     window.removeEventListener('deviceorientation', this.deviceOrientationHandler, true);
     window.removeEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
     this.compassActive = false;
+    this.compassHeadingActive = false;
     this.compassError = null;
     // Leave heading as-is; geolocation will update it when moving if available
   }
@@ -306,6 +311,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
     // update center of map.
     this.center = new LngLat(position.coords.longitude, position.coords.latitude);
+    if (this.followUserLocation) {
+      this.mapCenter = new LngLat(position.coords.longitude, position.coords.latitude);
+    }
 
     // Update single-point "user location" list for marker rendering
     this.userLocationTrees = [
@@ -476,6 +484,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
     // Ensure map centers on default location when permission is denied
     this.center = new LngLat(this.defaultLng, this.defaultLat);
+    this.mapCenter = new LngLat(this.defaultLng, this.defaultLat);
     this.highlightNearbyTrees();
 
     // Show a visible toast notification to the user
@@ -531,6 +540,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       this.errorMsg = config.errorName;
       this.statusMsg = config.finalStatusMessage;
       this.center = new LngLat(this.defaultLng, this.defaultLat);
+      this.mapCenter = new LngLat(this.defaultLng, this.defaultLat);
       this.highlightNearbyTrees();
 
       const toast = await this.toastController.create({
@@ -778,6 +788,55 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const dist = ev.detail.value as number;
     HOW_CLOSE_IS_CLOSE = dist;
     this.highlightNearbyTrees
+  }
+
+  public onMapMoveStart(event: any): void {
+    // Ignore programmatic map moves; only user interactions should disable follow mode.
+    if (event?.originalEvent) {
+      this.followUserLocation = false;
+      // Disable compass bearing during user pan/drag to avoid interference
+      this.compassHeadingActive = false;
+    }
+  }
+
+  public onMapMoveEnd(event: any): void {
+    // Resume compass bearing after user is done panning/dragging
+    if (event?.originalEvent && this.compassActive) {
+      this.compassHeadingActive = true;
+    }
+  }
+
+  public onMapDragStart(event: any): void {
+    // Disable compass bearing during drag to prevent interference
+    if (event?.originalEvent) {
+      this.compassHeadingActive = false;
+    }
+  }
+
+  public onMapDragEnd(event: any): void {
+    // Resume compass bearing after drag completes
+    if (event?.originalEvent && this.compassActive) {
+      this.compassHeadingActive = true;
+    }
+  }
+
+  public onMapZoomStart(event: any): void {
+    // Disable compass bearing during zoom to prevent interference
+    if (event?.originalEvent) {
+      this.compassHeadingActive = false;
+    }
+  }
+
+  public onMapZoomEnd(event: any): void {
+    // Resume compass bearing after zoom completes
+    if (event?.originalEvent && this.compassActive) {
+      this.compassHeadingActive = true;
+    }
+  }
+
+  public recenterToUserLocation(): void {
+    this.followUserLocation = true;
+    this.mapCenter = new LngLat(this.center.lng, this.center.lat);
   }
 
   handlePopupOpen(tree: TreeInfo) {

@@ -1,5 +1,6 @@
 ion-content {
   --background: transparent;
+  position: relative;
 }
 
 mgl-map {
@@ -120,11 +121,45 @@ mgl-map {
 // remains visible even if MapLibre moves the marker DOM outside Angular's
 // style scoping.
 
+// Recenter button overlay - appears on bottom-left of map when user has panned away
+.recenter-button-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+// Animation for smooth bearing transition
+@media (prefers-reduced-motion: no-preference) {
+  mgl-map {
+    transition: bearing 0.3s ease-out;
+  }
+}
+
+.recenter-button {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 @media (prefers-color-scheme: dark) {
   .heading-display {
     background: rgba(30, 30, 30, 0.9);
-    .heading-cardinal { color: #52b788; }
-    .heading-degrees { color: #aaa; }
-    .heading-hint { color: #888; }
+
+    .heading-cardinal {
+      color: #52b788;
+    }
+
+    .heading-degrees {
+      color: #aaa;
+    }
+
+    .heading-hint {
+      color: #888;
+    }
   }
 }

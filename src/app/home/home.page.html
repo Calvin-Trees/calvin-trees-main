@@ -147,7 +147,10 @@
     </div>
 
     <!-- replace "streets" with "hybrid" to get a satellite view -->
-    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="center" [bearing]="heading" [pitch]="[15]">
+    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter"
+      [bearing]="compassHeadingActive ? heading : undefined" [pitch]="[15]" (moveStart)="onMapMoveStart($event)"
+      (moveEnd)="onMapMoveEnd($event)" (dragStart)="onMapDragStart($event)" (dragEnd)="onMapDragEnd($event)"
+      (zoomStart)="onMapZoomStart($event)" (zoomEnd)="onMapZoomEnd($event)">
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
@@ -267,6 +270,13 @@
       </mgl-layer>
 
     </mgl-map>
+
+    <!-- Recenter button overlay on map -->
+    <div class="recenter-button-container" [style.display]="followUserLocation ? 'none' : 'flex'">
+      <ion-button size="small" color="primary" (click)="recenterToUserLocation()" class="recenter-button">
+        Recenter
+      </ion-button>
+    </div>
 
     <ion-modal [isOpen]="isTreePictureModalOpen" (click)="isTreePictureModalOpen = false">
       <ng-template>
