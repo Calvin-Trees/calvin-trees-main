@@ -121,7 +121,7 @@
     }
   </ion-header>
 
-  <ion-content [fullscreen]="true">
+  <ion-content [fullscreen]="true" [scrollY]="false">
     @if (showDebugWindow) {
     <div class="debug-overlay">
       <div class="debug-overlay__inner">
@@ -154,12 +154,12 @@
     }
 
     <!-- replace "streets" with "hybrid" to get a satellite view -->
-    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter"
-      [bearing]="compassHeadingActive ? heading : undefined" [pitch]="[15]" (moveStart)="onMapMoveStart($event)"
-      (moveEnd)="onMapMoveEnd($event)" (mapDragStart)="onMapDragStart($event)" (mapDragEnd)="onMapDragEnd($event)"
-      (zoomStart)="onMapZoomStart($event)" (zoomEnd)="onMapZoomEnd($event)" (mapTouchStart)="onUserInteractionStart()"
-      (mapTouchEnd)="onUserInteractionEnd()" (mapMouseDown)="onUserInteractionStart()"
-      (mapMouseUp)="onUserInteractionEnd()">
+    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter" [cooperativeGestures]="false" [dragPan]="true"
+      [touchZoomRotate]="true" [touchPitch]="false" [bearing]="compassHeadingActive ? heading : undefined"
+      [pitch]="[15]" (moveStart)="onMapMoveStart($event)" (moveEnd)="onMapMoveEnd($event)"
+      (mapDragStart)="onMapDragStart($event)" (mapDragEnd)="onMapDragEnd($event)" (zoomStart)="onMapZoomStart($event)"
+      (zoomEnd)="onMapZoomEnd($event)" (mapTouchStart)="onUserInteractionStart()" (mapTouchEnd)="onUserInteractionEnd()"
+      (mapMouseDown)="onUserInteractionStart()" (mapMouseUp)="onUserInteractionEnd()">
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
