@@ -205,6 +205,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const headingDeg = this.getCompassHeadingFromEvent(event);
     if (headingDeg !== null) {
       this.heading = [headingDeg];
+      if (this.compassHeadingActive && this.map?.mapInstance) {
+        this.map.mapInstance.setBearing(headingDeg);
+      }
       this.compassError = null;
     }
   }
