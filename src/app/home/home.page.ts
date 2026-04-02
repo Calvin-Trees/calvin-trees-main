@@ -5,6 +5,8 @@ import { LngLat } from 'maplibre-gl';
 import treeJson from '../../assets/trees.json';
 import tour1Json from '../../assets/tour1_geojson.json';
 import { AlertController, RadioGroupCustomEvent, RangeChangeEventDetail, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
 import { treeImgs } from '../../assets/treeId2Img';
 import { environment } from '../../environments/environment';
 import { TreeService } from '../services/tree.service';
@@ -15,6 +17,11 @@ type AppMode = 'tour1' | 'wander' | 'randomTour';
 interface TourInfo {
   id: number;
   localImgFile: string;
+}
+
+interface AppGeolocationError {
+  code: number;
+  message: string;
 }
 
 let HOW_CLOSE_IS_CLOSE = 10;   // how close to be to see tree popup, in meters.
@@ -115,7 +122,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   // Retry mechanism properties
-  private geolocationWatchId: number | null = null;
+  private geolocationWatchId: string | number | null = null;
   private retryCount: number = 0;
   private readonly MAX_RETRIES: number = 3;
   private readonly TIMEOUT_MS: number = 10000; // 10 seconds
@@ -144,14 +151,13 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public treesDb: TreeInfo[] = [];
 
   private treeSubscription: Subscription | null = null;
+  private geolocationInitialized = false;
 
   constructor(
     private toastController: ToastController,
     private treeService: TreeService,
     private alertController: AlertController
   ) {
-    this.startGeolocationWatch();
-
     this.tour1Trees = Tour1.map((tourTree: TourInfo) => {
       const jsonTree = treeJson.features.find((json: any) => json.id === tourTree.id)!;
       return {
@@ -170,13 +176,12 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       this.treesDb = trees;
       this.highlightNearbyTrees();
     });
+    void this.initializeGeolocation();
   }
 
   ngOnDestroy(): void {
     this.treeSubscription?.unsubscribe();
-    if (this.geolocationWatchId !== null) {
-      window.navigator.geolocation.clearWatch(this.geolocationWatchId);
-    }
+    void this.clearGeolocationWatch();
     this.stopCompass();
   }
 
@@ -259,67 +264,188 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   /**
    * Starts the geolocation watch with timeout configuration
    */
-  private startGeolocationWatch(): void {
-    // Clear any existing watch
-    if (this.geolocationWatchId !== null) {
-      window.navigator.geolocation.clearWatch(this.geolocationWatchId);
+  private isNativePlatform(): boolean {
+    return Capacitor.isNativePlatform();
+  }
+
+  private async clearGeolocationWatch(): Promise<void> {
+    if (this.geolocationWatchId === null) {
+      return;
+    }
+
+    if (this.isNativePlatform()) {
+      await Geolocation.clearWatch({ id: String(this.geolocationWatchId) });
+    } else {
+      window.navigator.geolocation.clearWatch(this.geolocationWatchId as number);
+    }
+    this.geolocationWatchId = null;
+  }
+
+  private applyGeolocationPosition(position: GeolocationPosition): void {
+    // Reset retry count on success
+    this.retryCount = 0;
+    this.geoUpdateCount++;
+
+    this.lastGeo = {
+      lng: position.coords.longitude,
+      lat: position.coords.latitude,
+      accuracy: typeof position.coords.accuracy === 'number' ? position.coords.accuracy : null,
+      heading: typeof position.coords.heading === 'number' ? position.coords.heading : null,
+      timestamp: position.timestamp
+    };
+
+    if (this.debugGeo) {
+      // eslint-disable-next-line no-console
+      console.debug('[geo] update', {
+        count: this.geoUpdateCount,
+        lng: this.lastGeo.lng,
+        lat: this.lastGeo.lat,
+        accuracy: this.lastGeo.accuracy,
+        heading: this.lastGeo.heading,
+        timestamp: this.lastGeo.timestamp
+      });
+    }
+
+    if (!this.compassActive && typeof position.coords.heading === 'number') {
+      this.heading = [position.coords.heading];
+    }
+    // update center of map.
+    this.center = new LngLat(position.coords.longitude, position.coords.latitude);
+    if (this.followUserLocation) {
+      this.mapCenter = new LngLat(position.coords.longitude, position.coords.latitude);
+    }
+
+    // Update single-point "user location" list for marker rendering
+    this.userLocationTrees = [
+      {
+        treeId: -1,
+        lng: position.coords.longitude,
+        lat: position.coords.latitude,
+        commonName: 'You are here',
+        scientificName: '',
+        commemoration: '',
+      }
+    ];
+
+    this.highlightNearbyTrees();
+  }
+
+  private normalizeGeolocationError(error: unknown): AppGeolocationError {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      typeof (error as { code?: unknown }).code === 'number'
+    ) {
+      const err = error as { code: number; message?: string };
+      return {
+        code: err.code,
+        message: typeof err.message === 'string' ? err.message : 'Location error occurred'
+      };
+    }
+
+    if (typeof error === 'string') {
+      const normalized = error.toLowerCase();
+      if (normalized.includes('permission')) {
+        return { code: 1, message: error };
+      }
+      if (normalized.includes('timeout')) {
+        return { code: 3, message: error };
+      }
+      return { code: 2, message: error };
+    }
+
+    return { code: 2, message: 'Location unavailable' };
+  }
+
+  private async startNativeGeolocationWatch(): Promise<void> {
+    const currentPermissionStatus = await Geolocation.checkPermissions();
+    const shouldRequestPermission =
+      currentPermissionStatus.location === 'prompt' ||
+      currentPermissionStatus.coarseLocation === 'prompt';
+    const permissionStatus = shouldRequestPermission
+      ? await Geolocation.requestPermissions()
+      : currentPermissionStatus;
+    const locationPermission = permissionStatus.location;
+    const coarseLocationPermission = permissionStatus.coarseLocation;
+    const locationGranted = locationPermission === 'granted' || coarseLocationPermission === 'granted';
+
+    if (!locationGranted) {
+      await this.handlePermissionDenied();
+      return;
+    }
+
+    // Try to get one immediate fix first so UI doesn't stay in "(none yet)".
+    try {
+      const initialPosition = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      });
+      this.applyGeolocationPosition(initialPosition as GeolocationPosition);
+    } catch (error: unknown) {
+      if (this.debugGeo) {
+        const normalized = this.normalizeGeolocationError(error);
+        // eslint-disable-next-line no-console
+        console.warn('[geo] initial position failed', { code: normalized.code, message: normalized.message });
+      }
+    }
+
+    this.geolocationWatchId = await Geolocation.watchPosition(
+      {
+        enableHighAccuracy: true,
+        timeout: this.TIMEOUT_MS,
+        maximumAge: 0,
+        minimumUpdateInterval: 1000
+      },
+      (position, error) => {
+        if (position) {
+          this.applyGeolocationPosition(position as GeolocationPosition);
+          return;
+        }
+
+        const normalized = this.normalizeGeolocationError(error);
+        if (this.debugGeo) {
+          // eslint-disable-next-line no-console
+          console.warn('[geo] error', { code: normalized.code, message: normalized.message });
+        }
+        this.handleGeolocationError(normalized);
+      }
+    );
+  }
+
+  private async initializeGeolocation(): Promise<void> {
+    if (this.geolocationInitialized) {
+      return;
+    }
+    this.geolocationInitialized = true;
+    await this.startGeolocationWatch();
+  }
+
+  private async startGeolocationWatch(): Promise<void> {
+    await this.clearGeolocationWatch();
+
+    if (this.isNativePlatform()) {
+      try {
+        await this.startNativeGeolocationWatch();
+      } catch (error: unknown) {
+        const normalized = this.normalizeGeolocationError(error);
+        this.handleGeolocationError(normalized);
+      }
+      return;
     }
 
     this.geolocationWatchId = window.navigator.geolocation.watchPosition(
       (position) => {
-        // Reset retry count on success
-        this.retryCount = 0;
-        this.geoUpdateCount++;
-
-        this.lastGeo = {
-          lng: position.coords.longitude,
-          lat: position.coords.latitude,
-          accuracy: typeof position.coords.accuracy === 'number' ? position.coords.accuracy : null,
-          heading: typeof position.coords.heading === 'number' ? position.coords.heading : null,
-          timestamp: position.timestamp
-        };
-
-        if (this.debugGeo) {
-          // eslint-disable-next-line no-console
-          console.debug('[geo] update', {
-            count: this.geoUpdateCount,
-            lng: this.lastGeo.lng,
-            lat: this.lastGeo.lat,
-            accuracy: this.lastGeo.accuracy,
-            heading: this.lastGeo.heading,
-            timestamp: this.lastGeo.timestamp
-          });
-        }
-
-        if (!this.compassActive && typeof position.coords.heading === 'number') {
-          this.heading = [position.coords.heading];
-        }
-        // Keep latest user location updated independently of map viewport.
-        this.center = new LngLat(position.coords.longitude, position.coords.latitude);
-        if (this.followUserLocation) {
-          this.mapCenter = new LngLat(position.coords.longitude, position.coords.latitude);
-        }
-
-        // Update single-point "user location" list for marker rendering
-        this.userLocationTrees = [
-          {
-            treeId: -1,
-            lng: position.coords.longitude,
-            lat: position.coords.latitude,
-            commonName: 'You are here',
-            scientificName: '',
-            commemoration: '',
-          }
-        ];
-
-        this.highlightNearbyTrees();
+        this.applyGeolocationPosition(position);
       },
       (error) => {
+        const normalized = this.normalizeGeolocationError(error);
         if (this.debugGeo) {
           // eslint-disable-next-line no-console
-          console.warn('[geo] error', { code: error.code, message: error.message });
+          console.warn('[geo] error', { code: normalized.code, message: normalized.message });
         }
-        this.handleGeolocationError(error);
+        this.handleGeolocationError(normalized);
       },
       {
         enableHighAccuracy: true,
@@ -332,7 +458,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   /**
    * Handles geolocation errors with specific handling for different error types
    */
-  private handleGeolocationError(error: GeolocationPositionError): void {
+  private handleGeolocationError(error: AppGeolocationError): void {
     if (error.code === 1) {
       this.handlePermissionDenied();
     }
