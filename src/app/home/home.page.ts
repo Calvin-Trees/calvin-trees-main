@@ -839,6 +839,18 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  public onUserInteractionStart(): void {
+    if (this.compassActive) {
+      this.compassHeadingActive = false;
+    }
+  }
+
+  public onUserInteractionEnd(): void {
+    if (this.compassActive) {
+      this.compassHeadingActive = true;
+    }
+  }
+
   public recenterToUserLocation(): void {
     this.followUserLocation = true;
     this.mapCenter = new LngLat(this.center.lng, this.center.lat);

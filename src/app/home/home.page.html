@@ -156,8 +156,10 @@
     <!-- replace "streets" with "hybrid" to get a satellite view -->
     <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter"
       [bearing]="compassHeadingActive ? heading : undefined" [pitch]="[15]" (moveStart)="onMapMoveStart($event)"
-      (moveEnd)="onMapMoveEnd($event)" (dragStart)="onMapDragStart($event)" (dragEnd)="onMapDragEnd($event)"
-      (zoomStart)="onMapZoomStart($event)" (zoomEnd)="onMapZoomEnd($event)">
+      (moveEnd)="onMapMoveEnd($event)" (mapDragStart)="onMapDragStart($event)" (mapDragEnd)="onMapDragEnd($event)"
+      (zoomStart)="onMapZoomStart($event)" (zoomEnd)="onMapZoomEnd($event)" (mapTouchStart)="onUserInteractionStart()"
+      (mapTouchEnd)="onUserInteractionEnd()" (mapMouseDown)="onUserInteractionStart()"
+      (mapMouseUp)="onUserInteractionEnd()">
 
       <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
         position="top-left">
