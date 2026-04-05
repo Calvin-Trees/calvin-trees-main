@@ -19,26 +19,28 @@ Coverage output is written to `./coverage/app/` (HTML + text-summary).
 
 ## Test Files
 
+All test files are located under `src/tests/`, mirroring the `src/app/` structure.
+
 | File | Tests | Covers |
 |---|---|---|
-| `services/tree.service.spec.ts` | 46 | CRUD, search, localStorage persistence, observable behavior, GeoJSON parsing, reset |
-| `home/home.page.spec.ts` | 67 | Geolocation, compass, mode switching, proximity detection, random tour lifecycle, search + selection, popup handling |
-| `admin/admin.page.spec.ts` | 23 | Passphrase auth, sessionStorage, create/edit modals, delete/reset confirmation alerts, logout |
-| `admin/components/tree-form/tree-form.component.spec.ts` | 16 | Reactive form validation, create vs edit mode, save/cancel dismiss |
-| `admin/components/tree-list/tree-list.component.spec.ts` | 12 | Tree loading, search filtering, editTree/deleteTree event emission, subscription cleanup |
-| `show-tree-markers/show-tree-markers.component.spec.ts` | 14 | Input defaults, input binding |
-| `app.component.spec.ts` | 1 | Smoke test |
+| `src/tests/services/tree.service.spec.ts` | 46 | CRUD, search, localStorage persistence, observable behavior, GeoJSON parsing, reset |
+| `src/tests/home/home.page.spec.ts` | 91 | Initialization, cardinal direction, heading degrees, highlightNearbyTrees, mode switching, random tour lifecycle + proximity + advancement, geolocation error/retry, search + selection, showAllTrees, showMarkersForOnlySelected, popup handling, distanceToTreeChanged, compass, ngOnDestroy |
+| `src/tests/admin/admin.page.spec.ts` | 19 | Passphrase auth, sessionStorage, create/edit modals, delete/reset confirmation alerts, logout |
+| `src/tests/admin/components/tree-form/tree-form.component.spec.ts` | 18 | Reactive form validation, create vs edit mode, save/cancel dismiss |
+| `src/tests/admin/components/tree-list/tree-list.component.spec.ts` | 15 | Tree loading, search filtering, editTree/deleteTree event emission, subscription cleanup |
+| `src/tests/show-tree-markers/show-tree-markers.component.spec.ts` | 14 | Input defaults, input binding |
+| `src/tests/app.component.spec.ts` | 1 | Smoke test |
 
-**Total: 188 tests**
+**Total: 203 tests (all passing)**
 
 ## Coverage
 
 | Metric | Coverage |
 |---|---|
-| Statements | 85% |
-| Branches | 77% |
-| Functions | 84% |
-| Lines | 85% |
+| Statements | 87.17% (408/468) |
+| Branches | 83.19% (99/119) |
+| Functions | 84.34% (97/115) |
+| Lines | 88.08% (392/445) |
 
 ## Notes
 

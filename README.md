@@ -29,7 +29,7 @@ An interactive mobile-first web application for exploring the Calvin University 
 - **Interactive Tree Map**: Browse 113+ trees on Calvin's campus with detailed information
 - **Smart Proximity Detection**: Automatic popups when within 10 meters of a tree
 - **Search Functionality**: Find trees by common name, scientific name, or commemoration
-- **Curated Tours**: Follow Bob Speelman's favorite trees tour
+- **Random Walking Tours**: Generate randomized walking tours with turn-by-turn routes via MapTiler Directions API
 - **Detailed Tree Information**: View scientific names, common names, commemorations, and photos
 - **Offline Capability**: Progressive Web App with service worker support
 - **Mobile Optimized**: Built with Ionic for native-like mobile experience
@@ -213,6 +213,12 @@ npx cap open ios
 
 #### Android
 
+> **Note:** `@capacitor/android` is not currently installed. To add Android support:
+> ```bash
+> npm install @capacitor/android
+> npx cap add android
+> ```
+
 ```bash
 # Sync web assets to Android
 npx cap sync android
@@ -263,28 +269,39 @@ calvin-trees-main/
 ├── src/
 │   ├── app/
 │   │   ├── home/                    # Main map page
-│   │   │   ├── home.page.ts        # Map logic, geolocation, search
+│   │   │   ├── home.page.ts        # Map logic, geolocation, search, tour
 │   │   │   ├── home.page.html      # Map template
 │   │   │   └── home.page.scss      # Map styles
-│   │   ├── show-tree-markers/      # Tree marker component
-│   │   └── app.component.ts        # Root component
+│   │   ├── admin/                   # Admin CRUD pages
+│   │   │   ├── admin.page.ts       # Auth, create/edit/delete trees
+│   │   │   └── components/
+│   │   │       ├── tree-form/       # Tree create/edit form component
+│   │   │       └── tree-list/       # Tree list with search component
+│   │   ├── services/
+│   │   │   ├── tree.service.ts      # Tree CRUD, localStorage persistence
+│   │   │   └── tour.service.ts      # Random tour: selection, ordering, routing
+│   │   ├── shared/
+│   │   │   └── interfaces/          # TreeInfo, GeoJsonFeature interfaces
+│   │   ├── show-tree-markers/       # Reusable map marker component
+│   │   └── app.component.ts         # Root component
 │   ├── assets/
-│   │   ├── trees.json              # Tree database (113 trees)
-│   │   ├── tour1_geojson.json      # Bob Speelman's tour route
-│   │   ├── tree_imgs/              # Tree photographs (111 images)
-│   │   ├── treeId2Img.ts           # Image ID mappings
-│   │   └── icons/                  # App icons
+│   │   ├── trees.json               # Tree database (113 trees, GeoJSON)
+│   │   ├── tree_imgs/               # Tree photographs
+│   │   ├── treeId2Img.ts            # Tree ID → image ID mappings
+│   │   └── icons/                   # App icons
+│   ├── tests/                       # Unit tests (mirrors app/ structure)
 │   ├── environments/
-│   │   ├── environment.ts          # Development config
-│   │   └── environment.prod.ts     # Production config
+│   │   ├── environment.ts           # Development config
+│   │   └── environment.prod.ts      # Production config
 │   └── index.html
-├── capacitor.config.ts             # Capacitor configuration
-├── angular.json                    # Angular CLI config
-├── firebase.json                   # Firebase hosting config
-├── package.json                    # Dependencies
-├── tsconfig.json                   # TypeScript config
-├── ISSUES.md                       # Project issues tracker
-└── README.md                       # This file
+├── capacitor.config.ts              # Capacitor configuration
+├── angular.json                     # Angular CLI config
+├── firebase.json                    # Firebase hosting config
+├── package.json                     # Dependencies
+├── tsconfig.json                    # TypeScript config
+├── TESTING.md                       # Test documentation
+├── FINDINGS.md                      # Code analysis findings
+└── README.md                        # This file
 ```
 
 ---
@@ -295,7 +312,7 @@ Please follow these guidelines:
 
 ### 1. Find or Create an Issue
 
-- Check [ISSUES.md](./ISSUES.md) for existing issues
+- Check GitHub Issues for existing issues
 - Comment on an issue to claim it
 - Create a new issue if needed
 
@@ -316,7 +333,7 @@ Please follow these guidelines:
 ## Project Status
 
 **Current Version**: 0.3.2
-**Last Updated**: November 2025
+**Last Updated**: March 2026
 
 ### Tech Stack
 
@@ -331,7 +348,7 @@ Please follow these guidelines:
 
 ## License
 
-N/A ??
+TBD
 
 ---
 

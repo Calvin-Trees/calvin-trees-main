@@ -1,9 +1,11 @@
 <mgl-geojson-source id="{{id}}-source">
-  <mgl-feature *ngFor="let marker of treesList" [geometry]="{
-                            type: 'Point',
-                            coordinates: [marker.lng, marker.lat]
-                          }">
-  </mgl-feature>
+  @for (marker of treesList; track marker.treeId) {
+    <mgl-feature [geometry]="{
+                              type: 'Point',
+                              coordinates: [marker.lng, marker.lat]
+                            }">
+    </mgl-feature>
+  }
 </mgl-geojson-source>
 <mgl-layer id="{{id}}-layer" type="circle" source="{{id}}-source" [paint]="{
                           'circle-color': color,

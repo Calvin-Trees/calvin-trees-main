@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -11,7 +10,7 @@ import { TreeInfo } from '../../../shared/interfaces/tree-info.interface';
   templateUrl: './tree-list.component.html',
   styleUrls: ['./tree-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [FormsModule, IonicModule]
 })
 export class TreeListComponent implements OnInit, OnDestroy {
   @Output() editTree = new EventEmitter<TreeInfo>();

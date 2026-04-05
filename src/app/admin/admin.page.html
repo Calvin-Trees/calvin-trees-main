@@ -1,17 +1,20 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Admin</ion-title>
-    <ion-buttons slot="end" *ngIf="isAuthenticated">
+    @if (isAuthenticated) {
+    <ion-buttons slot="end">
       <ion-button (click)="logout()">
         <ion-icon name="log-out-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <!-- Passphrase Gate -->
-  <div *ngIf="!isAuthenticated" class="auth-container">
+  @if (!isAuthenticated) {
+  <div class="auth-container">
     <ion-card>
       <ion-card-header>
         <ion-card-title>Admin Access</ion-card-title>
@@ -26,18 +29,22 @@
             (keyup.enter)="submitPassphrase()"
           ></ion-input>
         </ion-item>
-        <ion-text color="danger" *ngIf="passphraseError">
+        @if (passphraseError) {
+        <ion-text color="danger">
           <p class="error-text">{{ passphraseError }}</p>
         </ion-text>
+        }
         <ion-button expand="block" (click)="submitPassphrase()" class="submit-btn">
           Submit
         </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
+  }
 
   <!-- Admin Content -->
-  <div *ngIf="isAuthenticated" class="admin-content">
+  @if (isAuthenticated) {
+  <div class="admin-content">
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-button (click)="openCreateModal()" color="primary">
@@ -58,4 +65,5 @@
       (deleteTree)="confirmDelete($event)"
     ></app-tree-list>
   </div>
+  }
 </ion-content>

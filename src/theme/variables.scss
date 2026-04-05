@@ -1,2 +1,38 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
+:root {
+  --ct-primary: #2d6a4f;
+  --ct-primary-light: #52b788;
+  --ct-primary-bg: #e8f5e9;
+  --ct-primary-bg-dark: #1a3a2a;
+  --ct-primary-badge: #d4edda;
+  --ct-accent: #f59e0b;
+  --ct-accent-dark: #d97706;
+  --ct-popup-text: darkgreen;
+  --ct-text: #1a1a1a;
+  --ct-text-secondary: #666;
+  --ct-text-muted: #999;
+  --ct-text-hint: #888;
+  --ct-text-commemoration: #444;
+  --ct-close-bg: #f1f1f1;
+  --ct-close-bg-active: #ddd;
+  --ct-close-color: #666;
+  --ct-debug-text: #111;
+  --ct-heading-degrees: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ct-primary: #52b788;
+    --ct-primary-bg: #1a3a2a;
+    --ct-primary-bg-dark: #1a3a2a;
+    --ct-primary-badge: #1a3a2a;
+    --ct-text: #f0f0f0;
+    --ct-text-secondary: #aaa;
+    --ct-text-muted: #999;
+    --ct-text-hint: #888;
+    --ct-text-commemoration: #ccc;
+    --ct-heading-degrees: #aaa;
+    --ct-close-bg: #333;
+    --ct-close-color: #ccc;
+    --ct-debug-text: #eee;
+  }
+}

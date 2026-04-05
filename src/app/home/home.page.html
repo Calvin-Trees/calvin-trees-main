@@ -10,26 +10,36 @@
         <ion-item>
           <ion-radio value="wander">Wander Mode</ion-radio>
         </ion-item>
-        <!-- <ion-item>
-          <ion-radio value="tour1">Bob Speelman's Favs</ion-radio>
-        </ion-item> -->
       </ion-radio-group>
       @if (!randomTourActive) {
-      <ion-item>
-        <ion-button expand="block" fill="outline" (click)="startRandomTour()">
-          Start Random Tour
-        </ion-button>
-      </ion-item>
+        <ion-item>
+          <ion-button expand="block" fill="outline" (click)="startSpeelmanTour()">
+            Bob Speelman's 12 Favorites
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-button expand="block" fill="outline" (click)="startRandomTour()">
+            Start Random Tour
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-button expand="block" fill="outline" color="tertiary" size="small" (click)="startSpeelmanTestTour()">
+            Preview Speelman Tour
+          </ion-button>
+          <ion-button expand="block" fill="outline" color="tertiary" size="small" (click)="startTestTour()">
+            Preview Random Tour
+          </ion-button>
+        </ion-item>
       } @else {
-      <ion-item>
-        <ion-label>
-          <h3>Random Tour Active</h3>
-          <p>Tree {{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</p>
-        </ion-label>
-        <ion-button fill="outline" color="danger" size="small" (click)="endRandomTour()">
-          End Tour
-        </ion-button>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <h3>{{ mode === 'speelmanTour' ? 'Speelman Tour' : 'Random Tour' }} Active</h3>
+            <p>Tree {{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</p>
+          </ion-label>
+          <ion-button fill="outline" color="danger" size="small" (click)="endRandomTour()">
+            End Tour
+          </ion-button>
+        </ion-item>
       }
       <ion-item></ion-item>
       <ion-item>
@@ -57,7 +67,7 @@
         </ion-button>
       </ion-item>
       <ion-item lines="none">
-        <ion-range min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
+        <ion-range aria-label="Proximity distance in meters" min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
         </ion-range>
       </ion-item>
       <ion-item>
@@ -80,10 +90,10 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-title>
-        Calvin Trees v0.3.2
+        Calvin Trees v0.38t
       </ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="searchClicked()">
+        <ion-button (click)="searchClicked()" aria-label="Search for a tree">
           <ion-icon name="search"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -93,78 +103,36 @@
       <ion-searchbar placeholder="Search for a tree" (ionInput)="doSearch($event)" (ionClear)="onSearchCancel()"
         [debounce]="300"></ion-searchbar>
     </ion-toolbar>
-    @if (searchResultStr.length > 0) {
+    @if (searchResults.length > 0) {
     <ion-list class="tree-search-list">
-      @if (searchResultTrees.length > 0) {
       <ion-item>
         <ion-checkbox [checked]="selectAllSelected" (ionChange)="selectAllCheckboxChanged()">
           <b>Select all</b>
         </ion-checkbox>
       </ion-item>
-      }
-      @for (res of searchResultStr; track $index) {
+      @for (result of searchResults; track $index) {
       <ion-item>
-        <ion-checkbox [checked]="selectedSearchResults[$index]" (ionChange)="searchSelectionChanged($index)">
-          {{res}}
+        <ion-checkbox [checked]="result.selected" (ionChange)="searchSelectionChanged($index)">
+          {{result.displayStr}}
         </ion-checkbox>
       </ion-item>
       }
-      @if (searchResultTrees.length > 0) {
       <ion-item>
         <ion-button [disabled]="areNoSearchResultsSelected()" (click)="showMarkersForOnlySelectedTrees()">
           Show markers for selected items
         </ion-button>
       </ion-item>
-      }
     </ion-list>
     }
     }
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    @if (showDebugWindow) {
-    <div class="debug-overlay">
-      <div class="debug-overlay__inner">
-        <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
-        @if (lastGeo) {
-        <div><b>lng:</b> {{ lastGeo.lng }}</div>
-        <div><b>lat:</b> {{ lastGeo.lat }}</div>
-        <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
-        } @else {
-        <div><b>geo:</b> (none yet)</div>
-        }
-        <div style="margin-top: 6px;">
-          <div><b>center.lng:</b> {{ center.lng }}</div>
-          <div><b>center.lat:</b> {{ center.lat }}</div>
-        </div>
-        <div style="margin-top: 6px;">
-          @if (heading) {
-          <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
-          } @else {
-          <div><b>heading:</b> --</div>
-          }
-        </div>
-        <div style="margin-top: 6px; opacity: 0.9;">
-          <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
-          <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
-          <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
-        </div>
-      </div>
-    </div>
-    }
 
-    <!-- replace "streets" with "hybrid" to get a satellite view -->
-    <mgl-map #map [style]="mapStyle" [zoom]="[18]" [center]="mapCenter"
-      [bearing]="compassHeadingActive ? heading : undefined" [pitch]="[15]" (moveStart)="onMapMoveStart($event)"
-      (moveEnd)="onMapMoveEnd($event)" (dragStart)="onMapDragStart($event)" (dragEnd)="onMapDragEnd($event)"
-      (zoomStart)="onMapZoomStart($event)" (zoomEnd)="onMapZoomEnd($event)">
+    <mgl-map #map [style]="mapStyle" [zoom]="[18]"
+      [center]="center" [bearing]="heading" [pitch]="[15]">
 
-      <!-- <mgl-control mglGeolocate [positionOptions]="{enableHighAccuracy: true}" [trackUserLocation]="true"
-        position="top-left">
-      </mgl-control> -->
 
-      <!-- <mgl-control mglNavigation [showCompass]="true" position="bottom-left">
-      </mgl-control> -->
 
       <!-- markers for nearbyTrees -->
       <app-show-tree-markers id="nearby-trees" color="green" [markerRadius]=7 [treesList]="nearbyTrees">
@@ -178,68 +146,57 @@
 
       @for (tree of nearbyTrees; track tree.treeId) {
       <mgl-popup [lngLat]="[tree.lng, tree.lat]" (popupOpen)="handlePopupOpen(tree)">
-        <div (click)="handleClickOnPopup(tree)">
-          <ion-grid class="no-padding">
-            <ion-row>
-              <ion-col size="4">
-                <ion-img [src]="tree.localImgFile" />
-              </ion-col>
-              <ion-col>
-                <ion-note class="display-block">{{tree.scientificName}}</ion-note>
-                <ion-text class="display-block common-name">{{tree.commonName}}</ion-text>
-                <!-- commemration field is " " when empty -->
-                @if (tree.commemoration.length > 1) {
-                <ion-text class="display-block commemoration-text">
-                  {{tree.commemoration}}</ion-text>
-                }
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+        <div class="tree-popup" role="button" tabindex="0" (click)="handleClickOnPopup(tree)" (keydown.enter)="handleClickOnPopup(tree)">
+          <div class="tree-popup__img-wrap">
+            @if (tree.localImgFile) {
+              <img [src]="tree.localImgFile" class="tree-popup__img" />
+            } @else {
+              <div class="tree-popup__img-placeholder">
+                <ion-icon name="leaf-outline"></ion-icon>
+              </div>
+            }
+          </div>
+          <div class="tree-popup__body">
+            <div class="tree-popup__name">{{ tree.commonName }}</div>
+            <div class="tree-popup__scientific">{{ tree.scientificName }}</div>
+            @if (tree.commemoration.length > 1) {
+              <div class="tree-popup__commemoration">{{ tree.commemoration }}</div>
+            }
+            <div class="tree-popup__hint">
+              <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+              Tap for details
+            </div>
+          </div>
         </div>
       </mgl-popup>
       }
 
-      @if (mode === 'tour1') {
-      <!-- If user is searching for a tree, don't show all tour trees -->
-      @if (!showOnlySearchedForTrees) {
-      <!-- show round green markers for trees on the tour -->
-      <app-show-tree-markers id="tour1" [treesList]="tour1Trees" color="green" [markerRadius]=7>
-      </app-show-tree-markers>
-      }
-
-      <!-- show route between trees on the tour -->
-      <!-- <mgl-geojson-source id="tour1-path-source">
-          <mgl-feature [geometry]="tour1Json"></mgl-feature>
-        </mgl-geojson-source>
-        <mgl-layer id="tour1-path-layer" type="line" source="tour1-path-source" [layout]="{
-            'line-join': 'round',
-            'line-cap': 'round'
-          }" [paint]="{
-            'line-color': 'green',
-            'line-width': 3,
-          }">
-        </mgl-layer> -->
-      }
-
-      @if (mode === 'randomTour' && randomTourCurrentTarget.length > 0) {
-      <app-show-tree-markers id="random-tour-target" [treesList]="randomTourCurrentTarget" color="orange"
-        [markerRadius]="9" strokeColor="white" [strokeWidth]="2">
+      @if ((mode === 'randomTour' || mode === 'speelmanTour') && randomTourCurrentTarget.length > 0) {
+      <app-show-tree-markers
+        id="random-tour-target"
+        [treesList]="randomTourCurrentTarget"
+        [color]="mode === 'speelmanTour' ? '#2d6a4f' : 'orange'"
+        [markerRadius]="9"
+        strokeColor="white"
+        [strokeWidth]="2">
       </app-show-tree-markers>
       }
 
       <!-- show round gold markers for all trees selected when searched -->
       @if (showOnlySearchedForTrees) {
-      <app-show-tree-markers id="search-trees" [treesList]="searchResultTrees" color="gold" [markerRadius]=5>
+      <app-show-tree-markers id="search-trees" [treesList]="selectedSearchTrees" color="gold" [markerRadius]=5>
       </app-show-tree-markers>
       }
 
       <!-- User location rendered using tracking_dot.png image -->
       <mgl-geojson-source id="user-location-source">
-        <mgl-feature *ngFor="let marker of userLocationTrees" [geometry]="{
-                          type: 'Point',
-                          coordinates: [marker.lng, marker.lat]
-                        }">
-        </mgl-feature>
+        @for (marker of userLocationTrees; track $index) {
+          <mgl-feature [geometry]="{
+                            type: 'Point',
+                            coordinates: [marker.lng, marker.lat]
+                          }">
+          </mgl-feature>
+        }
       </mgl-geojson-source>
       <mgl-layer id="user-location-layer" type="symbol" source="user-location-source" [layout]="{
                         'icon-image': 'tracking-dot',
@@ -250,12 +207,107 @@
 
     </mgl-map>
 
-    <!-- Recenter button overlay on map -->
-    <div class="recenter-button-container" [style.display]="followUserLocation ? 'none' : 'flex'">
-      <ion-button size="small" color="primary" (click)="recenterToUserLocation()" class="recenter-button">
-        Recenter
-      </ion-button>
-    </div>
+    <!-- Tour HUD: floating card when random tour is active -->
+    @if (randomTourActive && randomTourCurrentTarget.length > 0) {
+      <div class="tour-hud">
+        <!-- Progress dots -->
+        <div class="tour-hud__progress" role="group" aria-label="Tour progress">
+          @for (tree of randomTourTrees; track $index) {
+            <div class="tour-hud__dot"
+              [class.tour-hud__dot--done]="$index < randomTourCurrentIndex"
+              [class.tour-hud__dot--active]="$index === randomTourCurrentIndex"
+              [class.tour-hud__dot--upcoming]="$index > randomTourCurrentIndex"
+              [attr.aria-label]="'Tree ' + ($index + 1) + ' of ' + randomTourTrees.length + ($index < randomTourCurrentIndex ? ' (visited)' : $index === randomTourCurrentIndex ? ' (current)' : ' (upcoming)')">
+            </div>
+          }
+        </div>
+
+        <!-- Current target card -->
+        <div class="tour-hud__card">
+          <div class="tour-hud__img-wrap">
+            @if (randomTourCurrentTarget[0].localImgFile) {
+              <img [src]="randomTourCurrentTarget[0].localImgFile" class="tour-hud__img" />
+            } @else {
+              <div class="tour-hud__img-placeholder">
+                <ion-icon name="leaf-outline"></ion-icon>
+              </div>
+            }
+          </div>
+          <div class="tour-hud__info">
+            <div class="tour-hud__label">{{ mode === 'speelmanTour' ? 'Speelman\'s Favorites' : 'Next up' }} &middot; {{ randomTourCurrentIndex + 1 }}/{{ randomTourTrees.length }}</div>
+            <div class="tour-hud__name">{{ randomTourCurrentTarget[0].commonName }}</div>
+            <div class="tour-hud__scientific">{{ randomTourCurrentTarget[0].scientificName }}</div>
+            @if (distanceToTarget !== null) {
+              <div class="tour-hud__distance">
+                <ion-icon name="navigate-outline"></ion-icon>
+                {{ distanceToTarget < 1000 ? (distanceToTarget | number:'1.0-0') + ' m' : (distanceToTarget / 1000 | number:'1.1-1') + ' km' }} away
+              </div>
+            }
+          </div>
+          <button class="tour-hud__close" (click)="endRandomTour()" aria-label="End tour">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Tour arrival celebration overlay -->
+    @if (showTourArrival) {
+      <div class="tour-arrival-overlay" (click)="dismissArrival()">
+        <div class="tour-arrival" (click)="$event.stopPropagation()">
+          <div class="tour-arrival__badge">
+            <ion-icon [name]="mode === 'speelmanTour' ? 'leaf' : 'checkmark-circle'"></ion-icon>
+          </div>
+          @if (mode === 'speelmanTour') {
+            <div class="tour-arrival__tour-label">Bob Speelman's Favorites</div>
+          }
+          <div class="tour-arrival__count">{{ randomTourCurrentIndex + 1 }} of {{ randomTourTrees.length }}</div>
+          @if (arrivalTree) {
+            @if (arrivalTree.localImgFile) {
+              <img [src]="arrivalTree.localImgFile" class="tour-arrival__img" />
+            }
+            <h2 class="tour-arrival__name">{{ arrivalTree.commonName }}</h2>
+            <p class="tour-arrival__scientific">{{ arrivalTree.scientificName }}</p>
+            @if (arrivalLocation) {
+              <p class="tour-arrival__location-tag">
+                <ion-icon name="location-outline"></ion-icon>
+                {{ arrivalLocation }}
+              </p>
+            }
+            @if (arrivalTree.commemoration && arrivalTree.commemoration.length > 1) {
+              <p class="tour-arrival__commemoration">{{ arrivalTree.commemoration }}</p>
+            }
+            @if (arrivalStory) {
+              <div class="tour-arrival__story">
+                <div class="tour-arrival__story-quote">"</div>
+                <p class="tour-arrival__story-text">{{ arrivalStory }}</p>
+                <p class="tour-arrival__story-attr">— Bob Speelman</p>
+              </div>
+            }
+          }
+          @if (testTourActive) {
+            <button class="tour-arrival__detail-link" (click)="viewArrivalTreeDetail()">
+              <ion-icon name="expand-outline"></ion-icon>
+              View full details
+            </button>
+          }
+          <div class="tour-arrival__actions">
+            @if (randomTourCurrentIndex + 1 < randomTourTrees.length) {
+              <ion-button fill="outline" color="medium" (click)="endRandomTour(); dismissArrival()">End Tour</ion-button>
+              <ion-button color="success" (click)="advanceAndDismiss()">
+                <ion-icon name="arrow-forward-outline" slot="start"></ion-icon>
+                Next Tree
+              </ion-button>
+            } @else {
+              <ion-button color="success" expand="block" (click)="endRandomTour(); dismissArrival()">
+                <ion-icon name="trophy-outline" slot="start"></ion-icon>
+                Finish Tour
+              </ion-button>
+            }
+          </div>
+        </div>
+      </div>
+    }
 
     <ion-modal [isOpen]="isTreePictureModalOpen" (click)="isTreePictureModalOpen = false">
       <ng-template>
@@ -269,16 +321,43 @@
           </ion-toolbar>
         </ion-header>
         <ion-content>
-          <img [src]="currentTree!.localImgFile" />
-          <ion-item lines="none">
-            <div class="center-text">{{currentTree?.commonName}}</div>
-          </ion-item>
-          <ion-item>
-            <div class="center-text">{{currentTree?.treeId}}</div>
-          </ion-item>
-          <ion-item>
-            <div class="center-text">{{currentTree?.localImgFile}}</div>
-          </ion-item>
+          @if (currentTree) {
+            <div class="tree-detail">
+              <div class="tree-detail__hero">
+                @if (currentTree.localImgFile) {
+                  <img [src]="currentTree.localImgFile" class="tree-detail__hero-img" />
+                } @else {
+                  <div class="tree-detail__hero-placeholder">
+                    <ion-icon name="leaf-outline"></ion-icon>
+                  </div>
+                }
+                <button class="tree-detail__close" (click)="isTreePictureModalOpen = false">
+                  <ion-icon name="close"></ion-icon>
+                </button>
+              </div>
+              <div class="tree-detail__content">
+                <div class="tree-detail__id-badge">#{{ currentTree.treeId }}</div>
+                <h1 class="tree-detail__name">{{ currentTree.commonName }}</h1>
+                <p class="tree-detail__scientific">{{ currentTree.scientificName }}</p>
+                @if (currentTree.commemoration && currentTree.commemoration.length > 1) {
+                  <div class="tree-detail__section">
+                    <div class="tree-detail__section-label">
+                      <ion-icon name="heart-outline"></ion-icon>
+                      Commemoration
+                    </div>
+                    <p class="tree-detail__commemoration">{{ currentTree.commemoration }}</p>
+                  </div>
+                }
+                <div class="tree-detail__section">
+                  <div class="tree-detail__section-label">
+                    <ion-icon name="location-outline"></ion-icon>
+                    Location
+                  </div>
+                  <p class="tree-detail__location">{{ currentTree.lat | number:'1.6-6' }}, {{ currentTree.lng | number:'1.6-6' }}</p>
+                </div>
+              </div>
+            </div>
+          }
         </ion-content>
       </ng-template>
     </ion-modal>
