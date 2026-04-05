@@ -84,7 +84,7 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-title>
-        Calvin Trees v0.36t
+        Calvin Trees v0.38t
       </ion-title>
       <ion-buttons slot="end">
         <ion-button (click)="searchClicked()" aria-label="Search for a tree">
@@ -122,42 +122,10 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    <!-- Debug overlay (NOT a map control, should always be visible) -->
-    <div class="debug-overlay">
-      <div class="debug-overlay__inner">
-        <div><b>geo updates:</b> {{ geoUpdateCount }}</div>
-        @if (lastGeo) {
-          <div><b>lng:</b> {{ lastGeo.lng }}</div>
-          <div><b>lat:</b> {{ lastGeo.lat }}</div>
-          <div><b>acc:</b> {{ lastGeo.accuracy }} m</div>
-        } @else {
-          <div><b>geo:</b> (none yet)</div>
-        }
-        <div class="debug-overlay__section">
-          <div><b>center.lng:</b> {{ center.lng }}</div>
-          <div><b>center.lat:</b> {{ center.lat }}</div>
-        </div>
-        <div class="debug-overlay__section">
-          @if (heading) {
-            <div><b>heading:</b> {{ cardinalDirection }} {{ headingDegrees }}° @if (compassActive) { (compass) }</div>
-          } @else {
-            <div><b>heading:</b> --</div>
-          }
-        </div>
-        <div class="debug-overlay__section debug-overlay__section--faded">
-          <div><b>map:</b> {{ mapDebugState.hasMapInstance ? 'yes' : 'no' }}</div>
-          <div><b>user layer:</b> {{ mapDebugState.hasUserLayer ? 'yes' : 'no' }}</div>
-          <div><b>fixed layer:</b> {{ mapDebugState.hasDebugFixedLayer ? 'yes' : 'no' }}</div>
-        </div>
-      </div>
-    </div>
 
     <mgl-map #map [style]="mapStyle" [zoom]="[18]"
       [center]="center" [bearing]="heading" [pitch]="[15]">
 
-      <mgl-control position="bottom-right">
-        Status: {{ statusMsg }}
-      </mgl-control>
 
 
       <!-- markers for nearbyTrees -->
