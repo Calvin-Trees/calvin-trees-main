@@ -447,6 +447,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
           const layersToCheck: string[] = [];
           if (mapInstance.getLayer('nearby-trees-layer')) layersToCheck.push('nearby-trees-layer');
           if (mapInstance.getLayer('all-trees-layer')) layersToCheck.push('all-trees-layer');
+          if (mapInstance.getLayer('random-tour-target-layer')) layersToCheck.push('random-tour-target-layer');
+          if (mapInstance.getLayer('search-trees-layer')) layersToCheck.push('search-trees-layer');
 
           if (layersToCheck.length > 0) {
             const features = mapInstance.queryRenderedFeatures(e.point, { layers: layersToCheck });
