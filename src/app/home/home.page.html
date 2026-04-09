@@ -60,12 +60,7 @@
         <ion-note color="warning">{{ compassError }}</ion-note>
       </ion-item>
       }
-      <ion-item>
-        <ion-label>Debug window</ion-label>
-        <ion-button fill="outline" size="small" (click)="toggleDebugWindow()">
-          {{ showDebugWindow ? 'Hide' : 'Show' }}
-        </ion-button>
-      </ion-item>
+
       <ion-item lines="none">
         <ion-range aria-label="Proximity distance in meters" min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
         </ion-range>
@@ -130,7 +125,8 @@
   <ion-content [fullscreen]="true">
 
     <mgl-map #map [style]="mapStyle" [zoom]="[18]"
-      [center]="center" [bearing]="heading" [pitch]="[15]">
+      [center]="mapCenter" [bearing]="heading" [pitch]="[15]"
+      [attributionControl]="false">
 
 
 
@@ -142,33 +138,6 @@
       @if (showAllTreesChecked) {
       <app-show-tree-markers id="all-trees" [treesList]="treesDb" color="maroon" [markerRadius]=5>
       </app-show-tree-markers>
-      }
-
-      @for (tree of nearbyTrees; track tree.treeId) {
-      <mgl-popup [lngLat]="[tree.lng, tree.lat]" (popupOpen)="handlePopupOpen(tree)">
-        <div class="tree-popup" role="button" tabindex="0" (click)="handleClickOnPopup(tree)" (keydown.enter)="handleClickOnPopup(tree)">
-          <div class="tree-popup__img-wrap">
-            @if (tree.localImgFile) {
-              <img [src]="tree.localImgFile" class="tree-popup__img" />
-            } @else {
-              <div class="tree-popup__img-placeholder">
-                <ion-icon name="leaf-outline"></ion-icon>
-              </div>
-            }
-          </div>
-          <div class="tree-popup__body">
-            <div class="tree-popup__name">{{ tree.commonName }}</div>
-            <div class="tree-popup__scientific">{{ tree.scientificName }}</div>
-            @if (tree.commemoration.length > 1) {
-              <div class="tree-popup__commemoration">{{ tree.commemoration }}</div>
-            }
-            <div class="tree-popup__hint">
-              <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-              Tap for details
-            </div>
-          </div>
-        </div>
-      </mgl-popup>
       }
 
       @if ((mode === 'randomTour' || mode === 'speelmanTour') && randomTourCurrentTarget.length > 0) {
@@ -206,6 +175,43 @@
       </mgl-layer>
 
     </mgl-map>
+
+    @if (!followUserLocation) {
+      <div class="recenter-button-container">
+        <ion-button class="recenter-button" (click)="recenterToUserLocation()" fill="solid" color="primary" size="small">
+          <ion-icon name="locate-outline" slot="start"></ion-icon>
+          Recenter
+        </ion-button>
+      </div>
+    }
+
+    @if (selectedPopupTree) {
+      <div class="tree-info-card" role="button" tabindex="0" (click)="handleClickOnPopup(selectedPopupTree)" (keydown.enter)="handleClickOnPopup(selectedPopupTree)">
+        <button class="tree-info-card__close" (click)="closePopup(); $event.stopPropagation()" aria-label="Close">
+          <ion-icon name="close"></ion-icon>
+        </button>
+        <div class="tree-popup__img-wrap">
+          @if (selectedPopupTree.localImgFile) {
+            <img [src]="selectedPopupTree.localImgFile" class="tree-popup__img" />
+          } @else {
+            <div class="tree-popup__img-placeholder">
+              <ion-icon name="leaf-outline"></ion-icon>
+            </div>
+          }
+        </div>
+        <div class="tree-popup__body">
+          <div class="tree-popup__name">{{ selectedPopupTree.commonName }}</div>
+          <div class="tree-popup__scientific">{{ selectedPopupTree.scientificName }}</div>
+          @if (selectedPopupTree.commemoration.length > 1) {
+            <div class="tree-popup__commemoration">{{ selectedPopupTree.commemoration }}</div>
+          }
+          <div class="tree-popup__hint">
+            <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+            Tap for details
+          </div>
+        </div>
+      </div>
+    }
 
     <!-- Tour HUD: floating card when random tour is active -->
     @if (randomTourActive && randomTourCurrentTarget.length > 0) {

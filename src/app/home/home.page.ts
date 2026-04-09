@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MapComponent, NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
-import { LngLat } from 'maplibre-gl';
+import { AttributionControl, LngLat } from 'maplibre-gl';
 import { DecimalPipe } from '@angular/common';
 
 import { AlertController, IonicModule, RadioGroupCustomEvent, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
@@ -73,6 +73,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     | null = null;
 
   public nearbyTrees: TreeInfo[] = [];
+  public selectedPopupTree: TreeInfo | null = null;
   public userLocationTrees: TreeInfo[] = [];
 
   // Random Tour state
@@ -116,7 +117,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   // Retry mechanism properties
-  private geolocationWatchId: string | number | null = null;
+  private geolocationWatchId: number | null = null;
   private retryCount: number = 0;
   private retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private readonly MAX_RETRIES: number = 3;
@@ -164,7 +165,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       this.highlightNearbyTrees();
       this.cdr.markForCheck();
     });
-    void this.initializeGeolocation();
+
   }
 
   ngOnDestroy(): void {
@@ -279,6 +280,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
           this.heading = [position.coords.heading];
         }
         this.center = new LngLat(position.coords.longitude, position.coords.latitude);
+        if (this.followUserLocation) {
+          this.mapCenter = new LngLat(position.coords.longitude, position.coords.latitude);
+        }
 
         this.userLocationTrees = [
           {
@@ -295,11 +299,6 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         this.cdr.markForCheck();
       },
       (error) => {
-        const normalized = this.normalizeGeolocationError(error);
-        if (this.debugGeo) {
-          // eslint-disable-next-line no-console
-          console.warn('[geo] error', { code: normalized.code, message: normalized.message });
-        }
         this.handleGeolocationError(error);
         this.cdr.markForCheck();
       },
@@ -340,6 +339,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.statusMsg = 'Location permission denied. Using default location.';
 
     this.center = new LngLat(this.defaultLng, this.defaultLat);
+    this.mapCenter = new LngLat(this.defaultLng, this.defaultLat);
     this.highlightNearbyTrees();
     await this.showWarningToast('Location permission denied. Using default location.');
   }
@@ -430,7 +430,43 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
           console.error('[map] Error loading tracking_dot.png:', error);
         };
         img.src = 'assets/tracking_dot.png';
+        mapInstance.addControl(new AttributionControl({ compact: true }));
         refreshMapDebugState('load');
+
+        // Detect user-initiated map movement to stop auto-follow
+        mapInstance.on('movestart', (e: any) => {
+          if (e.originalEvent) {
+            this.followUserLocation = false;
+            this.compassHeadingActive = false;
+            this.cdr.markForCheck();
+          }
+        });
+
+        // Show popup when a tree marker is tapped; dismiss on empty area tap
+        mapInstance.on('click', (e: any) => {
+          const layersToCheck: string[] = [];
+          if (mapInstance.getLayer('nearby-trees-layer')) layersToCheck.push('nearby-trees-layer');
+          if (mapInstance.getLayer('all-trees-layer')) layersToCheck.push('all-trees-layer');
+
+          if (layersToCheck.length > 0) {
+            const features = mapInstance.queryRenderedFeatures(e.point, { layers: layersToCheck });
+            if (features.length > 0) {
+              const geom = features[0].geometry as any;
+              const [lng, lat] = geom.coordinates;
+              const tree = this.treesDb.find(t =>
+                Math.abs(t.lng - lng) < 0.0001 && Math.abs(t.lat - lat) < 0.0001
+              );
+              if (tree) {
+                this.selectedPopupTree = { ...tree, localImgFile: getTreeImagePath(tree.treeId) };
+                this.handlePopupOpen(tree);
+                this.cdr.markForCheck();
+                return;
+              }
+            }
+          }
+          this.selectedPopupTree = null;
+          this.cdr.markForCheck();
+        });
       });
       mapInstance.on('styledata', () => refreshMapDebugState('styledata'));
       refreshMapDebugState('afterViewInit');
@@ -676,6 +712,10 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     if (window.navigator?.vibrate) {
       window.navigator.vibrate(200);
     }
+  }
+
+  public closePopup(): void {
+    this.selectedPopupTree = null;
   }
 
   handleClickOnPopup(tree: TreeInfo): void {

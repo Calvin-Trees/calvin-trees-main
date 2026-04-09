@@ -558,6 +558,45 @@ ion-content {
   }
 }
 
+// ── Tree info card (fixed bottom overlay) ──
+.tree-info-card {
+  position: absolute;
+  bottom: calc(16px + var(--ion-safe-area-bottom, 0px));
+  left: 12px;
+  right: 12px;
+  z-index: 1500;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+
+  &__close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: var(--ct-close-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--ct-close-color);
+    cursor: pointer;
+    z-index: 1;
+
+    &:active {
+      background: var(--ct-close-bg-active);
+    }
+  }
+}
+
 .recenter-button {
   --padding-start: 12px;
   --padding-end: 12px;
@@ -565,6 +604,9 @@ ion-content {
 }
 
 @media (prefers-color-scheme: dark) {
+  .tree-info-card {
+    background: rgba(30, 30, 30, 0.95);
+  }
   .heading-display {
     background: rgba(30, 30, 30, 0.9);
   }
