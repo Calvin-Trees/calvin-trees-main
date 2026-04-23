@@ -5,6 +5,13 @@ import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 
 import { NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 
+/**
+ * Shared MapLibre marker layer for rendering a collection of tree points.
+ *
+ * Each instance must use a unique id because it creates source/layer ids in the
+ * underlying map. Styling inputs intentionally stay simple so HomePage can
+ * reuse this component for all, nearby, searched, and tour target markers.
+ */
 @Component({
     selector: 'app-show-tree-markers',
     templateUrl: './show-tree-markers.component.html',

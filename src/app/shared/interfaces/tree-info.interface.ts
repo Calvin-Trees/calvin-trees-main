@@ -1,3 +1,4 @@
+/** Normalized tree record used by the map, search UI, tours, and admin tools. */
 export interface TreeInfo {
   treeId: number;
   lng: number;
@@ -5,9 +6,10 @@ export interface TreeInfo {
   commonName: string;
   scientificName: string;
   commemoration: string;
-  localImgFile?: string;
+  localImgFile?: string; // Populated at display time by getTreeImagePath(); absent in stored records.
 }
 
+/** Raw GeoJSON feature shape from assets/trees.json. */
 export interface GeoJsonFeature {
   type: string;
   id: number;
@@ -25,6 +27,7 @@ export interface GeoJsonFeature {
   };
 }
 
+/** Raw GeoJSON feature collection shape from assets/trees.json. */
 export interface GeoJsonFeatureCollection {
   type: string;
   features: GeoJsonFeature[];

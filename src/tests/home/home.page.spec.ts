@@ -128,7 +128,11 @@ describe('HomePage', () => {
         { provide: AlertController, useValue: alertCtrlSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
+    })
+      .overrideComponent(HomePage, {
+        set: { template: '<div id="main-content"></div>' },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;

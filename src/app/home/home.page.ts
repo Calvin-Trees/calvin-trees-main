@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MapComponent, NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 import { AttributionControl, LngLat } from 'maplibre-gl';
 import { DecimalPipe } from '@angular/common';
@@ -27,6 +27,13 @@ function getTreeImagePath(treeId: number): string {
 }
 
 
+/**
+ * Main map experience for browsing campus trees.
+ *
+ * This page coordinates geolocation, MapLibre marker layers, tree search,
+ * nearby-tree detection, and the random/Speelman tour flows. Persistence and
+ * tree search stay in TreeService; this class owns view state and map behavior.
+ */
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -41,6 +48,10 @@ function getTreeImagePath(treeId: number): string {
   ]
 })
 export class HomePage implements AfterViewInit, OnInit, OnDestroy {
+  private readonly toastController = inject(ToastController);
+  private readonly treeService = inject(TreeService);
+  private readonly alertController = inject(AlertController);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   public isTreePictureModalOpen = false;
   public currentTree: TreeInfo | null = null;
@@ -145,18 +156,10 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public treesDb: TreeInfo[] = [];
 
   private treeSubscription: Subscription | null = null;
-  private geolocationInitialized = false;
 
   get selectedSearchTrees(): TreeInfo[] {
     return this.searchResults.filter(r => r.selected).map(r => r.tree);
   }
-
-  constructor(
-    private toastController: ToastController,
-    private treeService: TreeService,
-    private alertController: AlertController,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.startGeolocationWatch();
@@ -180,6 +183,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private getCompassHeadingFromEvent(event: DeviceOrientationEvent): number | null {
+    // webkitCompassHeading is iOS Safari's proprietary property — clockwise degrees from
+    // magnetic north. The standard alpha value works on Android but measures the opposite
+    // rotation axis, so prefer the webkit value when available to keep both platforms consistent.
     const raw = (event as DeviceOrientationEvent & { webkitCompassHeading?: number }).webkitCompassHeading;
     if (typeof raw === 'number' && !Number.isNaN(raw)) {
       return (raw % 360 + 360) % 360;
@@ -203,6 +209,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
   private startCompassListeners(): void {
     window.addEventListener('deviceorientation', this.deviceOrientationHandler, true);
+    // deviceorientationabsolute is a non-standard Chrome/Android event that provides
+    // geographically absolute bearing instead of relative-to-initial. Only wire it up
+    // when the browser exposes the event to avoid a silent no-op listener.
     if (typeof (window as any).ondeviceorientationabsolute !== 'undefined') {
       window.addEventListener('deviceorientationabsolute', this.deviceOrientationAbsoluteHandler, true);
     }
@@ -363,6 +372,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const config = errorConfig[errorType];
 
     if (this.retryCount <= this.MAX_RETRIES) {
+      // Exponential backoff: 1s → 2s → 4s, capped at 5s so the user isn't waiting too long.
       const retryDelay = Math.min(1000 * Math.pow(2, this.retryCount - 1), 5000);
       this.statusMsg = `${config.retryMessage} (${this.retryCount}/${this.MAX_RETRIES})`;
 
@@ -380,6 +390,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    // Defer one tick so MapLibre has time to initialize its canvas after Angular
+    // renders the template. The mapInstance is null synchronously in ngAfterViewInit.
     setTimeout(() => {
       const mapInstance = this.map?.mapInstance;
 
@@ -455,7 +467,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
             if (features.length > 0) {
               const geom = features[0].geometry as any;
               const [lng, lat] = geom.coordinates;
-              const tree = this.treesDb.find(t =>
+              // 0.0001 degrees ≈ 11 m — MapLibre rounds rendered coordinates so an
+            // exact equality check would miss real matches near rounding boundaries.
+            const tree = this.treesDb.find(t =>
                 Math.abs(t.lng - lng) < 0.0001 && Math.abs(t.lat - lat) < 0.0001
               );
               if (tree) {
@@ -483,10 +497,14 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.showAllTreesChecked = false;
     this.showOnlySearchedForTrees = true;
     this.searching = false;
+    // The search panel collapsing changes the map's rendered dimensions, but
+    // MapLibre doesn't detect DOM resize automatically — explicit call required.
     setTimeout(() => this.map!.mapInstance.resize(), 0);
   }
 
   highlightNearbyTrees() {
+    // In tour modes, check proximity against the current target only — this is what
+    // triggers tour advancement when the user reaches the target tree.
     const db2Use = (this.mode === 'randomTour' || this.mode === 'speelmanTour')
       ? this.randomTourCurrentTarget : this.treesDb;
 
@@ -547,6 +565,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const n = allTrees.length;
     const selected: TreeInfo[] = [];
 
+    // Partial Fisher-Yates: swap a random unvisited element into position i each
+    // iteration, stopping after `count` picks instead of shuffling the whole array.
     for (let i = 0; i < count && i < n; i++) {
       const j = i + Math.floor(Math.random() * (n - i));
       [allTrees[i], allTrees[j]] = [allTrees[j], allTrees[i]];
@@ -713,6 +733,8 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   handlePopupOpen(tree: TreeInfo) {
     if (window.navigator?.vibrate) {
       window.navigator.vibrate(200);
+    } else {
+      this.statusMsg = 'No haptics';
     }
   }
 

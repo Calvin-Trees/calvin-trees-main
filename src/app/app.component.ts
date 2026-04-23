@@ -1,18 +1,25 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, Subscription } from 'rxjs';
 
+/**
+ * Root application shell.
+ *
+ * The app is still bootstrapped through AppModule so Ionic routing, service
+ * worker registration, and native-style route reuse stay centralized.
+ */
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss'],
+    // eslint-disable-next-line @angular-eslint/prefer-standalone
     standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private readonly swUpdate = inject(SwUpdate);
+
   private updateSub: Subscription | null = null;
   private checkInterval: ReturnType<typeof setInterval> | null = null;
-
-  constructor(private swUpdate: SwUpdate) {}
 
   ngOnInit(): void {
     if (!this.swUpdate.isEnabled) return;
@@ -25,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.swUpdate.activateUpdate().then(() => document.location.reload());
       });
 
-    // iOS aggressively caches standalone PWAs — poll every 30 seconds
+    // iOS aggressively caches standalone PWAs, so poll every 30 seconds.
     this.checkInterval = setInterval(() => {
       this.swUpdate.checkForUpdate();
     }, 30 * 1000);

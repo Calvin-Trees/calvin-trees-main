@@ -1,8 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { TreeInfo } from '../../../shared/interfaces/tree-info.interface';
 
+/**
+ * Modal form used by the admin page to create or edit one tree record.
+ *
+ * The form returns normalized numeric coordinates to the caller and does not
+ * write directly to persistence.
+ */
 @Component({
   selector: 'app-tree-form',
   templateUrl: './tree-form.component.html',
@@ -11,6 +17,9 @@ import { TreeInfo } from '../../../shared/interfaces/tree-info.interface';
   imports: [ReactiveFormsModule, IonicModule]
 })
 export class TreeFormComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly modalController = inject(ModalController);
+
   @Input() mode: 'create' | 'edit' = 'create';
   @Input() tree?: TreeInfo;
 
@@ -18,11 +27,6 @@ export class TreeFormComponent implements OnInit {
 
   private defaultLat = 42.9308076;
   private defaultLng = -85.5871801;
-
-  constructor(
-    private fb: FormBuilder,
-    private modalController: ModalController
-  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -49,6 +53,7 @@ export class TreeFormComponent implements OnInit {
     }
 
     const formValue = this.form.value;
+    // parseFloat: reactive form returns all values as strings, including number inputs.
     const treeData: Omit<TreeInfo, 'treeId'> = {
       commonName: formValue.commonName,
       scientificName: formValue.scientificName,

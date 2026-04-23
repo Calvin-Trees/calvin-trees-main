@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { TreeService } from '../services/tree.service';
@@ -9,29 +9,36 @@ import { TreeListComponent } from './components/tree-list/tree-list.component';
 const AUTH_SESSION_KEY = 'calvin-trees-admin-auth';
 const PASSPHRASE = 'calvin';
 
+/**
+ * Admin maintenance page for the local tree database.
+ *
+ * Changes are persisted by TreeService in browser localStorage. The passphrase
+ * gate is intentionally lightweight and should not be treated as server-side
+ * authentication.
+ */
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.page.html',
   styleUrls: ['./admin.page.scss'],
   standalone: true,
-  imports: [FormsModule, IonicModule, TreeListComponent, TreeFormComponent]
+  imports: [FormsModule, IonicModule, TreeListComponent]
 })
 export class AdminPage implements OnInit {
+  private readonly treeService = inject(TreeService);
+  private readonly modalController = inject(ModalController);
+  private readonly alertController = inject(AlertController);
+
   isAuthenticated = false;
   passphraseInput = '';
   passphraseError = '';
-
-  constructor(
-    private treeService: TreeService,
-    private modalController: ModalController,
-    private alertController: AlertController
-  ) {}
 
   ngOnInit() {
     this.checkAuth();
   }
 
   private checkAuth(): void {
+    // sessionStorage (not localStorage) — auth clears when the tab closes,
+    // so each new session requires re-entry of the passphrase.
     const auth = sessionStorage.getItem(AUTH_SESSION_KEY);
     this.isAuthenticated = auth === 'true';
   }

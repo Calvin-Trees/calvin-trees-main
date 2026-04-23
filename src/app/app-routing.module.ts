@@ -19,6 +19,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    // PreloadAllModules eagerly downloads /admin after the initial page load so
+    // navigating there feels instant without blocking the first render.
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule]

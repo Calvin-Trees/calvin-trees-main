@@ -1,8 +1,8 @@
 {
-  "name": "trees-new",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "name": "calvin-trees",
+  "version": "0.3.8",
+  "author": "Calvin University",
+  "homepage": "https://calvin.edu/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -66,5 +66,5 @@
     "karma-jasmine-html-reporter": "^2.1.0",
     "typescript": "~5.8.0"
   },
-  "description": "An Ionic project"
+  "description": "Mobile-first Ionic app for exploring Calvin University's campus trees"
 }

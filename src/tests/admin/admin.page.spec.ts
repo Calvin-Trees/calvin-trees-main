@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { AdminPage } from '../../app/admin/admin.page';
-import { TreeListComponent } from '../../app/admin/components/tree-list/tree-list.component';
-import { TreeFormComponent } from '../../app/admin/components/tree-form/tree-form.component';
 import { TreeService } from '../../app/services/tree.service';
 import { TreeInfo } from '../../app/shared/interfaces/tree-info.interface';
 
@@ -56,9 +54,8 @@ describe('AdminPage', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     })
-      .overrideComponent(AdminPage, {
-        remove: { imports: [TreeListComponent, TreeFormComponent] },
-      })
+      .overrideProvider(ModalController, { useValue: modalCtrlSpy })
+      .overrideProvider(AlertController, { useValue: alertCtrlSpy })
       .compileComponents();
 
     fixture = TestBed.createComponent(AdminPage);
@@ -153,12 +150,6 @@ describe('AdminPage', () => {
   // Create modal
   // ---------------------------------------------------------------------------
   describe('openCreateModal()', () => {
-    let directComponent: AdminPage;
-
-    beforeEach(() => {
-      directComponent = new AdminPage(treeServiceSpy as any, modalCtrlSpy as any, alertCtrlSpy as any);
-    });
-
     it('should open a modal with mode "create"', async () => {
       const fakeModal = {
         present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
@@ -168,7 +159,7 @@ describe('AdminPage', () => {
       };
       modalCtrlSpy.create.and.returnValue(Promise.resolve(fakeModal as any));
 
-      await directComponent.openCreateModal();
+      await component.openCreateModal();
 
       expect(modalCtrlSpy.create).toHaveBeenCalledWith(
         jasmine.objectContaining({ componentProps: { mode: 'create' } })
@@ -186,7 +177,7 @@ describe('AdminPage', () => {
       };
       modalCtrlSpy.create.and.returnValue(Promise.resolve(fakeModal as any));
 
-      await directComponent.openCreateModal();
+      await component.openCreateModal();
 
       expect(treeServiceSpy.createTree).toHaveBeenCalledWith(savedTree);
     });
@@ -211,12 +202,6 @@ describe('AdminPage', () => {
   // Edit modal
   // ---------------------------------------------------------------------------
   describe('openEditModal()', () => {
-    let directComponent: AdminPage;
-
-    beforeEach(() => {
-      directComponent = new AdminPage(treeServiceSpy as any, modalCtrlSpy as any, alertCtrlSpy as any);
-    });
-
     it('should open a modal with mode "edit" and the tree', async () => {
       const fakeModal = {
         present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
@@ -226,7 +211,7 @@ describe('AdminPage', () => {
       };
       modalCtrlSpy.create.and.returnValue(Promise.resolve(fakeModal as any));
 
-      await directComponent.openEditModal(MOCK_TREE);
+      await component.openEditModal(MOCK_TREE);
 
       expect(modalCtrlSpy.create).toHaveBeenCalledWith(
         jasmine.objectContaining({
@@ -245,7 +230,7 @@ describe('AdminPage', () => {
       };
       modalCtrlSpy.create.and.returnValue(Promise.resolve(fakeModal as any));
 
-      await directComponent.openEditModal(MOCK_TREE);
+      await component.openEditModal(MOCK_TREE);
 
       expect(treeServiceSpy.updateTree).toHaveBeenCalledWith(MOCK_TREE.treeId, updates);
     });

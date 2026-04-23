@@ -1,358 +1,248 @@
 # Calvin Trees
 
-An interactive mobile-first web application for exploring the Calvin University campus arboretum. Navigate through campus trees with real-time geolocation, view detailed tree information, and follow curated walking tours.
+Calvin Trees is a mobile-first Ionic/Angular application for exploring trees on
+Calvin University's campus. The main screen is an interactive MapLibre map with
+geolocation, searchable tree markers, tree detail cards, proximity alerts, and
+two walking-tour modes.
 
-**Version:** 0.3.2
-**Status:** Active Development
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Development](#development)
-- [Git Workflow](#git-workflow)
-- [Building](#building)
-- [Deployment](#deployment)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
-
----
+**Current app version:** 0.3.8  
+**Status:** active coursework/development build  
+**Primary routes:** `/home`, `/admin`
 
 ## Features
 
-- **Real-time Geolocation Tracking**: See your location on campus with heading indicator
-- **Interactive Tree Map**: Browse 113+ trees on Calvin's campus with detailed information
-- **Smart Proximity Detection**: Automatic popups when within 10 meters of a tree
-- **Search Functionality**: Find trees by common name, scientific name, or commemoration
-- **Random Walking Tours**: Generate randomized walking tours with turn-by-turn routes via MapTiler Directions API
-- **Detailed Tree Information**: View scientific names, common names, commemorations, and photos
-- **Offline Capability**: Progressive Web App with service worker support
-- **Mobile Optimized**: Built with Ionic for native-like mobile experience
+- **Interactive campus map:** Renders the campus tree dataset from `src/assets/trees.json`.
+- **User location tracking:** Uses browser geolocation to center the map and show the user's current position.
+- **Nearby tree detection:** Highlights trees within the selected proximity radius, defaulting to 10 meters.
+- **Search:** Finds trees by common name, scientific name, or commemoration text.
+- **Tree details:** Shows common name, scientific name, commemoration, coordinates, and local tree photos when mapped.
+- **Random tour:** Selects a random set of target trees and advances as the user reaches each target.
+- **Bob Speelman's 12 Favorites:** Curated tour data in `src/assets/speelman-tour.ts`.
+- **Admin maintenance:** Passphrase-gated CRUD UI for local tree edits stored in browser `localStorage`.
+- **PWA support:** Production builds register the Angular service worker.
+- **Native shells:** Capacitor iOS and Android project folders are present.
 
----
+Current tour modes show target markers and distance to the next tree. They do
+not currently render turn-by-turn route geometry from a directions API.
 
-## Prerequisites
+## Requirements
 
-Before you begin, ensure you have the following installed:
+- Node.js 18 LTS or 20 LTS
+- npm 9 or 10
+- Git
+- Angular CLI 20 (`npm install -g @angular/cli@20`) or `npx ng`
+- Ionic CLI 8 (`npm install -g @ionic/cli`) for Ionic/Capacitor workflows
 
-- **Node.js**: v18.x or v20.x LTS
-- **npm**: v9.x or v10.x
-- **Git**: Latest version
-- **Angular CLI**: v20.x (`npm install -g @angular/cli@20`)
-- **Ionic CLI**: v8.x (`npm install -g @ionic/cli`)
+Optional native build tools:
 
-Optional for mobile builds:
-- **Capacitor CLI**: v7.x (included in dev dependencies)
-- **Xcode**: For iOS builds (macOS only)
-- **Android Studio**: For Android builds
+- Xcode for iOS builds on macOS
+- Android Studio for Android builds
 
----
-
-## Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd calvin-trees-main
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-
-   Create or update `src/environments/environment.ts`:
-   ```typescript
-   export const environment = {
-     production: false,
-     mapTilerApiKey: 'YOUR_MAPTILER_API_KEY_HERE'
-   };
-   ```
-
-   Create or update `src/environments/environment.prod.ts`:
-   ```typescript
-   export const environment = {
-     production: true,
-     mapTilerApiKey: 'YOUR_PRODUCTION_MAPTILER_API_KEY_HERE'
-   };
-   ```
-
-   **Never commit API keys to version control!** Add to `.gitignore`:
-   ```bash
-   echo "src/environments/environment.ts" >> .gitignore
-   echo "src/environments/environment.prod.ts" >> .gitignore
-   ```
-
-4. **Verify installation**
-   ```bash
-   npm run start
-   ```
-
-   Navigate to `http://localhost:4200` - you should see the app running.
-
----
-
-## Development
-
-### Running the Development Server
+## Setup
 
 ```bash
+git clone <repository-url>
+cd calvin-trees-main
+npm install
 npm start
-# or
-ng serve
 ```
 
-### Development Tips
+Open `http://localhost:4200`.
 
-- **Enable high accuracy geolocation**: Use HTTPS or localhost (required by browser security)
-- **Testing on mobile**: Use `ng serve --host 0.0.0.0` and access via your local IP
-- **Debugging maps**: Check browser console for MapLibre GL errors
-- **Hot reload**: Changes to TypeScript/HTML/SCSS auto-reload the browser
-
----
-
-## Git Workflow
-
-This project uses a **Git Flow** branching strategy with two main branches:
-
-### Branch Structure
-
-```
-main (production-ready code)
-  ↑
-  └─── Pull Requests only (for releases)
-        ↑
-dev (integration branch)
-  ↑
-  └─── Pull Requests from feature branches
-        ↑
-feature/* (individual features)
-```
-
-### Working with Branches
-
-#### 1. Starting New Work
+Geolocation works on `localhost` during development. For testing on a phone,
+serve on the local network:
 
 ```bash
-# Always start from dev
-git checkout dev
-git pull origin dev
-
-# Create a feature branch
-git checkout -b feature/your-feature-name
-# or for bug fixes:
-git checkout -b fix/bug-description
+ng serve --host 0.0.0.0
 ```
 
-#### 2. Making Changes
+Then open the machine's local IP address from the phone.
 
-```bash
-# Make your changes, then:
-git add .
-git commit -m "Descriptive commit message"
+## Environment
 
-# Push to remote
-git push origin feature/your-feature-name
+Map tiles use `environment.maptilerApiKey`.
+
+Files:
+
+- `src/environments/environment.ts` for development
+- `src/environments/environment.prod.ts` for production builds
+- `src/environments/environment.example.ts` as the template
+
+Example:
+
+```ts
+export const environment = {
+  production: false,
+  maptilerApiKey: 'YOUR_MAPTILER_API_KEY_HERE'
+};
 ```
 
-#### 3. Releasing to Production
+Security note: MapTiler browser keys are public client-side credentials once the
+app is shipped. The current repository includes environment files for this
+coursework build; rotate the key before publishing the app outside the class
+context.
 
-```bash
-# After thorough testing on dev branch:
-# Create PR: dev → main on GitHub
-# After merge, tag the release:
+## Scripts
 
-git checkout main
-git pull origin main
-git tag -a v0.3.3 -m "Release version 0.3.3 - Description"
-git push origin v0.3.3
+| Command | Purpose |
+| --- | --- |
+| `npm start` | Run the Angular dev server on `localhost:4200`. |
+| `npm run build` | Build the web app into `www/`. |
+| `npm test -- --no-watch --browsers=ChromeHeadless` | Run the unit test suite once. |
+| `npm test -- --no-watch --browsers=ChromeHeadless --code-coverage` | Run tests with coverage output. |
+| `npm run lint` | Run Angular ESLint over `src/**/*.ts` and `src/**/*.html`. |
+
+## Architecture
+
+### App Shell
+
+- `src/main.ts` bootstraps `AppModule`.
+- `src/app/app.module.ts` centralizes Ionic, routing, and service worker setup.
+- `src/app/app.component.ts` owns service worker update polling and reloads when a new production version is ready.
+
+### Routes
+
+- `/home` lazy-loads `HomePage`.
+- `/admin` lazy-loads `AdminPage`.
+- `/` redirects to `/home`.
+
+### Home Map
+
+`src/app/home/home.page.ts` owns the main user experience:
+
+- Browser geolocation watch and retry behavior
+- MapLibre setup and user-location image registration
+- Nearby-tree detection
+- Search UI state
+- Tree detail modal state
+- Random tour state
+- Bob Speelman tour state
+- Compass/device-orientation behavior
+
+`src/app/show-tree-markers/` is the shared marker-layer component used by the
+home map for all marker categories.
+
+### Data Layer
+
+`TreeService` is the in-browser repository:
+
+- Loads the checked-in GeoJSON tree dataset on first run
+- Exposes the current tree list through `trees$`
+- Searches by name, scientific name, and commemoration
+- Persists admin changes in `localStorage`
+- Can reset local edits back to the checked-in dataset
+
+No backend database is currently used.
+
+### Admin
+
+The admin page is a local maintenance tool, not production-grade authentication.
+The passphrase is defined in `src/app/admin/admin.page.ts`; it protects the UI
+from casual use but is visible to anyone inspecting the client bundle.
+
+Admin changes are local to the browser. They do not modify `trees.json` and do
+not sync between devices.
+
+## Project Structure
+
+```text
+calvin-trees-main/
+├── src/
+│   ├── app/
+│   │   ├── admin/                 # Local CRUD admin page and modal/list components
+│   │   ├── home/                  # Main map, search, geolocation, and tour page
+│   │   ├── services/              # TreeService local repository
+│   │   ├── shared/interfaces/     # Shared tree and GeoJSON TypeScript shapes
+│   │   ├── show-tree-markers/     # Shared MapLibre marker layer component
+│   │   ├── app-routing.module.ts  # Lazy route definitions
+│   │   ├── app.component.*        # Root shell and service worker update behavior
+│   │   └── app.module.ts          # Angular/Ionic module bootstrap
+│   ├── assets/
+│   │   ├── trees.json             # Campus tree GeoJSON source data
+│   │   ├── tree_imgs/             # Local tree photos
+│   │   ├── treeId2Img.ts          # Tree id to photo id mapping
+│   │   ├── speelman-tour.ts       # Curated tour copy and order
+│   │   └── tracking_dot.png       # User-location marker image
+│   ├── environments/              # MapTiler/environment configuration
+│   ├── tests/                     # Jasmine/Karma unit tests
+│   ├── global.scss                # Global styles and Ionic overrides
+│   └── theme/variables.scss       # App CSS custom properties
+├── android/                       # Capacitor Android project
+├── ios/                           # Capacitor iOS project
+├── capacitor.config.ts            # Capacitor app config
+├── firebase.json                  # Firebase hosting config
+├── TESTING.md                     # Test-suite details and current coverage
+└── README.md                      # Project overview
 ```
 
-## Building
+## Build
 
-### Development Build
+Development build:
 
 ```bash
 npm run build
 ```
 
-Output: `www/` directory
-
-### Production Build
+Production build:
 
 ```bash
 ng build --configuration production
 ```
 
-This creates an optimized build with:
-- Minified JavaScript/CSS
-- Tree-shaking for smaller bundle size
-- Service worker for offline support
-- Source maps (optional, disable with `--source-map=false`)
+Both write web assets to `www/`.
 
-### Mobile Builds
+## Native Builds
 
-#### iOS
+Both Capacitor platforms are installed in this repository.
+
+iOS:
 
 ```bash
-# Sync web assets to iOS
 npx cap sync ios
-
-# Open in Xcode
 npx cap open ios
-
-# Build and run from Xcode
 ```
 
-#### Android
-
-> **Note:** `@capacitor/android` is not currently installed. To add Android support:
-> ```bash
-> npm install @capacitor/android
-> npx cap add android
-> ```
+Android:
 
 ```bash
-# Sync web assets to Android
 npx cap sync android
-
-# Open in Android Studio
 npx cap open android
-
-# Build and run from Android Studio
 ```
 
----
+Build and run from Xcode or Android Studio after syncing.
 
 ## Deployment
 
-### Firebase Hosting
-
-This project is configured for Firebase Hosting.
-
-#### Prerequisites
+Firebase Hosting is configured through `firebase.json`.
 
 ```bash
-npm install -g firebase-tools
-firebase login
-```
-
-#### Deploy
-
-```bash
-# Build for production
 npm run build -- --configuration production
-
-# Deploy to Firebase
 firebase deploy
-
-# Deploy hosting only
-firebase deploy --only hosting
 ```
 
-#### Environments
-
-- **Production**: Deployed from `main` branch
-- **Staging** (optional): Deployed from `dev` branch
-
-## Project Structure
-
-```
-calvin-trees-main/
-├── src/
-│   ├── app/
-│   │   ├── home/                    # Main map page
-│   │   │   ├── home.page.ts        # Map logic, geolocation, search, tour
-│   │   │   ├── home.page.html      # Map template
-│   │   │   └── home.page.scss      # Map styles
-│   │   ├── admin/                   # Admin CRUD pages
-│   │   │   ├── admin.page.ts       # Auth, create/edit/delete trees
-│   │   │   └── components/
-│   │   │       ├── tree-form/       # Tree create/edit form component
-│   │   │       └── tree-list/       # Tree list with search component
-│   │   ├── services/
-│   │   │   ├── tree.service.ts      # Tree CRUD, localStorage persistence
-│   │   │   └── tour.service.ts      # Random tour: selection, ordering, routing
-│   │   ├── shared/
-│   │   │   └── interfaces/          # TreeInfo, GeoJsonFeature interfaces
-│   │   ├── show-tree-markers/       # Reusable map marker component
-│   │   └── app.component.ts         # Root component
-│   ├── assets/
-│   │   ├── trees.json               # Tree database (113 trees, GeoJSON)
-│   │   ├── tree_imgs/               # Tree photographs
-│   │   ├── treeId2Img.ts            # Tree ID → image ID mappings
-│   │   └── icons/                   # App icons
-│   ├── tests/                       # Unit tests (mirrors app/ structure)
-│   ├── environments/
-│   │   ├── environment.ts           # Development config
-│   │   └── environment.prod.ts      # Production config
-│   └── index.html
-├── capacitor.config.ts              # Capacitor configuration
-├── angular.json                     # Angular CLI config
-├── firebase.json                    # Firebase hosting config
-├── package.json                     # Dependencies
-├── tsconfig.json                    # TypeScript config
-├── TESTING.md                       # Test documentation
-├── FINDINGS.md                      # Code analysis findings
-└── README.md                        # This file
-```
-
----
+Use `firebase deploy --only hosting` when only hosting assets changed.
 
 ## Contributing
 
-Please follow these guidelines:
+1. Start from the current integration branch used by the team.
+2. Keep PRs focused on one behavior or documentation area.
+3. Update `README.md` and/or `TESTING.md` when behavior, setup, test status, or known risks change.
+4. Run `npm run build`, `npm run lint`, and the headless test command before handing off.
+5. Avoid committing real production credentials. Browser map keys should be scoped and replaceable.
 
-### 1. Find or Create an Issue
+## Troubleshooting
 
-- Check GitHub Issues for existing issues
-- Comment on an issue to claim it
-- Create a new issue if needed
-
-### 2. Follow the Git Workflow
-
-- Create feature branch from `dev`
-- Make focused, atomic commits
-- Write descriptive commit messages
-- Keep PRs small and reviewable
-
-### 3. Code Standards
-
-- **TypeScript**: Use strict typing, avoid `any`
-- **Formatting**: Run `npm run lint` before committing
-- **Testing**: Add tests for new features
-- **Documentation**: Update README/ISSUES.md as needed
-
-## Project Status
-
-**Current Version**: 0.3.2
-**Last Updated**: March 2026
-
-### Tech Stack
-
-- **Angular**: 20.3.12
-- **TypeScript**: 5.8.3
-- **Ionic**: 8.0.0
-- **Capacitor**: 7.4.4
-- **MapLibre GL**: 4.7.1
-- **RxJS**: 7.8.2
-
----
+- **Map does not load:** Check `environment.maptilerApiKey` and browser console network errors.
+- **Geolocation does not update:** Use `localhost`, HTTPS, or a secure mobile test origin. Browser geolocation is blocked on insecure origins.
+- **Phone testing cannot reach dev server:** Run `ng serve --host 0.0.0.0` and confirm the phone is on the same network.
+- **Admin edits disappear in another browser:** Admin edits are stored in the current browser's `localStorage`.
+- **Old PWA content persists:** Production service worker updates are activated by `AppComponent`; close/reopen the PWA if a device still shows an old cached build.
 
 ## License
 
-TBD
+TBD.
 
----
+## Contributors
 
-## 👥 Contributors
-
-- Original Author: [Professor Victor Norman]
-- Current Contributors: [Alim Darmenov, Sam Viss, Peter Brink]
+- Original author: Professor Victor Norman
+- Current contributors: Alim Darmenov, Sam Viss, Peter Brink

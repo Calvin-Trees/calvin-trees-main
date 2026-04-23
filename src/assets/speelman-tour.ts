@@ -1,3 +1,4 @@
+/** One stop in Bob Speelman's curated favorites tour. */
 export interface SpeelmanTree {
   treeId: number;
   order: number;
@@ -5,6 +6,7 @@ export interface SpeelmanTree {
   location: string;
 }
 
+/** Curated tour copy keyed to tree ids from assets/trees.json. */
 export const speelmanTour: SpeelmanTree[] = [
   {
     treeId: 54,

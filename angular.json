@@ -34,6 +34,7 @@
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
             "scripts": [],
+            "allowedCommonJsDependencies": ["maplibre-gl"],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },
