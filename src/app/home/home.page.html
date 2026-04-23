@@ -62,7 +62,7 @@
       }
 
       <ion-item lines="none">
-        <ion-range aria-label="Proximity distance in meters" min="5" max="50" value="10" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
+        <ion-range aria-label="Proximity distance in meters" min="5" max="50" [value]="howCloseIsClose" [pin]="true" (ionChange)="distanceToTreeChanged($event)">
         </ion-range>
       </ion-item>
       <ion-item>

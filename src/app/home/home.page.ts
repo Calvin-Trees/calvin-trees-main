@@ -13,6 +13,7 @@ import { TreeInfo } from '../shared/interfaces/tree-info.interface';
 import { ShowTreeMarkersComponent } from '../show-tree-markers/show-tree-markers.component';
 import { Subscription } from 'rxjs';
 import { speelmanTour, SpeelmanTree } from '../../assets/speelman-tour';
+import { loadHomePreferences, saveHomePreferences } from './home-preferences.storage';
 
 type AppMode = 'wander' | 'randomTour' | 'speelmanTour';
 
@@ -185,12 +186,18 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public treesDb: TreeInfo[] = [];
 
   private treeSubscription: Subscription | null = null;
+  private shouldRestoreCompass = false;
 
   get selectedSearchTrees(): TreeInfo[] {
     return this.searchResults.filter(r => r.selected).map(r => r.tree);
   }
 
   ngOnInit(): void {
+    const preferences = loadHomePreferences();
+    this.howCloseIsClose = preferences.proximityDistance;
+    this.vibrateWhenNearTree = preferences.vibrateWhenNearTree;
+    this.shouldRestoreCompass = preferences.compassEnabled;
+
     this.startGeolocationWatch();
     this.treeSubscription = this.treeService.trees$.subscribe(trees => {
       this.treesDb = trees;
@@ -292,20 +299,25 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         } else {
           this.compassError = 'Compass permission denied';
         }
+        this.persistPreferences();
       } catch (e) {
         this.compassError = e instanceof Error ? e.message : 'Compass permission failed';
+        this.persistPreferences();
       }
       return;
     }
     if (typeof window.DeviceOrientationEvent === 'undefined') {
       this.compassError = 'Compass not supported on this device';
+      this.persistPreferences();
       return;
     }
     this.startCompassListeners();
+    this.persistPreferences();
   }
 
   public disableCompass(): void {
     this.stopCompass();
+    this.persistPreferences();
   }
 
   private startGeolocationWatch(): void {
@@ -460,6 +472,10 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    if (this.shouldRestoreCompass) {
+      void this.enableCompass();
+    }
+
     // Defer one tick so MapLibre has time to initialize its canvas after Angular
     // renders the template. The mapInstance is null synchronously in ngAfterViewInit.
     setTimeout(() => {
@@ -574,6 +590,14 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       mapInstance.on('styledata', () => refreshMapDebugState('styledata'));
       refreshMapDebugState('afterViewInit');
     }, 0);
+  }
+
+  private persistPreferences(): void {
+    saveHomePreferences({
+      compassEnabled: this.compassActive,
+      proximityDistance: this.howCloseIsClose,
+      vibrateWhenNearTree: this.vibrateWhenNearTree,
+    });
   }
 
   showAllTreesSelected() {
@@ -775,10 +799,12 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const dist = ev.detail.value as number;
     this.howCloseIsClose = dist;
     this.highlightNearbyTrees();
+    this.persistPreferences();
   }
 
   public vibrateWhenNearTreeChanged(): void {
     this.vibrateWhenNearTree = !this.vibrateWhenNearTree;
+    this.persistPreferences();
   }
 
   public onMapMoveStart(event: any): void {
