@@ -158,15 +158,7 @@
       }
 
       <!-- User location rendered using tracking_dot.png image -->
-      <mgl-geojson-source id="user-location-source">
-        @for (marker of userLocationTrees; track $index) {
-          <mgl-feature [geometry]="{
-                            type: 'Point',
-                            coordinates: [marker.lng, marker.lat]
-                          }">
-          </mgl-feature>
-        }
-      </mgl-geojson-source>
+      <mgl-geojson-source id="user-location-source" [data]="userLocationGeoJson"></mgl-geojson-source>
       <mgl-layer id="user-location-layer" type="symbol" source="user-location-source" [layout]="{
                         'icon-image': 'tracking-dot',
                         'icon-size': 0.5,

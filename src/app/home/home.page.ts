@@ -86,6 +86,23 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public nearbyTrees: TreeInfo[] = [];
   public selectedPopupTree: TreeInfo | null = null;
   public userLocationTrees: TreeInfo[] = [];
+  public userLocationGeoJson: {
+    type: 'FeatureCollection';
+    features: Array<{
+      type: 'Feature';
+      geometry: {
+        type: 'Point';
+        coordinates: [number, number];
+      };
+      properties: {
+        treeId: number;
+        label: string;
+      };
+    }>;
+  } = {
+    type: 'FeatureCollection',
+    features: [],
+  };
 
   // Random Tour state
   public randomTourActive = false;
@@ -303,6 +320,22 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
             commemoration: '',
           }
         ];
+        this.userLocationGeoJson = {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [position.coords.longitude, position.coords.latitude],
+              },
+              properties: {
+                treeId: -1,
+                label: 'You are here',
+              },
+            },
+          ],
+        };
 
         this.highlightNearbyTrees();
         this.cdr.markForCheck();
