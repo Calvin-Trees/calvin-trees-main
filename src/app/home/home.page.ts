@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, i
 import { MapComponent, NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 import { AttributionControl, LngLat } from 'maplibre-gl';
 import { DecimalPipe } from '@angular/common';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import { AlertController, IonicModule, RadioGroupCustomEvent, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
@@ -163,10 +164,18 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   public searchResults: SearchResult[] = [];
   public selectAllSelected = false;
   public showOnlySearchedForTrees = false;
+  public vibrateWhenNearTree = false;
+  private nearbyTreeIdsInRange = new Set<number>();
 
   public howCloseIsClose = 10;
   public mode: AppMode = 'wander';
   public mapStyle: string = `https://api.maptiler.com/maps/streets/style.json?key=${environment.maptilerApiKey}`;
+  private mapLoaded = false;
+  private startupRecenterDone = false;
+  private mapPointerPauseHandler: (() => void) | null = null;
+  private mapCanvasElement: HTMLCanvasElement | null = null;
+  private suppressManualPauseUntil = 0;
+  private programmaticRecenterActive = false;
 
   @ViewChild('map') map: MapComponent | null = null;
 
@@ -196,6 +205,10 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     if (this.retryTimeoutId !== null) {
       clearTimeout(this.retryTimeoutId);
     }
+    if (this.mapCanvasElement && this.mapPointerPauseHandler) {
+      this.mapCanvasElement.removeEventListener('touchstart', this.mapPointerPauseHandler);
+      this.mapCanvasElement.removeEventListener('mousedown', this.mapPointerPauseHandler);
+    }
     this.stopCompass();
   }
 
@@ -222,6 +235,26 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       this.compassError = null;
       this.cdr.markForCheck();
     }
+  }
+
+  get isCompassDirectionPaused(): boolean {
+    return this.compassActive && !this.followUserLocation && !this.compassHeadingActive;
+  }
+
+  private pauseCompassDirectionForManualNavigation(): void {
+    if (this.programmaticRecenterActive || Date.now() < this.suppressManualPauseUntil) {
+      return;
+    }
+    this.followUserLocation = false;
+    this.compassHeadingActive = false;
+    this.cdr.markForCheck();
+  }
+
+  private tryStartupRecenter(): void {
+    // Wait for map + first location update so initial blue-dot placement is centered.
+    if (!this.mapLoaded || this.startupRecenterDone || !this.lastGeo) return;
+    this.startupRecenterDone = true;
+    this.recenterToUserLocation();
   }
 
   private startCompassListeners(): void {
@@ -338,6 +371,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         };
 
         this.highlightNearbyTrees();
+        this.tryStartupRecenter();
         this.cdr.markForCheck();
       },
       (error) => {
@@ -445,6 +479,30 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
 
       mapInstance.resize();
 
+      // Detect user-initiated map movement to stop auto-follow. This must be
+      // registered as soon as mapInstance exists so drag/recenter behavior is
+      // consistent even while compass updates are flowing.
+      mapInstance.on('movestart', (e: any) => {
+        if (e.originalEvent) {
+          this.pauseCompassDirectionForManualNavigation();
+        }
+      });
+      mapInstance.on('dragstart', (e: any) => {
+        if (e.originalEvent) {
+          this.pauseCompassDirectionForManualNavigation();
+        }
+      });
+      // Pause compass-follow immediately on first finger/mouse contact so
+      // the map does not "fight" the initial drag gesture in compass mode.
+      this.mapCanvasElement = mapInstance.getCanvas();
+      this.mapPointerPauseHandler = () => {
+        if (this.compassActive && (this.followUserLocation || this.compassHeadingActive)) {
+          this.pauseCompassDirectionForManualNavigation();
+        }
+      };
+      this.mapCanvasElement.addEventListener('touchstart', this.mapPointerPauseHandler, { passive: true });
+      this.mapCanvasElement.addEventListener('mousedown', this.mapPointerPauseHandler, { passive: true });
+
       const refreshMapDebugState = (tag: string) => {
         const hasUserSource = !!mapInstance.getSource('user-location-source');
         const hasUserLayer = !!mapInstance.getLayer('user-location-layer');
@@ -466,6 +524,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       };
 
       mapInstance.once('load', () => {
+        this.mapLoaded = true;
         const img = new Image();
         img.onload = () => {
           mapInstance.addImage('tracking-dot', img);
@@ -477,15 +536,7 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
         img.src = 'assets/tracking_dot.png';
         mapInstance.addControl(new AttributionControl({ compact: true }));
         refreshMapDebugState('load');
-
-        // Detect user-initiated map movement to stop auto-follow
-        mapInstance.on('movestart', (e: any) => {
-          if (e.originalEvent) {
-            this.followUserLocation = false;
-            this.compassHeadingActive = false;
-            this.cdr.markForCheck();
-          }
-        });
+        this.tryStartupRecenter();
 
         // Show popup when a tree marker is tapped; dismiss on empty area tap
         mapInstance.on('click', (e: any) => {
@@ -541,9 +592,18 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     const db2Use = (this.mode === 'randomTour' || this.mode === 'speelmanTour')
       ? this.randomTourCurrentTarget : this.treesDb;
 
-    this.nearbyTrees = db2Use
+    const nextNearbyTrees = db2Use
       .filter(tree => this.center.distanceTo(new LngLat(tree.lng, tree.lat)) < this.howCloseIsClose)
       .map(tree => ({ ...tree, localImgFile: getTreeImagePath(tree.treeId) }));
+    const nextNearbyTreeIds = new Set(nextNearbyTrees.map((tree) => tree.treeId));
+    const hasNewNearbyTree = [...nextNearbyTreeIds].some((treeId) => !this.nearbyTreeIdsInRange.has(treeId));
+
+    this.nearbyTrees = nextNearbyTrees;
+    this.nearbyTreeIdsInRange = nextNearbyTreeIds;
+
+    if (this.vibrateWhenNearTree && hasNewNearbyTree) {
+      void this.triggerNearTreeHaptic();
+    }
 
     if (this.randomTourActive && this.randomTourCurrentTarget.length > 0) {
       const target = this.randomTourCurrentTarget[0];
@@ -714,61 +774,84 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
     this.highlightNearbyTrees();
   }
 
+  public vibrateWhenNearTreeChanged(): void {
+    this.vibrateWhenNearTree = !this.vibrateWhenNearTree;
+  }
+
   public onMapMoveStart(event: any): void {
     // Ignore programmatic map moves; only user interactions should disable follow mode.
     if (event?.originalEvent) {
-      this.followUserLocation = false;
-      // Disable compass bearing during user pan/drag to avoid interference
-      this.compassHeadingActive = false;
+      this.pauseCompassDirectionForManualNavigation();
     }
   }
 
   public onMapMoveEnd(event: any): void {
-    // Resume compass bearing after user is done panning/dragging
-    if (event?.originalEvent && this.compassActive) {
-      this.compassHeadingActive = true;
-    }
+    if (event?.originalEvent) this.cdr.markForCheck();
   }
 
   public onMapDragStart(event: any): void {
-    // Disable compass bearing during drag to prevent interference
     if (event?.originalEvent) {
-      this.compassHeadingActive = false;
+      this.pauseCompassDirectionForManualNavigation();
     }
   }
 
   public onMapDragEnd(event: any): void {
-    // Resume compass bearing after drag completes
-    if (event?.originalEvent && this.compassActive) {
-      this.compassHeadingActive = true;
-    }
+    if (event?.originalEvent) this.cdr.markForCheck();
   }
 
   public onMapZoomStart(event: any): void {
-    // Disable compass bearing during zoom to prevent interference
     if (event?.originalEvent) {
-      this.compassHeadingActive = false;
+      this.pauseCompassDirectionForManualNavigation();
     }
   }
 
   public onMapZoomEnd(event: any): void {
-    // Resume compass bearing after zoom completes
-    if (event?.originalEvent && this.compassActive) {
-      this.compassHeadingActive = true;
-    }
+    if (event?.originalEvent) this.cdr.markForCheck();
   }
 
   public recenterToUserLocation(): void {
+    // Prevent the same tap gesture from immediately re-pausing follow mode.
+    this.suppressManualPauseUntil = Date.now() + 700;
+    const dotCoordinates = this.userLocationGeoJson.features[0]?.geometry.coordinates;
+    const targetCenter = Array.isArray(dotCoordinates)
+      ? new LngLat(dotCoordinates[0], dotCoordinates[1])
+      : this.lastGeo
+        ? new LngLat(this.lastGeo.lng, this.lastGeo.lat)
+        : new LngLat(this.center.lng, this.center.lat);
+    this.center = targetCenter;
     this.followUserLocation = true;
-    this.mapCenter = new LngLat(this.center.lng, this.center.lat);
+    this.mapCenter = targetCenter;
+    const targetBearing = this.compassActive && this.heading ? this.heading[0] : undefined;
+    const mapInstance = this.map?.mapInstance;
+    if (mapInstance) {
+      this.programmaticRecenterActive = true;
+      mapInstance.stop();
+      // Force center first so "Recenter" always moves camera back to blue dot.
+      mapInstance.jumpTo({ center: targetCenter });
+      mapInstance.easeTo({
+        center: targetCenter,
+        ...(typeof targetBearing === 'number' ? { bearing: targetBearing } : {}),
+        duration: 250,
+        essential: true,
+      });
+      mapInstance.once('moveend', () => {
+        this.programmaticRecenterActive = false;
+      });
+      setTimeout(() => {
+        this.programmaticRecenterActive = false;
+      }, 1200);
+    }
+    if (this.compassActive) {
+      this.compassHeadingActive = true;
+    }
+    this.cdr.markForCheck();
+    setTimeout(() => {
+      this.suppressManualPauseUntil = 0;
+    }, 750);
   }
 
   handlePopupOpen(tree: TreeInfo) {
-    if (window.navigator?.vibrate) {
-      window.navigator.vibrate(200);
-    } else {
-      this.statusMsg = 'No haptics';
-    }
+    this.statusMsg = tree.commonName;
   }
 
   public closePopup(): void {
@@ -836,5 +919,17 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
   selectAllCheckboxChanged() {
     this.selectAllSelected = !this.selectAllSelected;
     this.searchResults = this.searchResults.map(r => ({ ...r, selected: this.selectAllSelected }));
+  }
+
+  private async triggerNearTreeHaptic(): Promise<void> {
+    try {
+      await Haptics.impact({ style: ImpactStyle.Medium });
+      return;
+    } catch {
+      // Fallback for web/non-Capacitor runtimes
+      if (window.navigator?.vibrate) {
+        window.navigator.vibrate(200);
+      }
+    }
   }
 }

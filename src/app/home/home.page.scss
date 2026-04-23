@@ -546,8 +546,10 @@ ion-content {
   left: 20px;
   z-index: 100;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 6px;
   pointer-events: auto;
 }
 
@@ -603,6 +605,17 @@ ion-content {
   --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+.recenter-pause-note {
+  display: inline-block;
+  max-width: min(75vw, 240px);
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 @media (prefers-color-scheme: dark) {
   .tree-info-card {
     background: rgba(30, 30, 30, 0.95);
@@ -625,6 +638,10 @@ ion-content {
 
   .tour-arrival__story-text {
     color: #ddd;
+  }
+
+  .recenter-pause-note {
+    background: rgba(30, 30, 30, 0.92);
   }
 
   .tree-detail {
