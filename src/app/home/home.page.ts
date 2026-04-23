@@ -3,6 +3,7 @@ import { MapComponent, NgxMapLibreGLModule } from '@maplibre/ngx-maplibre-gl';
 import { AttributionControl, LngLat } from 'maplibre-gl';
 import { DecimalPipe } from '@angular/common';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import packageJson from '../../../package.json';
 
 import { AlertController, IonicModule, RadioGroupCustomEvent, RangeCustomEvent, SearchbarCustomEvent, ToastController } from '@ionic/angular';
 import { treeImgs } from '../../assets/treeId2Img';
@@ -49,6 +50,8 @@ function getTreeImagePath(treeId: number): string {
   ]
 })
 export class HomePage implements AfterViewInit, OnInit, OnDestroy {
+  public readonly appVersion = packageJson.version;
+
   private readonly toastController = inject(ToastController);
   private readonly treeService = inject(TreeService);
   private readonly alertController = inject(AlertController);
