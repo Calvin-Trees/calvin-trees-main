@@ -105,9 +105,9 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
       };
     }>;
   } = {
-    type: 'FeatureCollection',
-    features: [],
-  };
+      type: 'FeatureCollection',
+      features: [],
+    };
 
   // Random Tour state
   public randomTourActive = false;
@@ -566,13 +566,33 @@ export class HomePage implements AfterViewInit, OnInit, OnDestroy {
           if (mapInstance.getLayer('search-trees-layer')) layersToCheck.push('search-trees-layer');
 
           if (layersToCheck.length > 0) {
-            const features = mapInstance.queryRenderedFeatures(e.point, { layers: layersToCheck });
+            const pointerType = (e?.originalEvent as any)?.pointerType;
+            const isTouchInteraction = pointerType === 'touch' || !!(e?.originalEvent as any)?.touches;
+            const hitTolerancePx = isTouchInteraction ? 24 : 12;
+            const queryBox: [[number, number], [number, number]] = [
+              [e.point.x - hitTolerancePx, e.point.y - hitTolerancePx],
+              [e.point.x + hitTolerancePx, e.point.y + hitTolerancePx],
+            ];
+            const features = mapInstance.queryRenderedFeatures(queryBox, { layers: layersToCheck });
             if (features.length > 0) {
-              const geom = features[0].geometry as any;
+              // Pick the nearest marker within the tolerance box so nearby
+              // overlapping markers behave predictably.
+              const nearestFeature = features.reduce((best: any, candidate: any) => {
+                const [candidateLng, candidateLat] = (candidate.geometry as any).coordinates as [number, number];
+                const candidatePoint = mapInstance.project([candidateLng, candidateLat]);
+                const candidateDistSq = ((candidatePoint.x - e.point.x) ** 2) + ((candidatePoint.y - e.point.y) ** 2);
+
+                if (!best || candidateDistSq < best.distSq) {
+                  return { feature: candidate, distSq: candidateDistSq };
+                }
+                return best;
+              }, null);
+
+              const geom = nearestFeature.feature.geometry as any;
               const [lng, lat] = geom.coordinates;
               // 0.0001 degrees ≈ 11 m — MapLibre rounds rendered coordinates so an
-            // exact equality check would miss real matches near rounding boundaries.
-            const tree = this.treesDb.find(t =>
+              // exact equality check would miss real matches near rounding boundaries.
+              const tree = this.treesDb.find(t =>
                 Math.abs(t.lng - lng) < 0.0001 && Math.abs(t.lat - lat) < 0.0001
               );
               if (tree) {
